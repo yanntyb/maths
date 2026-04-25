@@ -44,17 +44,28 @@ graph LR
 Agda est le coeur du projet. Tout le modele formel est ecrit en Agda.
 
 **Pourquoi Agda :**
-- Les contrats des [objets mathematiques](objets.md) **sont** des types dependants
+- Les contrats des [objets mathematiques](sens/) **sont** des types dependants
 - L'incompatibilite `E != E*` est un refus de typage, pas un check runtime
 - Une preuve qui compile est une preuve correcte -- pas de tests a ecrire
 - Le JS genere peut etre appele depuis le frontend pour evaluer / verifier
 
 **Ce qu'Agda gere :**
-- Definition des [espaces](objets.md#espaces-et-incompatibilites) (`E`, `E*`, `R`, `Omega`)
+- Definition des [espaces](sens/espaces.md) (`E`, `E*`, `R`, `Omega`)
 - Types des ports (entree/sortie, espace associe)
-- [Contrats](concepts.md#triple-distinction) des objets (signature typee)
+- [Contrats](vocabulaire/triple-distinction.md) des objets (signature typee)
 - Regles d'assemblage (unification de ports)
 - Preuves d'incompatibilite et de correction
+
+**Organisation :**
+
+| Couche | Role | Exemples |
+|--------|------|----------|
+| **[Sens](sens/)** | blocs atomiques, un seul contrat chacun | aligner, observer, ponderer, attirer, deplacer, concentrer |
+| **[Cablages](cablages/)** | circuits qui assemblent plusieurs sens | [projeter](cablages/projeter.md), [ecouter](cablages/ecouter.md), [concentration](cablages/concentration.md) |
+| **[Meta-objets](meta-objets/)** | operent sur les objets eux-memes | [Godel](meta-objets/README.md), [currying](meta-objets/currying.md) |
+| **[Espaces](sens/espaces.md)** | espaces et regles de typage | `E`, `E*`, `R`, `Omega` |
+
+Un cablage ne definit rien de nouveau — il montre comment les sens se connectent.
 
 ---
 
@@ -63,7 +74,7 @@ Agda est le coeur du projet. Tout le modele formel est ecrit en Agda.
 - **p5.js** -- rendu canvas, interactions visuelles (drag & drop, zoom)
 - Consomme le JS genere par Agda pour la logique de validation
 - Aucune logique metier dans le frontend : il affiche et transmet
-- Les [trois vues](concepts.md#trois-vues) sont pilotees par le frontend
+- Les [trois vues](vocabulaire/trois-vues.md) sont pilotees par le frontend
 
 ---
 

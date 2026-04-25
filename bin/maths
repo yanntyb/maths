@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\DTO\Context;
+use Symfony\Component\Console\Application;
+
+$context = new Context(dirname(__DIR__));
+$application = new Application('maths-tools', '1.0.0');
+
+foreach (glob(__DIR__ . '/../src/Command/*Command.php') as $file) {
+    $class = 'App\\Command\\' . basename($file, '.php');
+    $application->add(new $class($context));
+}
+
+$application->run();
