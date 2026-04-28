@@ -1,7 +1,5 @@
 'use strict';
 
-import algebre from './cablages/algebre/index.js';
-import algebreInversion from './cablages/algebre-inversion/index.js';
 import euclid from './cablages/euclid/index.js';
 import measure from './cablages/measure/index.js';
 import hilbert from './cablages/hilbert/index.js';
@@ -9,7 +7,7 @@ import parseval from './cablages/parseval/index.js';
 import { classify, applyNumerically } from './classifier.js';
 import { drawAxiomRow, drawAxiomTree, drawAxiomSphere } from './structure.js';
 
-const CABLAGES = [algebre, algebreInversion, euclid, measure, hilbert, parseval];
+const CABLAGES = [euclid, measure, hilbert, parseval];
 
 function drawLegend(ctx, rect, proof) {
   const p = ctx.p;

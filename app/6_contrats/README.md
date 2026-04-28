@@ -53,6 +53,7 @@ graph TD
 | cablages/measure/rendu.js | classe `MeasureRenderer` — spécialise layout et barres de mesure | `extends RenderContract` ; `drawGeometry(layout)` dessine barres | hérité de RenderContract |
 | cablages/hilbert/rendu.js | classe `HilbertRenderer` — spécialise layout et vecteurs | `extends RenderContract` ; `drawGeometry(layout)` dessine grille + flèches | hérité de RenderContract |
 | cablages/parseval/rendu.js | classe `ParsovalRenderer` — spécialise layout et diagramme commutatif | `extends RenderContract` ; `drawGeometry(layout)` dessine nœuds + flèches | hérité de RenderContract |
+| (algebre, algebre-inversion supprimés en V7) | | | |
 | classifier.js, structure.js, primitives.js | inchangés | idem V5 | idem V5 |
 
 ## Comment ca marche

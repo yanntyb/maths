@@ -27,6 +27,7 @@ graph TD
     V4["<b>V4 — Sens commun</b><br/>16 fichiers (4 dossiers)<br/>1 cablage = 1 dossier<br/>sens commun emergent<br/>dispatch supprime"]:::cyan
     V5["<b>V5 — Primitives</b><br/>17 fichiers + primitives.js<br/>p5.js encapsule<br/>rendus abstrait graphique<br/>swap graphique possible"]:::magenta
     V6["<b>V6 — Contrat rendu</b><br/>18 fichiers + RenderContract<br/>4 phases explicites<br/>template method pattern<br/>polymorphisme par héritage"]:::teal
+    V7["<b>V7 — Contrat cablage</b><br/>12 fichiers + CablageContract<br/>structure cablage explicite<br/>zéro duplication index.js<br/>singleton réutilisable"]:::orange
 
     V0 -->|"decoupe en 13 modules"| V1
     V1 -->|"contrats forts ctx/rect/tri"| V2
@@ -34,6 +35,7 @@ graph TD
     V3 -->|"1 cablage = 1 dossier sens commun"| V4
     V4 -->|"primitives graphiques p5.js encapsule"| V5
     V5 -->|"4-phase pipeline classe abstraite"| V6
+    V6 -->|"structure cablage classe abstraite"| V7
 
     classDef grey fill:#6B7280,color:#fff
     classDef blue fill:#3B82F6,color:#fff
@@ -41,6 +43,7 @@ graph TD
     classDef teal fill:#14B8A6,color:#fff
     classDef cyan fill:#0EA5E9,color:#fff
     classDef magenta fill:#D946EF,color:#fff
+    classDef orange fill:#F97316,color:#fff
 ```
 
 ## Versions
@@ -54,6 +57,7 @@ graph TD
 | [V4 — Sens commun](4_sens/) | reuni (1 cablage = 1 dossier) | forts + auto-porte (cablage.draw) | forme commune emergente (4 dossiers, frontiere exclue) |
 | [V5 — Primitives](5_abstraites/) | inchange (axiomes → formes) | 3 couches (rendus ↔ primitives ↔ p5.js) | p5.js encapsule, swap possible |
 | [V6 — Contrat rendu](6_contrats/) | inchange (axiomes → formes) | **4 couches** (rendus → RenderContract → primitives → p5.js) | **template method** (RenderContract orchestre, rendus héritent) |
+| [V7 — Contrat cablage](7_cablages/) | inchange (axiomes → formes) | **5 couches** (rendus → CablageContract → RenderContract → primitives → p5.js) | **CablageContract singleton** (metadata + rendu, zéro duplication) |
 
 ## Invariant a travers les versions
 
