@@ -8,20 +8,50 @@
 - **Contrat** -- les 6 cablages heritent de `CablageContract` qui orchestre metadata + axiomes + rendu via orchestration uniforme. Seul `drawGeometry()` varie ; metadata et structure sont partagees
 - **Ports** -- `CablageContract(config)` encapsule axioms, formula, proof, format, id, title, color ; chaque cablage spécialise `drawGeometry(layout)` pour sa geometrie
 
-## Circuit
+## Circuit complet
 
 ```mermaid
 graph TD
-    subgraph "Cablages — 4 classes spécialisées"
-        E["EuclidCablage<br/>extends CablageContract"]:::blue
-        M["MeasureCablage<br/>extends CablageContract"]:::green
-        H["HilbertCablage<br/>extends CablageContract"]:::violet
-        P["ParsavalCablage<br/>extends CablageContract"]:::cyan
-    end
+    SCENE["scene.js<br/>drawProof(ctx, vizRect, cablage, tri)"]:::code
 
-    subgraph "Contrat — orchestration commune"
-        CC["CablageContract<br/>id, title, color, axioms, formula, proof, format<br/>abstract drawGeometry()"]:::grey
-        RC["RenderContract<br/>(base pour pipeline 4-phases)"]:::ochre
+    SCENE -->|"appel"| DRAW["cablage.draw(ctx, vizRect, tri, cablage.color)"]:::code
+
+    DRAW --> CC["CablageContract.draw()<br/>assigne ctx, rect, tri, color<br/>appel super.draw()"]:::contract
+
+    CC --> RC["RenderContract.draw()<br/>orchestre 4 phases<br/>calculateLayout() → drawGeometry() → drawAnnotation()"]:::contract
+
+    RC --> PRIM["Primitives<br/>P.box, P.circle, P.line, P.text, P.polygon..."]:::support
+
+    DRAW -.->|"polymorphe"| E["EuclidCablage<br/>drawGeometry(layout)"]:::blue
+    DRAW -.->|"polymorphe"| M["MeasureCablage<br/>drawGeometry(layout)"]:::green
+    DRAW -.->|"polymorphe"| H["HilbertCablage<br/>drawGeometry(layout)"]:::violet
+    DRAW -.->|"polymorphe"| P["ParsavalCablage<br/>drawGeometry(layout)"]:::cyan
+
+    PRIM --> P5["p5.js"]:::external
+
+    classDef code fill:#475569,color:#fff
+    classDef contract fill:#9CA3AF,color:#fff
+    classDef support fill:#D97706,color:#fff
+    classDef external fill:#6B7280,color:#fff
+    classDef blue fill:#3B82F6,color:#fff
+    classDef green fill:#10B981,color:#fff
+    classDef violet fill:#8B5CF6,color:#fff
+    classDef cyan fill:#0EA5E9,color:#fff
+```
+
+## Cablages — hiérarchie des classes
+
+```mermaid
+graph TD
+    subgraph "Hiérarchie — héritage double"
+        E["EuclidCablage<br/>constructor(config)<br/>drawGeometry(layout)"]:::blue
+        M["MeasureCablage<br/>constructor(config)<br/>drawGeometry(layout)"]:::green
+        H["HilbertCablage<br/>constructor(config)<br/>drawGeometry(layout)"]:::violet
+        P["ParsavalCablage<br/>constructor(config)<br/>drawGeometry(layout)"]:::cyan
+
+        CC["CablageContract<br/>id, title, color, axioms, formula, proof, format<br/>draw(ctx, rect, tri, color)<br/>abstract drawGeometry(layout)"]:::grey
+
+        RC["RenderContract<br/>calculateLayout()<br/>abstract drawGeometry(layout)<br/>drawAnnotation()"]:::ochre
     end
 
     E --> CC
