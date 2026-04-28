@@ -23,6 +23,7 @@ Pourquoi les versions évoluent-elles de cette façon ? Quel est le **fil conduc
 | **V5** | Primitives graphiques abstraites (v2) | Consolider les primitives, améliorer la séparation backend/frontend | [v5-abstraites.md](v5-abstraites.md) |
 | **V6** | Contrat de rendu émergent | Formaliser le pipeline 4-phases en classe abstraite RenderContract | [v6-contrats.md](v6-contrats.md) |
 | **V7** | Contrat de cablage explicite | Formaliser la structure répétée des cablages en classe CablageContract | [v7-cablages.md](v7-cablages.md) |
+| **V8** | Contrat de visualisation axiomatique | Extraire drawAxiomTree/Sphere en classe VisualizationContract, brancher d'autres rendus | [v8-visualisations.md](v8-visualisations.md) |
 
 ---
 
@@ -55,7 +56,9 @@ V5 (Abstraites)
 V6 (Contrats de rendu)
    ↓ "structure cablage implicite dans 4 cablages identiques"
 V7 (Contrats de cablage)
-   ✓ CablageContract = classe abstraite
+   ↓ "structure visualisation implicite dans drawAxiomTree/Sphere"
+V8 (Contrats de visualisation)
+   ✓ VisualizationContract = classe abstraite
 ```
 
 ---
@@ -113,7 +116,8 @@ Chaque version a une implémentation correspondante :
 - `../4_sens/` → v4-sens.md
 - `../5_abstraites/` → v5-abstraites.md
 - `../6_contrats/` → v6-contrats.md
-- `../7_cablages/` → v7-cablages.md
+- `../7_cablages/` → v7-cablages.md ✓ Implémentée
+- `../8_visualisations/` → v8-visualisations.md (non implémentée)
 
 ---
 
