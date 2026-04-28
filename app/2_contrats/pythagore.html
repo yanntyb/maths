@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Pythagore — trois preuves</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;height:100vh;height:100dvh;overflow:hidden;overscroll-behavior:none;touch-action:none}
+body{background:#FAFAFC;font-family:'Courier New',monospace;color:#1F2937}
+canvas{display:block}
+#ui{position:fixed;top:0;top:env(safe-area-inset-top);left:0;right:0;z-index:20;display:flex;background:rgba(250,250,252,.98);border-bottom:1px solid rgba(15,118,110,.25);overflow-x:auto;padding:8px 14px;gap:14px;align-items:center}
+#ui::-webkit-scrollbar{display:none}
+.title{display:flex;flex-direction:column;justify-content:center;font-size:11px;color:#6B7280;flex-shrink:0}
+.title strong{font-size:14px;color:#0F766E;letter-spacing:1px}
+.sep{width:1px;height:36px;background:rgba(15,118,110,.15)}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.ctrl label{font-size:10px;color:#6B7280;letter-spacing:1px;text-transform:uppercase}
+.ctrl input{width:90px;height:30px;accent-color:#0F766E}
+.ctrl span{font-size:13px;min-width:42px;text-align:center}
+.btn,.tab{font:inherit;font-size:13px;padding:8px 14px;border:1.5px solid #0F766E;border-radius:6px;background:transparent;color:#0F766E;cursor:pointer;white-space:nowrap;min-height:36px}
+.btn:active,.tab:active{background:rgba(15,118,110,.15)}
+.btn.playing,.tab.active{background:#0F766E;color:#fff}
+.tabs{display:flex;gap:6px}
+</style>
+</head>
+<body>
+<div id="ui">
+  <div class="title"><strong>pythagore</strong>3 preuves simultanées</div>
+  <div class="sep"></div>
+  <div class="ctrl"><label>côté a</label><input id="a" type="range" min="0" max="25" value="3" step="1"><span id="a-v">3.0</span></div>
+  <div class="ctrl"><label>côté b</label><input id="b" type="range" min="0" max="25" value="4" step="1"><span id="b-v">4.0</span></div>
+  <div class="ctrl"><label>s (exposant ζ)</label><input id="sExp" type="range" min="0.3" max="3" value="1.5" step="0.05"><span id="sExp-v">1.50</span></div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <span style="font-size:9px;color:#9CA3AF;letter-spacing:1px;align-self:center;margin-right:4px;">PREUVES</span>
+    <button class="tab active" data-proof="0">Euclide</button>
+    <button class="tab" data-proof="1">Mesure</button>
+    <button class="tab" data-proof="2">Hilbert</button>
+    <button class="tab" data-proof="3">Parseval</button>
+  </div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <span style="font-size:9px;color:#9CA3AF;letter-spacing:1px;align-self:center;margin-right:4px;">MÉTA</span>
+    <button class="tab" data-proof="4">Frontière</button>
+  </div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <button class="tab active" data-view="anim">animation</button>
+    <button class="tab" data-view="tree">arbre</button>
+    <button class="tab" data-view="sphere">cercle</button>
+  </div>
+  <div class="sep"></div>
+  <button id="play" class="btn">▶ animer</button>
+  <button id="reset" class="btn">↺ reset</button>
+</div>
+<canvas id="cv"></canvas>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

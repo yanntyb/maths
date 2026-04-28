@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Pythagore — trois preuves</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;height:100vh;height:100dvh;overflow:hidden;overscroll-behavior:none;touch-action:none}
+body{background:#FAFAFC;font-family:'Courier New',monospace;color:#1F2937}
+canvas{display:block}
+#ui{position:fixed;top:0;top:env(safe-area-inset-top);left:0;right:0;z-index:20;display:flex;background:rgba(250,250,252,.98);border-bottom:1px solid rgba(15,118,110,.25);overflow-x:auto;padding:8px 14px;gap:14px;align-items:center}
+#ui::-webkit-scrollbar{display:none}
+.title{display:flex;flex-direction:column;justify-content:center;font-size:11px;color:#6B7280;flex-shrink:0}
+.title strong{font-size:14px;color:#0F766E;letter-spacing:1px}
+.sep{width:1px;height:36px;background:rgba(15,118,110,.15)}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.ctrl label{font-size:10px;color:#6B7280;letter-spacing:1px;text-transform:uppercase}
+.ctrl input{width:90px;height:30px;accent-color:#0F766E}
+.ctrl span{font-size:13px;min-width:42px;text-align:center}
+.btn,.tab{font:inherit;font-size:13px;padding:8px 14px;border:1.5px solid #0F766E;border-radius:6px;background:transparent;color:#0F766E;cursor:pointer;white-space:nowrap;min-height:36px}
+.btn:active,.tab:active{background:rgba(15,118,110,.15)}
+.btn.playing,.tab.active{background:#0F766E;color:#fff}
+.tabs{display:flex;gap:6px}
+</style>
+</head>
+<body>
+<div id="ui">
+  <div class="title"><strong>pythagore</strong>3 preuves simultanées</div>
+  <div class="sep"></div>
+  <div class="ctrl"><label>côté a</label><input id="a" type="range" min="0" max="25" value="3" step="1"><span id="a-v">3.0</span></div>
+  <div class="ctrl"><label>côté b</label><input id="b" type="range" min="0" max="25" value="4" step="1"><span id="b-v">4.0</span></div>
+  <div class="ctrl"><label>s (exposant ζ)</label><input id="sExp" type="range" min="0.3" max="3" value="1.5" step="0.05"><span id="sExp-v">1.50</span></div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <span style="font-size:9px;color:#9CA3AF;letter-spacing:1px;align-self:center;margin-right:4px;">PREUVES</span>
+    <button class="tab active" data-proof="0">Euclide</button>
+    <button class="tab" data-proof="1">Mesure</button>
+    <button class="tab" data-proof="2">Hilbert</button>
+    <button class="tab" data-proof="3">Parseval</button>
+  </div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <span style="font-size:9px;color:#9CA3AF;letter-spacing:1px;align-self:center;margin-right:4px;">MÉTA</span>
+    <button class="tab" data-proof="4">Frontière</button>
+  </div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <button class="tab active" data-view="anim">animation</button>
+    <button class="tab" data-view="tree">arbre</button>
+    <button class="tab" data-view="sphere">cercle</button>
+  </div>
+  <div class="sep"></div>
+  <button id="play" class="btn">▶ animer</button>
+  <button id="reset" class="btn">↺ reset</button>
+</div>
+<canvas id="cv"></canvas>
+
+<script>
+'use strict';
+
+const S = {
+  a: 3, b: 4,
+  aTarget: 3, bTarget: 4,
+  playing: false,
+  morphPhase: 0,
+  activeProof: 0,
+  rightView: 'anim', // 'anim' | 'tree'
+  s: 1.5,            // exposant pour ζ_Q (méta-preuve)
+};
+
+const $ = id => document.getElementById(id);
+
+['a','b'].forEach(id => {
+  const inp = $(id), lbl = $(id+'-v');
+  inp.addEventListener('input', () => {
+    S[id+'Target'] = +inp.value;
+    lbl.textContent = inp.value;
+  });
+});
+
+$('sExp').addEventListener('input', () => {
+  S.s = +$('sExp').value;
+  $('sExp-v').textContent = S.s.toFixed(2);
+});
+
+$('play').addEventListener('click', () => {
+  S.playing = !S.playing;
+  $('play').textContent = S.playing ? '⏸ pause' : '▶ animer';
+  $('play').classList.toggle('playing', S.playing);
+});
+$('reset').addEventListener('click', () => {
+  S.aTarget = 3; S.bTarget = 4;
+  $('a').value = 3; $('a-v').textContent = '3';
+  $('b').value = 4; $('b-v').textContent = '4';
+});
+
+document.querySelectorAll('.tab[data-proof]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    S.activeProof = +btn.dataset.proof;
+    document.querySelectorAll('.tab[data-proof]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+document.querySelectorAll('.tab[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    S.rightView = btn.dataset.view;
+    document.querySelectorAll('.tab[data-view]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+
+
+// 3 preuves — chacune avec axiomes, formule, visualisation
+const PROOFS = [
+  {
+    title: 'Preuve 1 — Géométrie euclidienne',
+    color: '#3B82F6',
+    axiomsList: [
+      ['P1 · par 2 points distincts passe une unique droite',
+       '∀p₁ p₂  p₁≠p₂  ⟹  ∃!ℓ  (p₁∈ℓ ∧ p₂∈ℓ)',
+       (a,b,c) => 4,
+       'rôle : tracer les côtés du grand carré · poids constant'],
+      ['P2 · tout segment se prolonge en droite',
+       '∀[p,q]  ∃ℓ  ([p,q] ⊂ ℓ)',
+       (a,b,c) => 4,
+       'rôle : prolonger pour fermer le grand carré · poids constant'],
+      ['P3 · cercle de centre et rayon donnés existe',
+       '∀c ∀r>0  ∃C  C = {x : d(x,c) = r}',
+       (a,b,c) => 0,
+       'rôle : non mobilisé dans cette preuve par décomposition'],
+      ['P4 · tous les angles droits sont égaux',
+       '∀α ∀β  (D(α) ∧ D(β))  ⟹  α ≡ β',
+       (a,b,c) => 2*a*b,
+       'rôle : produit les 4 triangles d\'aire ½ab · poids = 2ab (croît avec a·b)'],
+      ['P5 · postulat des parallèles (unicité)',
+       '∀ℓ ∀p∉ℓ  ∃!ℓ′  (p∈ℓ′ ∧ ℓ′ ∥ ℓ)',
+       (a,b,c) => c*c,
+       'rôle : ferme le carré central d\'aire c² · poids = c² = a² + b²'],
+      ['CN1 · les choses égales à une même chose sont égales entre elles',
+       '∀a b c  (a=c ∧ b=c)  ⟹  a=b',
+       (a,b,c) => 1,
+       'rôle : transitivité pour comparer les aires · poids constant'],
+      ['CN2 · si à des égaux on ajoute des égaux, les sommes sont égales',
+       '∀a b c d  (a=b ∧ c=d)  ⟹  a+c = b+d',
+       (a,b,c) => 4*0.5*a*b + c*c,
+       'rôle : assemble triangles + c² = (a+b)² · poids = 2ab + c² (croît avec a,b)'],
+      ['CN4 · les choses qui coïncident sont égales',
+       '∀F₁ F₂  (∃g∈Iso  g(F₁)=F₂)  ⟹  F₁ ≡ F₂',
+       (a,b,c) => 2*a*b,
+       'rôle : 4 triangles congruents d\'aire ½ab chacun · poids = 2ab'],
+      ['CN5 · le tout est plus grand que la partie',
+       '∀F G  G ⊂ F  ⟹  A(G) < A(F)',
+       (a,b,c) => 1,
+       'rôle : structure de découpage du grand carré · poids constant'],
+    ],
+    formula: 'a² + b² = c²',
+    proof: '(a+b)² = 4·(½ab) + c²  ⟹  a² + b² = c²',
+    vizType: 'euclid',
+  },
+  {
+    title: 'Preuve 2 — Théorie de la mesure',
+    color: '#10B981',
+    axiomsList: [
+      ['M1 · μ est positive',
+       'μ : Σ → [0,+∞]',
+       (a,b,c) => 1,
+       'rôle : les aires ne sont jamais négatives · poids constant'],
+      ['M2 · l\'ensemble vide a mesure nulle',
+       'μ(∅) = 0',
+       (a,b,c) => 0,
+       'rôle : non mobilisé (les carrés a², b², c² ne sont pas vides)'],
+      ['M3 · σ-additivité',
+       '∀(Aₙ) disjoints  μ(⊔ₙ Aₙ) = Σₙ μ(Aₙ)',
+       (a,b,c) => a*a + b*b,
+       'rôle : permet d\'écrire μ(c²) = μ(a²) + μ(b²) · poids = a² + b² (croît avec les aires)'],
+      ['M4 · invariance par translation',
+       '∀x ∈ ℝⁿ  ∀A ∈ Σ  μ(x + A) = μ(A)',
+       (a,b,c) => c*c,
+       'rôle : recomposer les carrés par translation sans changer leur aire · poids = c²'],
+      ['M5 · normalisation',
+       'μ([0,1]ⁿ) = 1',
+       (a,b,c) => 1,
+       'rôle : fixe l\'unité d\'aire · poids constant'],
+      ['M6 · existence et unicité de Lebesgue',
+       '∃!μ vérifiant M1–M5  sur ℬ(ℝⁿ)',
+       (a,b,c) => 1,
+       'rôle : garantit qu\'une telle mesure existe · poids constant'],
+    ],
+    formula: 'μ(□_a) + μ(□_b) = μ(□_c)',
+    proof: 'a² et b² se recomposent en c² par isométries  ⟹  μ(a²) + μ(b²) = μ(c²)',
+    vizType: 'measure',
+  },
+  {
+    title: 'Preuve 3 — Espace préhilbertien',
+    color: '#8B5CF6',
+    axiomsList: [
+      ['E1 · E est un ℝ-espace vectoriel',
+       '(E, +, ·) ℝ-EV',
+       (a,b,c) => 1,
+       'rôle : structure pour additionner v et w · poids constant'],
+      ['E2 · le produit scalaire est défini',
+       '⟨·,·⟩ : E × E → ℝ',
+       (a,b,c) => 1,
+       'rôle : opération de base de toute la preuve · poids constant'],
+      ['E3 · bilinéarité',
+       '∀v w w′ λ μ  ⟨v, λw+μw′⟩ = λ⟨v,w⟩ + μ⟨v,w′⟩',
+       (a,b,c) => a*a + b*b,
+       'rôle : développe ⟨v+w,v+w⟩ = ⟨v,v⟩ + 2⟨v,w⟩ + ⟨w,w⟩ · poids = ||v||² + ||w||² = a² + b²'],
+      ['E4 · symétrie',
+       '∀v w  ⟨v,w⟩ = ⟨w,v⟩',
+       (a,b,c) => 1,
+       'rôle : autorise ⟨v,w⟩ = ⟨w,v⟩ dans le développement · poids constant'],
+      ['E5 · positivité',
+       '∀v  ⟨v,v⟩ ⩾ 0',
+       (a,b,c) => a*a + b*b,
+       'rôle : permet de définir la norme · poids = ||v||² + ||w||² (croît avec a,b)'],
+      ['E6 · définie',
+       '∀v  ⟨v,v⟩ = 0  ⟺  v = 0',
+       (a,b,c) => 0.5,
+       'rôle : caractérise l\'unicité de la norme · poids constant'],
+      ['D1 · norme induite',
+       '||v|| := √⟨v,v⟩',
+       (a,b,c) => Math.sqrt(a*a + b*b),
+       'rôle : passage du produit scalaire aux longueurs · poids = c (croît avec a,b)'],
+      ['D2 · orthogonalité',
+       'v ⊥ w  :⟺  ⟨v,w⟩ = 0',
+       (a,b,c) => 2*a*b,
+       'rôle : annule le terme croisé 2⟨v,w⟩ = 2ab — sans D2 c² serait a²+b²+2ab · poids = 2ab'],
+    ],
+    formula: '||v+w||² = ||v||² + ||w||²  si  v ⊥ w',
+    proof: '||v+w||² = ⟨v+w,v+w⟩ = ⟨v,v⟩ + 2⟨v,w⟩ + ⟨w,w⟩.  Si ⟨v,w⟩=0 : ||v+w||² = ||v||² + ||w||²',
+    vizType: 'hilbert',
+  },
+  {
+    title: 'Preuve 4 — Parseval (frame orthonormal)',
+    color: '#0EA5E9',
+    axiomsList: [
+      ['F1 · ℝ-espace vectoriel',
+       '(E, +, ·) ℝ-EV',
+       (a,b,c) => 1,
+       'rôle : structure pour combinaisons linéaires · poids constant'],
+      ['F2 · produit scalaire défini',
+       '⟨·,·⟩ : E × E → ℝ',
+       (a,b,c) => 1,
+       'rôle : nécessaire pour définir Aligner et Normer · poids constant'],
+      ['F3 · frame orthonormal {e₁, e₂}',
+       '⟨eᵢ|eⱼ⟩ = δᵢⱼ  (Gram = I)',
+       (a,b,c) => 1,
+       'rôle : la Gram est l\'identité, ce qui rend Analyser une isométrie · poids constant'],
+      ['F4 · Synthétiser',
+       'Φ : ℓ²(I) → E,  (a,b) ↦ a·e₁ + b·e₂',
+       (a,b,c) => Math.sqrt(a*a + b*b),
+       'rôle : reconstruit v depuis ses coefficients · poids = ||v||'],
+      ['F5 · Analyser',
+       'Φ* : E → ℓ²(I),  v ↦ (⟨e₁|v⟩, ⟨e₂|v⟩)',
+       (a,b,c) => a*a + b*b,
+       'rôle : extrait les coefficients de v · poids = a²+b² (somme des projections)'],
+      ['F6 · Normer',
+       '||v||² := ⟨v,v⟩',
+       (a,b,c) => c*c,
+       'rôle : mesure la longueur via auto-Aligner · poids = c²'],
+      ['F7 · Parseval — isométrie',
+       '||v||² = Σₖ |⟨eₖ|v⟩|²   (si Gram = I)',
+       (a,b,c) => a*a + b*b,
+       'rôle : conservation de la norme par décomposition · poids = a²+b² = c²'],
+    ],
+    formula: '||v||² = |⟨e₁|v⟩|² + |⟨e₂|v⟩|² = a² + b²',
+    proof: 'v = a·e₁ + b·e₂.  Synthétiser puis Analyser = id (Gram=I).  Donc ||v||² = a²+b² = c²',
+    vizType: 'parseval',
+  },
+  {
+    title: 'Méta-preuve — Frontière de convergence',
+    color: '#EC4899',
+    isMeta: true,
+    axiomsList: [
+      ['Z1 · forme quadratique Q(m,n) = m² + n²',
+       'Q : ℤ² → ℝ₊',
+       (a,b,c) => 1,
+       'rôle : structure de la forme à analyser · poids constant'],
+      ['Z2 · zêta d\'Epstein',
+       'ζ_Q(s) = Σ_{(m,n)≠(0,0)} 1/Q(m,n)^s',
+       (a,b,c) => 1,
+       'rôle : série de Dirichlet associée à Q · poids constant'],
+      ['Z3 · encodage de Gödel',
+       'enc : Circuit(Q) → N',
+       (a,b,c) => 1,
+       'rôle : transformer le circuit Q en nombre de Gödel · poids constant'],
+      ['Z4 · sonder (produit d\'Euler partiel)',
+       'sonder(N, s) = ∏_{p≤P} 1/(1 - p^{-s})',
+       (a,b,c) => 1 / Math.max(0.01, Math.abs(a*a + b*b - c*c) + 1),
+       'rôle : régime constructif s>1 · poids = proche de 1 quand a²+b² ≈ c²'],
+      ['Z5 · peser (champ de convergence)',
+       'P : N × ℝ → [0,1]',
+       (a,b,c) => Math.min(1, (a*a + b*b) / 30),
+       'rôle : probabilité de convergence à chaque s · poids = (a²+b²)/30'],
+      ['Z6 · frontière σ_c',
+       'σ_c = inf { s : ζ_Q(s) converge }',
+       (a,b,c) => 1,
+       'rôle : seuil de transition · σ_c = 1 indique Q définit une norme'],
+      ['Z7 · σ_c = d/2',
+       'd = dim(Q) ⟹ σ_c = d/2',
+       (a,b,c) => 2,
+       'rôle : relie σ_c à la dimension · pour d=2, σ_c=1 ⟹ a²+b²=c²'],
+    ],
+    formula: 'σ_c(ζ_Q) = d/2 = 1 ⟹ Q définit une norme ⟹ a² + b² = c²',
+    proof: 'L\'abscisse de convergence σ_c=1 de ζ_Q encode 3 choses : dim=2, défini positif, norme. Donc Q(a,b) = a²+b² = c².',
+    vizType: 'frontiere',
+  },
+];
+
+let P, W, H;
+const vpSize = () => {
+  const vv = window.visualViewport;
+  return { w: vv?vv.width:innerWidth, h: vv?vv.height:innerHeight };
+};
+
+new p5(p => {
+  P = p;
+  p.setup = () => {
+    const navH = $('ui').offsetHeight || 60;
+    const { w, h } = vpSize();
+    const c = p.createCanvas(w, Math.max(300, h - navH));
+    c.elt.style.position = 'absolute';
+    c.elt.style.top = navH + 'px';
+    c.elt.style.left = '0';
+    document.body.appendChild(c.elt);
+    p.textFont('Courier New');
+    p.frameRate(60);
+  };
+  p.draw = () => {
+    W = p.width; H = p.height;
+    p.background('#FAFAFC');
+
+    // morphisme : interpolation douce vers la cible
+    S.a += (S.aTarget - S.a) * 0.08;
+    S.b += (S.bTarget - S.b) * 0.08;
+
+    // animation auto
+    if (S.playing) {
+      S.morphPhase += 0.005;
+      const t = (Math.sin(S.morphPhase * Math.PI * 2) + 1) / 2; // 0..1..0
+      S.aTarget = Math.round(3 + t * 18);
+      S.bTarget = Math.round(20 - t * 16);
+      $('a').value = S.aTarget;
+      $('b').value = S.bTarget;
+      $('a-v').textContent = Math.round(S.aTarget);
+      $('b-v').textContent = Math.round(S.bTarget);
+    }
+
+    drawScene();
+  };
+  p.windowResized = () => {
+    const navH = $('ui').offsetHeight || 60;
+    const { w, h } = vpSize();
+    p.resizeCanvas(w, Math.max(300, h - navH));
+    p.canvas.style.top = navH + 'px';
+  };
+});
+
+if (window.visualViewport) window.visualViewport.addEventListener('resize', () => P && P.windowResized());
+window.addEventListener('orientationchange', () => setTimeout(() => P && P.windowResized(), 200));
+
+function drawScene() {
+  const a = S.a, b = S.b;
+  const c = Math.sqrt(a*a + b*b);
+
+  // ── BANDEAU SENS COMMUN ──────────────────────────────────────────
+  const banH = 92;
+  P.noStroke();
+  // fond léger
+  P.fill('#0F766E10');
+  P.rect(0, 0, W, banH);
+  P.stroke('#0F766E40'); P.strokeWeight(1);
+  P.line(0, banH, W, banH);
+
+  // titre
+  P.noStroke(); P.fill('#0F766E');
+  P.textSize(13); P.textAlign(P.LEFT, P.TOP);
+  P.text('THÉORÈME INVARIANT', 18, 10);
+
+  // énoncé
+  P.fill('#0F766E'); P.textSize(15); P.textAlign(P.LEFT, P.TOP);
+  P.text('« la longueur de l\'hypoténuse d\'un triangle rectangle se déduit des deux autres côtés »', 18, 28);
+
+  // contrat partagé + valeurs
+  P.fill(80, 90, 110); P.textSize(12);
+  P.text('signature commune  :  (a, b) ∈ ℝ₊²  ⟶  c ∈ ℝ₊', 18, 52);
+  P.fill('#0F766E'); P.textSize(13);
+  P.text('a=' + a.toFixed(2) + ',  b=' + b.toFixed(2) + '  ⟶  c=' + c.toFixed(2), 18, 70);
+
+  // verdict à droite — les trois preuves cristallisent le même nombre
+  P.fill('#0F766E'); P.textSize(12); P.textAlign(P.RIGHT, P.TOP);
+  P.text('résultat invariant', W - 18, 8);
+  P.textSize(13);
+  P.text('a² + b² = c²  →  ' + (a*a).toFixed(2) + ' + ' + (b*b).toFixed(2) + ' = ' + (c*c).toFixed(2), W - 18, 24);
+  P.fill(120, 130, 150); P.textSize(12);
+  P.text('même invariant scalaire  ·  trois axiomatiques distinctes', W - 18, 44);
+  P.fill('#0F766E'); P.textSize(12);
+  P.text('l\'invariant précède ses formalisations', W - 18, 60);
+
+  // une seule preuve affichée — sélectionnée par les onglets
+  const startY = banH + 8;
+  const proof = PROOFS[S.activeProof];
+  drawProofFull(0, startY, W, H - startY, proof, a, b, c);
+}
+
+// dessine une preuve seule en plein espace, avec légende
+function drawProofFull(x, y, w, h, proof, a, b, c) {
+  drawProof(x, y, w, h - 90, proof, a, b, c);
+  drawLegend(x, y + h - 86, w, 80, proof);
+}
+
+function drawLegend(x, y, w, h, proof) {
+  const PAD = 16;
+  P.noStroke();
+  P.fill(245, 246, 250);
+  P.rect(x + PAD, y, w - PAD*2, h, 8);
+  P.stroke(220); P.strokeWeight(1); P.noFill();
+  P.rect(x + PAD, y, w - PAD*2, h, 8);
+
+  // titre légende
+  P.noStroke(); P.fill('#0F766E');
+  P.textSize(10); P.textAlign(P.LEFT, P.TOP);
+  P.text('LÉGENDE — taille des cercles', x + PAD + 14, y + 10);
+
+  // définition rigoureuse
+  P.fill(70, 80, 100); P.textSize(11);
+  P.text('ce que chaque axiome apporte au résultat final',
+         x + PAD + 14, y + 28);
+  P.fill(120, 130, 150); P.textSize(10);
+  P.text('pour les valeurs courantes (a, b) — taille du cercle ∝ contribution',
+         x + PAD + 14, y + 46);
+
+  // mini légende structurels vs numériques à droite
+  const rx = x + w - 280;
+  P.fill(proof.color); P.noStroke();
+  P.circle(rx, y + 22, 10);
+  P.fill(70, 80, 100); P.textSize(10); P.textAlign(P.LEFT, P.CENTER);
+  P.text('actif', rx + 10, y + 22);
+
+  P.fill('rgb(200,205,215)'); P.noStroke();
+  P.circle(rx + 60, y + 22, 10);
+  P.fill(160, 170, 185);
+  P.text('inactif', rx + 70, y + 22);
+
+  // gradient cercles
+  P.fill(proof.color); P.circle(rx, y + 50, 6);
+  P.fill(proof.color); P.circle(rx + 22, y + 50, 12);
+  P.fill(proof.color); P.circle(rx + 50, y + 50, 18);
+  P.fill(70, 80, 100); P.textSize(10); P.textAlign(P.LEFT, P.CENTER);
+  P.text('faible  ⟶  fort', rx + 70, y + 50);
+}
+
+function drawProof(x, y, w, h, proof, a, b, c) {
+  const PAD = 16;
+
+  // bandeau coloré gauche
+  P.noStroke(); P.fill(proof.color);
+  P.rect(x, y, 4, h);
+
+  // séparateur bas
+  P.stroke(225); P.strokeWeight(.5);
+  P.line(x + 8, y + h - 1, x + w - 8, y + h - 1);
+
+  // colonne texte (gauche)
+  const textW = w * 0.5 - 24;  // exactement 50% de l'écran
+  const tx = x + PAD + 8;
+
+  P.noStroke();
+  // titre
+  P.fill(proof.color); P.textSize(15); P.textAlign(P.LEFT, P.TOP);
+  P.text(proof.title, tx, y + 8);
+
+  // liste rigoureuse des axiomes (titre repris dans les sous-colonnes)
+  // classification explicite : axiomes structurels vs numériques
+  // un axiome est numérique s'il décrit une quantité qui dépend des paramètres
+  const NUMERIC_CODES = {
+    'euclid':    ['P4', 'P5', 'CN2', 'CN4'],
+    'measure':   ['M3', 'M4'],
+    'hilbert':   ['E3', 'E5', 'D1', 'D2'],
+    'parseval':  ['F4', 'F5', 'F6', 'F7'],   // Synth, Analyse, Norme, Parseval
+    'frontiere': ['Z4', 'Z5'],
+  };
+  const numCodes = NUMERIC_CODES[proof.vizType] || [];
+
+  const classified = proof.axiomsList.map(ax => {
+    const code = ax[0].split(' · ')[0];
+    const isStructural = !numCodes.includes(code);
+    return { ax, code, isStructural, weight: weightOfAxiom(proof, code, a, b, c) };
+  });
+
+  const structAxs = classified.filter(x => x.isStructural);
+  const numAxs    = classified.filter(x => !x.isStructural);
+
+  // somme et max sur les seuls axiomes numériques
+  const totalNum = numAxs.reduce((s, x) => s + Math.abs(x.weight), 0);
+  const maxNum = Math.max(...numAxs.map(x => Math.abs(x.weight)), 0.001);
+
+
+  // 2 sections : STRUCTURELS puis NUMÉRIQUES, séparés par un titre
+  const maxR = 9;
+  const slotH = 42;
+  let cursorY = y + 36;
+
+  // ── titre section structurels ──────────────
+  P.noStroke();
+  P.fill(140, 145, 165);
+  P.textSize(10); P.textAlign(P.LEFT, P.TOP);
+  P.text('STRUCTURELS · ' + structAxs.length + ' axiomes constants', tx, cursorY);
+  // ligne fine sous le titre
+  P.stroke(proof.color + '40'); P.strokeWeight(0.8);
+  P.line(tx, cursorY + 14, tx + textW - 20, cursorY + 14);
+  cursorY += 22;
+
+  structAxs.forEach((entry) => {
+    if (cursorY > y + h - 90) return;
+    drawAxiomRow(entry, cursorY, tx, textW, proof.color, maxR, maxNum);
+    cursorY += slotH;
+  });
+
+  // espace entre les 2 sections
+  cursorY += 8;
+
+  // ── titre section numériques ──────────────
+  P.noStroke();
+  P.fill(140, 145, 165);
+  P.textSize(10); P.textAlign(P.LEFT, P.TOP);
+  P.text('NUMÉRIQUES · ' + numAxs.length + ' axiomes contributifs', tx, cursorY);
+  P.stroke(proof.color + '40'); P.strokeWeight(0.8);
+  P.line(tx, cursorY + 14, tx + textW - 20, cursorY + 14);
+  cursorY += 22;
+
+  numAxs.forEach((entry) => {
+    if (cursorY > y + h - 90) return;
+    drawAxiomRow(entry, cursorY, tx, textW, proof.color, maxR, maxNum);
+    cursorY += slotH;
+  });
+
+  // formule générale
+  P.fill(proof.color); P.textSize(14); P.textAlign(P.LEFT, P.BOTTOM);
+  P.text(proof.formula, tx, y + h - 50);
+  P.fill(160); P.textSize(10); P.textAlign(P.LEFT, P.BOTTOM);
+  P.text('forme générale', tx, y + h - 64);
+
+  // application numérique (boîte mise en évidence)
+  const numStr = applyNumerically(proof.vizType, a, b, c);
+
+  // mesurer la largeur réelle du texte avant de tracer la boîte
+  P.textSize(13);
+  const numW = P.textWidth(numStr);
+  // largeur disponible : depuis tx jusqu'au début de la viz (textW + 12 marge)
+  const availW = textW + 8;  // un peu plus large que la colonne texte stricte
+  const boxW = Math.min(availW, numW + 24);
+  const boxH = 36;
+  const boxX = tx - 4;
+  const boxY = y + h - 38;
+
+  // label au-dessus
+  P.noStroke();
+  P.fill(proof.color); P.textSize(10); P.textAlign(P.LEFT, P.BOTTOM);
+  P.text('APPLICATION  a=' + a.toFixed(2) + ', b=' + b.toFixed(2), tx, boxY - 4);
+
+  // boîte aux bonnes dimensions
+  P.fill(proof.color + '15');
+  P.stroke(proof.color); P.strokeWeight(1);
+  P.rect(boxX, boxY, boxW, boxH, 4);
+
+  // ajuster la taille du texte pour tenir dans la boîte
+  let fontSize = 13;
+  P.textSize(fontSize);
+  while (P.textWidth(numStr) > boxW - 24 && fontSize > 9) {
+    fontSize -= 0.5;
+    P.textSize(fontSize);
+  }
+  P.noStroke();
+  P.fill(proof.color); P.textAlign(P.LEFT, P.CENTER);
+  P.text(numStr, boxX + 12, boxY + boxH / 2);
+
+  // colonne droite : animation OU arbre selon S.rightView
+  const vizX = x + textW + 16;
+  const vizW = w - textW - PAD - 16;
+  const vizY = y + 8;
+  const vizH = h - 16;
+  if (S.rightView === 'tree') {
+    drawAxiomTree(proof, vizX, vizY, vizW, vizH, classified, a, b, c);
+  } else if (S.rightView === 'sphere') {
+    drawAxiomSphere(proof, vizX, vizY, vizW, vizH, classified, a, b, c);
+  } else {
+    drawVizOf(proof.vizType, vizX, vizY, vizW, vizH, a, b, c, proof.color);
+  }
+}
+
+// ── ARBRE DES AXIOMES ────────────────────────────────────────────────
+// montre comment les variables a, b traversent les axiomes pour produire c
+function drawAxiomTree(proof, x, y, w, h, classified, a, b, c) {
+  // titre
+  P.noStroke(); P.fill(proof.color);
+  P.textSize(11); P.textAlign(P.LEFT, P.TOP);
+  P.text('arbre des axiomes', x + 8, y + 4);
+  P.fill(140, 145, 160); P.textSize(9);
+  P.text('chemin a, b → axiomes utilisés → c²', x + 8, y + 18);
+
+  // niveaux verticaux
+  const yIn   = y + 38;        // entrées (a, b)
+  const yAx   = y + h * 0.55;  // axiomes
+  const yOut  = y + h - 26;    // sortie (c²)
+
+  // ── ENTRÉES a, b ──────────────────────────────────────────────────
+  const inA = { x: x + w * 0.30, y: yIn, label: 'a', val: a };
+  const inB = { x: x + w * 0.70, y: yIn, label: 'b', val: b };
+
+  const nodeR = 18; // rayon des cercles a, b
+  [inA, inB].forEach(node => {
+    P.noStroke(); P.fill(proof.color + '20');
+    P.circle(node.x, node.y, nodeR * 2 + 6);
+    P.stroke(proof.color); P.strokeWeight(2); P.fill('#fff');
+    P.circle(node.x, node.y, nodeR * 2);
+    // label dans le cercle
+    P.noStroke(); P.fill(proof.color);
+    P.textSize(14); P.textAlign(P.CENTER, P.CENTER);
+    P.text(node.label, node.x, node.y);
+    // valeur à droite du cercle
+    P.fill(proof.color);
+    P.textSize(12); P.textAlign(P.LEFT, P.CENTER);
+    P.text('= ' + node.val.toFixed(2), node.x + nodeR + 4, node.y);
+  });
+
+  // ── AXIOMES (uniquement ceux qui sont mobilisés, weight > 0) ──────
+  const active = classified.filter(c => Math.abs(c.weight) > 0.001);
+  const maxW = Math.max(...active.map(c => Math.abs(c.weight)), 0.001);
+
+  const nAx = active.length;
+  const xStart = x + 28;
+  const xEnd = x + w - 28;
+  const xStep = nAx > 1 ? (xEnd - xStart) / (nAx - 1) : 0;
+
+  const axNodes = active.map((entry, i) => {
+    const ax = entry.ax;
+    const code = entry.code;
+    const weight = Math.abs(entry.weight);
+    const ratio = weight / maxW;
+    const r = entry.isStructural ? 12 : (10 + ratio * 14);
+    return {
+      x: nAx > 1 ? xStart + i * xStep : x + w / 2,
+      y: yAx,
+      r, code, weight, isStructural: entry.isStructural,
+    };
+  });
+
+  // ── connexions a, b → axiomes ─────────────────────────────────────
+  // chaque axiome reçoit a et/ou b selon son rôle
+  // règle simple : numérique = reçoit les deux ; structurel = aucune flèche depuis a/b
+  axNodes.forEach(ax => {
+    if (ax.isStructural) return;
+    [inA, inB].forEach(inN => {
+      // épaisseur proportionnelle au poids de l'axiome
+      const lwIn = 1.2 + (ax.weight / maxW) * 3;
+      P.stroke(proof.color + '90');
+      P.strokeWeight(lwIn);
+      P.noFill();
+      P.beginShape();
+      P.vertex(inN.x, inN.y + 18);  // bord inférieur du cercle a/b (rayon 18)
+      const midY = (inN.y + ax.y) / 2;
+      P.bezierVertex(inN.x, midY, ax.x, midY, ax.x, ax.y - ax.r);
+      P.endShape();
+    });
+  });
+
+  // ── connexions axiomes → sortie c ─────────────────────────────────
+  const outN = { x: x + w / 2, y: yOut };
+  axNodes.forEach(ax => {
+    const lw = ax.isStructural ? 1.2 : (1.5 + (ax.weight / maxW) * 5);
+    P.stroke(proof.color + (ax.isStructural ? '60' : 'C0'));
+    P.strokeWeight(lw);
+    P.noFill();
+    P.beginShape();
+    P.vertex(ax.x, ax.y + ax.r);
+    const midY = (ax.y + outN.y) / 2;
+    P.bezierVertex(ax.x, midY, outN.x, midY, outN.x, outN.y - 22);  // bord sup. de c²
+    P.endShape();
+  });
+
+  // ── nœuds axiomes (au-dessus des arêtes) ──────────────────────────
+  axNodes.forEach(ax => {
+    P.noStroke(); P.fill(proof.color + '25');
+    P.circle(ax.x, ax.y, ax.r * 2.6);
+    P.stroke(proof.color); P.strokeWeight(2);
+    P.fill('#fff');
+    P.circle(ax.x, ax.y, ax.r * 2);
+    P.noStroke(); P.fill(proof.color);
+    P.textSize(Math.min(12, ax.r * 0.85));
+    P.textAlign(P.CENTER, P.CENTER);
+    P.text(ax.code, ax.x, ax.y);
+  });
+
+  // ── sortie c² ─────────────────────────────────────────────────────
+  const outR = 22;
+  P.noStroke(); P.fill(proof.color + '30');
+  P.circle(outN.x, outN.y, outR * 2 + 6);
+  P.stroke(proof.color); P.strokeWeight(2.5);
+  P.fill('#fff');
+  P.circle(outN.x, outN.y, outR * 2);
+  // label dans le cercle
+  P.noStroke(); P.fill(proof.color);
+  P.textSize(15); P.textAlign(P.CENTER, P.CENTER);
+  P.text('c²', outN.x, outN.y);
+  // valeur à droite
+  P.fill(proof.color);
+  P.textSize(13); P.textAlign(P.LEFT, P.CENTER);
+  P.text('= ' + (c*c).toFixed(2), outN.x + outR + 4, outN.y);
+}
+
+
+// ── VUE SPHÈRE — couverture et trous ─────────────────────────────────
+function drawAxiomSphere(proof, x, y, w, h, classified, a, b, c) {
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  const R  = Math.min(w, h) * 0.35;
+
+  // titre
+  P.noStroke(); P.fill(proof.color);
+  P.textSize(13); P.textAlign(P.LEFT, P.TOP);
+  P.text('cercle des axiomes', x + 12, y + 8);
+  P.fill('#6B7280'); P.textSize(10);
+  P.text('chaque axiome actif occupe un arc proportionnel à son poids · trous = axiomes inactifs',
+         x + 12, y + 26);
+
+  // légende couleurs
+  const legY = y + 44;
+  P.fill('#3B82F6'); P.noStroke(); P.circle(x + 18, legY, 10);
+  P.fill('#4B5563'); P.textSize(10); P.textAlign(P.LEFT, P.CENTER);
+  P.text('structurels', x + 28, legY);
+  P.fill('#F59E0B'); P.circle(x + 130, legY, 10);
+  P.fill('#4B5563');
+  P.text('numériques', x + 140, legY);
+
+  // halo + cercle de support
+  P.noStroke();
+  P.fill(proof.color + '08');
+  P.circle(cx, cy, R * 2.4);
+  P.fill(proof.color + '15');
+  P.circle(cx, cy, R * 2);
+  P.stroke('#9CA3AF'); P.strokeWeight(1); P.noFill();
+  P.circle(cx, cy, R * 2);
+
+  // ── partition ──
+  const struct = classified.filter(e => e.isStructural);
+  const numAx  = classified.filter(e => !e.isStructural);
+  const inactif = classified.filter(e => Math.abs(e.weight) < 0.001).length;
+  const total = classified.length;
+
+  // poids unitaire pour structurels actifs (poids relatif fixe = 1)
+  // poids relatif pour numériques actifs = poids absolu
+  // somme totale des poids des actifs uniquement
+  const items = classified.map(e => {
+    const active = Math.abs(e.weight) > 0.001;
+    let w_;
+    if (!active) w_ = 0;
+    else if (e.isStructural) w_ = 1;       // poids unitaire
+    else                     w_ = Math.abs(e.weight);
+    return { entry: e, active, w: w_, color: e.isStructural ? '#3B82F6' : '#F59E0B' };
+  });
+
+  const sumActive = items.reduce((s, it) => s + it.w, 0);
+
+  // chaque axiome reçoit une fraction de 2π proportionnelle à son poids relatif
+  // sur le total de tous les axiomes (actifs + inactifs)
+  // les inactifs occupent leur part en TROU (pas d'arc dessiné)
+  // pour ça on attribue à chacun une part nominale = 2π / total
+  // les actifs voient leur arc multiplié par (w_i / moyenne_active)
+  // mais on doit re-normaliser pour rentrer dans la part totale "active"
+
+  // simplification claire :
+  //   part_active_totale = (nb_actifs / total) * 2π
+  //   chaque axiome actif reçoit part_active_totale * (w_i / sumActive)
+  //   chaque axiome inactif laisse un trou de taille (1/total) * 2π
+  const NACTIVE = items.filter(it => it.active).length;
+  const partActiveTotal = (NACTIVE / total) * 2 * Math.PI;
+  const partInactif = (1 / total) * 2 * Math.PI;
+
+  // ordre : structurels d'abord puis numériques
+  const ordered = [
+    ...items.filter(it => it.entry.isStructural),
+    ...items.filter(it => !it.entry.isStructural),
+  ];
+
+  // dessiner
+  let curAngle = -Math.PI / 2;
+
+  ordered.forEach(it => {
+    let arc;
+    if (it.active) {
+      arc = sumActive > 0 ? partActiveTotal * (it.w / sumActive) : 0;
+    } else {
+      arc = partInactif;
+    }
+    const a0 = curAngle;
+    const a1 = curAngle + arc;
+    const aMid = (a0 + a1) / 2;
+
+    if (it.active) {
+      // halo
+      P.noFill();
+      P.stroke(it.color + '40');
+      P.strokeWeight(20);
+      P.arc(cx, cy, R * 2, R * 2, a0, a1);
+      // arc principal
+      P.stroke(it.color);
+      P.strokeWeight(10);
+      P.arc(cx, cy, R * 2, R * 2, a0, a1);
+
+      // code à l'extérieur
+      const lx = cx + Math.cos(aMid) * (R + 24);
+      const ly = cy + Math.sin(aMid) * (R + 24);
+      P.noStroke(); P.fill(it.color);
+      P.textSize(11); P.textAlign(P.CENTER, P.CENTER);
+      P.text(it.entry.code, lx, ly);
+    } else {
+      // trou : pointillés en gris clair pour matérialiser l'absence
+      P.noFill();
+      P.stroke('#D1D5DB');
+      P.strokeWeight(2);
+      P.drawingContext.setLineDash([2, 4]);
+      P.arc(cx, cy, R * 2, R * 2, a0, a1);
+      P.drawingContext.setLineDash([]);
+
+      // code en gris clair à l'extérieur
+      const lx = cx + Math.cos(aMid) * (R + 24);
+      const ly = cy + Math.sin(aMid) * (R + 24);
+      P.noStroke(); P.fill('#9CA3AF');
+      P.textSize(10); P.textAlign(P.CENTER, P.CENTER);
+      P.text(it.entry.code, lx, ly);
+    }
+
+    curAngle = a1;
+  });
+
+  // ── stats ──
+  const coverage = (NACTIVE / total) * 100;
+
+  // grand chiffre central : couverture
+  P.noStroke();
+  P.fill(proof.color);
+  P.textSize(Math.min(36, R * 0.5));
+  P.textAlign(P.CENTER, P.CENTER);
+  P.text(coverage.toFixed(0) + '%', cx, cy - 8);
+  P.fill('#6B7280'); P.textSize(10);
+  P.text('couverture', cx, cy + 16);
+
+  // détails en bas
+  P.noStroke(); P.fill('#4B5563');
+  P.textSize(11); P.textAlign(P.LEFT, P.TOP);
+  P.text(NACTIVE + ' / ' + total + ' axiomes actifs   ·   ' +
+         inactif + ' inactif' + (inactif > 1 ? 's' : ''),
+         x + 12, y + h - 38);
+  P.fill('#6B7280'); P.textSize(10);
+  if (inactif === 0) {
+    P.text('couverture maximale — tous les axiomes contribuent', x + 12, y + h - 20);
+  } else {
+    const inactifCodes = items.filter(it => !it.active).map(it => it.entry.code).join(', ');
+    P.text('inactifs : ' + inactifCodes, x + 12, y + h - 20);
+  }
+}
+
+function wrapText(str, x, y, maxW, lineH) {
+  const words = str.split(' ');
+  let line = '', cy = y;
+  for (let i = 0; i < words.length; i++) {
+    const test = line + words[i] + ' ';
+    if (P.textWidth(test) > maxW && line) {
+      P.text(line, x, cy);
+      line = words[i] + ' ';
+      cy += lineH;
+    } else line = test;
+  }
+  P.text(line, x, cy);
+}
+
+
+
+// ── POIDS LOGIQUE DES AXIOMES ─────────────────────────────────────────
+// Chaque axiome reçoit un poids ∈ [0,1] selon sa contribution
+// numérique à la preuve avec les valeurs courantes (a, b).
+function axiomWeights(vizType, a, b, c) {
+  const a2 = a*a, b2 = b*b, c2 = c*c;
+  const total = a2 + b2; // = c²
+
+  if (vizType === 'euclid') {
+    // Preuve par décomposition (a+b)² = 4·½ab + c²
+    // P1-P5 : postulats d'Euclide
+    // CN1, CN2, CN4, CN5 : notions communes utilisées dans la preuve
+    const triangles = 4 * 0.5 * a * b;     // 2ab
+    const central   = c2;                   // a² + b²
+    const grand     = (a + b) * (a + b);    // (a+b)²
+    return {
+      'P1':  0.4,                            // tracé
+      'P2':  0.4,                            // prolongement
+      'P3':  0.05,                           // cercles peu utilisés ici
+      'P4':  triangles / grand,              // angles droits
+      'P5':  central / grand,                // parallèles → carré central
+      'CN1': 0.5,                            // transitivité des égalités
+      'CN2': 1.0,                            // additivité des aires (toujours max)
+      'CN4': triangles / grand,              // congruence par superposition
+      'CN5': 0.6,                            // le tout > partie
+    };
+  }
+  if (vizType === 'measure') {
+    // M1 : positivité — toujours présent
+    // M2 : μ(∅)=0 — borne inférieure, peu invoqué quand a,b > 0
+    // M3 : σ-additivité — proportionnel au nombre de morceaux additionnés
+    // M4 : invariance par isométries — invoqué pour recomposer
+    // M5 : normalisation — invoqué une fois
+    // M6 : existence de Lebesgue — toujours présent en arrière-plan
+    return {
+      'M1': 1.0,
+      'M2': Math.max(0.05, 1 - Math.min(a, b) / 6),  // grand quand a ou b est petit
+      'M3': Math.min(1, total / 30),                  // grand pour grandes aires
+      'M4': 0.9,                                      // central pour la recomposition
+      'M5': 0.3,
+      'M6': 0.5,
+    };
+  }
+  if (vizType === 'parseval') {
+    return {
+      'F1': 0.5,
+      'F2': 0.6,
+      'F3': 1.0,                                  // la Gram = I : axiome central
+      'F4': Math.sqrt(a*a + b*b) / 10,           // Synthétiser : poids = ||v||
+      'F5': (a*a + b*b) / 50,                    // Analyser : a²+b²
+      'F6': c*c / 50,                             // Normer : c²
+      'F7': (a*a + b*b) / 50,                    // Parseval : conservation
+    };
+  }
+
+  if (vizType === 'frontiere') {
+    // Z4 : sonder = proche de 1 quand a²+b² ≈ c² (régime constructif)
+    // Z5 : peser = (a²+b²)/30 (champ de convergence borné)
+    return {
+      'Z1': 0.5, 'Z2': 0.6, 'Z3': 0.6,
+      'Z4': 1 / Math.max(0.01, Math.abs(a*a + b*b - c*c) + 1),
+      'Z5': Math.min(1, (a*a + b*b) / 30),
+      'Z6': 0.8, 'Z7': 1.0,
+    };
+  }
+
+  if (vizType === 'hilbert') {
+    // E1, E2 : structure d'EV et produit scalaire — fondement constant
+    // E3 : bilinéarité — clé du développement, poids = poids du terme croisé
+    // E4 : symétrie — invoquée à chaque ⟨v,w⟩
+    // E5 : positivité — détermine que ⟨v,v⟩ ⩾ 0
+    // E6 : définie — moins central pour Pythagore
+    // D1 : norme induite — invoquée pour passer de ⟨,⟩ aux longueurs
+    // D2 : orthogonalité — c'est CE qui annule le terme croisé : poids max
+    const cross = 2 * a * b;     // terme croisé annulé par orthogonalité
+    return {
+      'E1': 0.6,
+      'E2': 0.7,
+      'E3': cross / (cross + total),       // bilinéarité = importance du terme croisé
+      'E4': 0.5,
+      'E5': total / (total + 10),
+      'E6': 0.2,
+      'D1': 1.0,                            // toujours invoqué pour les normes
+      'D2': cross / (cross + total),       // orthogonalité = pareil que E3
+    };
+  }
+  return {};
+}
+
+function weightOfAxiom(proof, code, a, b, c) {
+  const w = axiomWeights(proof.vizType, a, b, c);
+  return w[code] ?? 0.5;
+}
+
+function applyNumerically(vizType, a, b, c) {
+  const a2 = (a*a).toFixed(2);
+  const b2 = (b*b).toFixed(2);
+  const c2 = (c*c).toFixed(2);
+  if (vizType === 'euclid') {
+    // (a+b)² = 4·½ab + c²
+    const ab2 = ((a+b)*(a+b)).toFixed(2);
+    const tri = (4 * 0.5 * a * b).toFixed(2);
+    return '(' + a.toFixed(1) + '+' + b.toFixed(1) + ')² = 4·½·' + a.toFixed(1) + '·' + b.toFixed(1) + ' + c²  →  ' + ab2 + ' = ' + tri + ' + ' + c2;
+  }
+  if (vizType === 'measure') {
+    return 'μ(' + a2 + ') + μ(' + b2 + ') = μ(' + c2 + ')   →   ' + a2 + ' + ' + b2 + ' = ' + c2;
+  }
+  if (vizType === 'hilbert') {
+    return '||v||²=' + b2 + ',  ||w||²=' + a2 + '  →  ||v+w||² = ' + (parseFloat(a2)+parseFloat(b2)).toFixed(2) + ' = ' + c2;
+  }
+  if (vizType === 'parseval') {
+    return '|⟨e₁|v⟩|² + |⟨e₂|v⟩|² = ' + a2 + ' + ' + b2 + ' = ' + (parseFloat(a2)+parseFloat(b2)).toFixed(2) + ' = ||v||² = ' + c2;
+  }
+  if (vizType === 'frontiere') {
+    const ratio = (a*a + b*b) / Math.max(c*c, 0.01);
+    return 'σ_c = 1  ·  Q(' + a.toFixed(1) + ',' + b.toFixed(1) + ') = ' + (a*a+b*b).toFixed(2) + ' = c² = ' + c2 + '  (ratio=' + ratio.toFixed(3) + ')';
+  }
+  return '';
+}
+
+function drawVizOf(type, x, y, w, h, a, b, c, color) {
+  if (type === 'euclid')    drawEuclid(x, y, w, h, a, b, c, color);
+  if (type === 'measure')   drawMeasure(x, y, w, h, a, b, c, color);
+  if (type === 'hilbert')   drawHilbert(x, y, w, h, a, b, c, color);
+  if (type === 'parseval')  drawParseval(x, y, w, h, a, b, c, color);
+  if (type === 'frontiere') drawFrontiere(x, y, w, h, a, b, c, color);
+}
+
+// ── PREUVE 1 — euclide : grand carré (a+b)² découpé en 4 triangles + c² ──
+function drawEuclid(x, y, w, h, a, b, c, color) {
+  const padH = 24;
+  const padTop = 16;
+  const padBot = 36; // espace pour l'équation en bas
+  const availW = w - padH * 2;
+  const availH = h - padTop - padBot;
+  const sc = Math.min(availW, availH) / (a + b);
+  const side = (a + b) * sc;
+  const cx = x + (w - side) / 2;
+  const cy = y + padTop + (availH - side) / 2;
+
+  // grand carré
+  P.stroke(color); P.strokeWeight(1.5);
+  P.fill(color + '10');
+  P.rect(cx, cy, side, side);
+
+  // 4 triangles aux coins (rectangle a × b)
+  // triangle 1 : haut-gauche
+  const aPx = a * sc, bPx = b * sc;
+
+  P.noStroke();
+  P.fill(color + '50');
+  // haut : du coin haut-gauche, descend de a, va à droite
+  P.beginShape();
+  P.vertex(cx, cy);
+  P.vertex(cx + bPx, cy);
+  P.vertex(cx, cy + aPx);
+  P.endShape(P.CLOSE);
+  // droite
+  P.beginShape();
+  P.vertex(cx + side, cy);
+  P.vertex(cx + side, cy + bPx);
+  P.vertex(cx + side - aPx, cy);
+  P.endShape(P.CLOSE);
+  // bas
+  P.beginShape();
+  P.vertex(cx + side, cy + side);
+  P.vertex(cx, cy + side);
+  P.vertex(cx + side, cy + side - aPx);
+  P.endShape(P.CLOSE);
+  // gauche
+  P.beginShape();
+  P.vertex(cx, cy + side);
+  P.vertex(cx, cy + side - bPx);
+  P.vertex(cx + aPx, cy + side);
+  P.endShape(P.CLOSE);
+
+  // carré central tilté = c²
+  P.stroke(color); P.strokeWeight(2);
+  P.fill(color + '30');
+  P.beginShape();
+  P.vertex(cx + bPx, cy);
+  P.vertex(cx + side, cy + bPx);
+  P.vertex(cx + side - bPx, cy + side);
+  P.vertex(cx, cy + side - bPx);
+  P.endShape(P.CLOSE);
+
+  // labels
+  P.noStroke();
+  P.fill('#fff'); P.textSize(13); P.textAlign(P.CENTER, P.CENTER);
+  P.text('c² = ' + (c*c).toFixed(1), cx + side/2, cy + side/2);
+
+  // a et b sur un des triangles
+  P.fill(color); P.textSize(12);
+  P.textAlign(P.CENTER, P.BOTTOM);
+  P.text('b', cx + bPx/2, cy - 2);
+  P.textAlign(P.RIGHT, P.CENTER);
+  P.text('a', cx - 2, cy + aPx/2);
+
+  // équation en bas
+  P.fill(color); P.textSize(13); P.textAlign(P.CENTER, P.TOP);
+  P.text('(a+b)² = 4·½ab + c²  →  a² + b² = c²', x + w/2, y + h - 18);
+}
+
+// ── PREUVE 2 — mesure : 3 carrés et leur aire ──
+function drawMeasure(x, y, w, h, a, b, c, color) {
+  // calcul de l'échelle pour que les 3 carrés + opérateurs tiennent dans w
+  // total horizontal = aPx + opSpace + bPx + opSpace + cPx
+  // somme des côtés = a + b + c, espace pour 2 opérateurs = 80px
+  const padH = 32;       // marge gauche/droite
+  const opSpace = 36;    // espace pour + et =
+  const availW = w - padH * 2 - opSpace * 2;
+  const availH = h - 80; // espace pour titre du haut + équation du bas
+
+  // taille max d'un côté = min(aPx_max, bPx_max, cPx_max)
+  // on doit avoir : a*sc + b*sc + c*sc <= availW  →  sc <= availW / (a+b+c)
+  // et aussi : c*sc <= availH (le plus grand carré tient verticalement)
+  const sc = Math.min(availW / (a + b + c), availH / c);
+
+  const aPx = a * sc, bPx = b * sc, cPx = c * sc;
+  const totalW = aPx + bPx + cPx + opSpace * 2;
+  const baseY = y + h - 50;
+  let xc = x + (w - totalW) / 2;
+
+  // a²
+  P.stroke(color); P.strokeWeight(1.5); P.fill(color + '40');
+  P.rect(xc, baseY - aPx, aPx, aPx);
+  P.noStroke(); P.fill(color); P.textSize(Math.min(13, aPx*0.18));
+  P.textAlign(P.CENTER, P.CENTER);
+  P.text('a²', xc + aPx/2, baseY - aPx/2 - 7);
+  P.text((a*a).toFixed(2), xc + aPx/2, baseY - aPx/2 + 7);
+
+  xc += aPx;
+  P.fill('#475569'); P.textSize(20);
+  P.text('+', xc + opSpace/2, baseY - aPx/2);
+
+  xc += opSpace;
+  P.stroke(color); P.strokeWeight(1.5); P.fill(color + '40');
+  P.rect(xc, baseY - bPx, bPx, bPx);
+  P.noStroke(); P.fill(color); P.textSize(Math.min(13, bPx*0.18));
+  P.textAlign(P.CENTER, P.CENTER);
+  P.text('b²', xc + bPx/2, baseY - bPx/2 - 7);
+  P.text((b*b).toFixed(2), xc + bPx/2, baseY - bPx/2 + 7);
+
+  xc += bPx;
+  P.fill('#475569'); P.textSize(20);
+  P.text('=', xc + opSpace/2, baseY - aPx/2);
+
+  xc += opSpace;
+  P.stroke(color); P.strokeWeight(1.5); P.fill(color + '60');
+  P.rect(xc, baseY - cPx, cPx, cPx);
+  P.noStroke(); P.fill('#fff'); P.textSize(Math.min(13, cPx*0.15));
+  P.textAlign(P.CENTER, P.CENTER);
+  P.text('c²', xc + cPx/2, baseY - cPx/2 - 8);
+  P.text((c*c).toFixed(2), xc + cPx/2, baseY - cPx/2 + 8);
+
+  // équation
+  P.fill(color); P.textSize(12); P.textAlign(P.CENTER, P.BOTTOM);
+  P.text('μ(a²) + μ(b²) = μ(c²)  par σ-additivité', x + w/2, y + h - 12);
+}
+
+// ── PREUVE 3 — hilbertien : v ⊥ w + parallélogramme ──
+
+// ── Formule de Jacobi : compte les décompositions m²+n²=N ─────────
+function jacobiCount(N) {
+  // r₂(N) = 4 × (d₁(N) − d₃(N))
+  // d_k = nombre de diviseurs IMPAIRS de N congrus à k mod 4
+  if (N <= 0) return { d1: 0, d3: 0, r2: 0 };
+  let d1 = 0, d3 = 0;
+  for (let d = 1; d <= N; d++) {
+    if (N % d !== 0) continue;
+    if (d % 2 === 0) continue;       // diviseurs impairs uniquement
+    if (d % 4 === 1) d1++;
+    else if (d % 4 === 3) d3++;
+  }
+  return { d1, d3, r2: 4 * (d1 - d3) };
+}
+
+// factorisation rapide pour affichage
+function factorize(n) {
+  const factors = {};
+  let x = n;
+  for (let p = 2; p * p <= x; p++) {
+    while (x % p === 0) {
+      factors[p] = (factors[p] || 0) + 1;
+      x = Math.floor(x / p);
+    }
+  }
+  if (x > 1) factors[x] = (factors[x] || 0) + 1;
+  return factors;
+}
+
+// caractère χ₄ : +1 si p≡1 mod 4, -1 si p≡3 mod 4, 0 si p=2
+function chi4(p) {
+  if (p === 2) return 0;
+  return (p % 4 === 1) ? 1 : -1;
+}
+
+// classer chaque facteur premier
+function classifyPrimes(factors) {
+  const split = [], inert = [], ramif = [];
+  Object.entries(factors).forEach(([p, e]) => {
+    const pn = parseInt(p);
+    const c = chi4(pn);
+    if (c === 1)       split.push([pn, e]);
+    else if (c === -1) inert.push([pn, e]);
+    else               ramif.push([pn, e]);
+  });
+  return { split, inert, ramif };
+}
+
+function factorString(factors) {
+  return Object.entries(factors)
+    .map(([p, e]) => e === 1 ? p : p + '^' + e)
+    .join(' × ');
+}
+
+function drawFrontiere(x, y, w, h, a, b, c, color) {
+  // vue isométrique 2D du paysage Z[i] avec contributions à ζ_Q(s)
+  // axe x = m, axe y = n, axe z = 1/(m²+n²)^s
+  // s est dérivé de S.eps si défini, sinon = 1.5
+
+  const sParam = (typeof S.s === 'number') ? S.s : 1.5;
+  // demi-largeur du réseau adaptée à c : doit englober le cercle
+  const N = Math.max(6, Math.ceil(c) + 1);
+  const cx = x + w / 2;
+  const cy = y + h * 0.45;
+
+  // projection isométrique — taille de cellule ajustée pour que tout tienne
+  // largeur isométrique totale ≈ N * cellPx * 1.732 (= 2 * 0.866)
+  // hauteur isométrique totale ≈ N * cellPx
+  // on prend une marge de 60% horizontale et 50% verticale (haut + bas pour barres et panneau)
+  const availW = w * 0.85;
+  const availH = h * 0.45;
+  const cellPx = Math.min(availW / (N * 1.732), availH / N);
+  const isoX = (m, n) => cx + (m - n) * cellPx * 0.866;
+  const isoY = (m, n) => cy + (m + n) * cellPx * 0.5;
+
+  // ── 1. plan du réseau (grille au sol) ──────────────────────────
+  P.stroke(220); P.strokeWeight(.5);
+  for (let m = -N; m <= N; m++) {
+    P.line(isoX(m, -N), isoY(m, -N), isoX(m, N), isoY(m, N));
+    P.line(isoX(-N, m), isoY(-N, m), isoX(N, m), isoY(N, m));
+  }
+
+  // ── 2. axes m, n ────────────────────────────────────────────────
+  P.stroke('#6B7280'); P.strokeWeight(1.2);
+  P.line(isoX(0, 0), isoY(0, 0), isoX(N, 0), isoY(N, 0));
+  P.line(isoX(0, 0), isoY(0, 0), isoX(0, N), isoY(0, N));
+  P.noStroke(); P.fill('#6B7280');
+  P.textSize(11); P.textAlign(P.LEFT, P.TOP);
+  P.text('m', isoX(N, 0) + 4, isoY(N, 0));
+  P.text('n', isoX(0, N) + 4, isoY(0, N));
+
+  // ── 3. cercle au sol : a² + b² = c² ────────────────────────────
+  P.stroke(color); P.strokeWeight(2);
+  P.noFill();
+  P.beginShape();
+  for (let θ = 0; θ <= Math.PI * 2 + 0.1; θ += 0.05) {
+    const m_ = c * Math.cos(θ);
+    const n_ = c * Math.sin(θ);
+    P.vertex(isoX(m_, n_), isoY(m_, n_));
+  }
+  P.endShape();
+
+  // label cercle
+  P.noStroke(); P.fill(color);
+  P.textSize(11); P.textAlign(P.CENTER, P.BOTTOM);
+  P.text('a² + b² = c² (= ' + (c*c).toFixed(2) + ')',
+         isoX(c*0.7, c*0.7), isoY(c*0.7, c*0.7) - 6);
+
+  // ── 4. caractère χ_4 d'un entier > 0 ────────────────────────────
+  // χ_4(k) = +1 si k ≡ 1 mod 4, -1 si k ≡ 3 mod 4, 0 sinon
+  const chi4 = k => (k % 4 === 1) ? 1 : (k % 4 === 3 ? -1 : 0);
+
+  // ── 5. barres pour chaque (m, n) ────────────────────────────────
+  // collecter et trier par profondeur (back to front)
+  const points = [];
+  for (let m = -N; m <= N; m++) {
+    for (let n = -N; n <= N; n++) {
+      if (m === 0 && n === 0) continue;
+      const Q = m*m + n*n;
+      const height = Math.pow(Q, -sParam);
+      points.push({ m, n, Q, height });
+    }
+  }
+  points.sort((a, b) => (a.m + a.n) - (b.m + b.n));
+
+  // échelle verticale dynamique
+  const heightMax = points.reduce((mx, p) => Math.max(mx, p.height), 0);
+  const zScale = (h * 0.32) / Math.max(heightMax, 0.01);
+
+  // détection des points sur le cercle (décompositions de c²)
+  const eps = 0.4;
+  points.forEach(pt => {
+    pt.onCircle = Math.abs(pt.Q - c*c) < eps;
+  });
+
+  points.forEach(pt => {
+    const x0 = isoX(pt.m, pt.n);
+    const y0 = isoY(pt.m, pt.n);
+    const barH = pt.height * zScale;
+    const x1 = x0;
+    const y1 = y0 - barH;
+
+    // couleur selon χ_4 ou cercle
+    let col, lw;
+    if (pt.onCircle) {
+      col = color; lw = 3;
+    } else {
+      const k = pt.Q;
+      const c4 = chi4(k);
+      if (c4 === 1)       col = '#10B981';   // scinde
+      else if (c4 === -1) col = '#EF4444';   // inerte
+      else                col = '#F59E0B';   // ramifie
+      lw = pt.onCircle ? 3 : 1.2;
+    }
+
+    P.stroke(col); P.strokeWeight(lw);
+    P.line(x0, y0, x1, y1);
+
+    // sphère au sol pour les points du cercle
+    if (pt.onCircle) {
+      P.noStroke(); P.fill(color);
+      P.circle(x0, y0, 7);
+      // label (m, n)
+      P.fill(color); P.textSize(10);
+      P.textAlign(P.CENTER, P.BOTTOM);
+      P.text('(' + pt.m + ',' + pt.n + ')', x1, y1 - 4);
+    }
+  });
+
+  // ── 6. titre + paramètres ──────────────────────────────────────
+  P.noStroke(); P.fill(color);
+  P.textSize(13); P.textAlign(P.LEFT, P.TOP);
+  P.text('Paysage de ζ_Q sur ℤ[i]', x + 16, y + 12);
+  P.fill('#6B7280'); P.textSize(10);
+  P.text('Q(m,n) = m²+n²  ·  hauteur = 1/Q^s  ·  s = ' + sParam.toFixed(2), x + 16, y + 30);
+
+  // ── 7. légende couleurs (en bas) ───────────────────────────────
+  const ly = y + h - 110;
+  let lx = x + 20;
+  const items = [
+    [color, '● a²+b²=c²'],
+    ['#10B981', 'χ₄=+1 scinde'],
+    ['#EF4444', 'χ₄=−1 inerte'],
+    ['#F59E0B', 'χ₄=0 ramifié'],
+  ];
+  P.textSize(10); P.textAlign(P.LEFT, P.CENTER);
+  items.forEach(([itemCol, itemTxt]) => {
+    P.noStroke(); P.fill(itemCol);
+    P.circle(lx + 4, ly + 4, 8);
+    P.fill('#6B7280');
+    P.text(itemTxt, lx + 14, ly + 4);
+    lx += P.textWidth(itemTxt) + 32;
+  });
+
+  // ── 8. panneau Jacobi : nombre de solutions + détails ─────────
+  // on travaille toujours avec l'entier le plus proche de c
+  const cInt = Math.round(c);
+  const cIsInt = Math.abs(c - cInt) < 0.05;
+  const cSq = cInt * cInt;
+
+  // boîte info en bas
+  const panelW = w - 32;
+  const panelH = 120;
+  const panelX = x + 16;
+  const panelY = y + h - panelH - 8;
+
+  P.noStroke();
+  P.fill(color + '10');
+  P.rect(panelX, panelY, panelW, panelH, 6);
+  P.stroke(color + '50'); P.strokeWeight(1); P.noFill();
+  P.rect(panelX, panelY, panelW, panelH, 6);
+
+  if (cInt > 0) {
+    const factors = factorize(cSq);
+    const factorStr = factorString(factors);
+    const { d1, d3, r2 } = jacobiCount(cSq);
+    const { split, inert, ramif } = classifyPrimes(factors);
+
+    // décompositions positives distinctes 0 ≤ m ≤ n
+    const decs = [];
+    for (let m = 0; m * m <= cSq; m++) {
+      const n2 = cSq - m * m;
+      const n = Math.round(Math.sqrt(n2));
+      if (n * n === n2 && n >= m) {
+        decs.push([m, n]);
+      }
+    }
+
+    // ── colonne 1 : grand chiffre ──────────────────────────────────
+    P.noStroke();
+    P.fill(color);
+    P.textSize(36); P.textAlign(P.LEFT, P.TOP);
+    P.text(decs.length, panelX + 16, panelY + 6);
+    P.fill(color + 'CC'); P.textSize(10);
+    P.text('SOLUTION' + (decs.length > 1 ? 'S' : ''), panelX + 16, panelY + 48);
+    P.text('m² + n² = c²', panelX + 16, panelY + 62);
+    if (!cIsInt) {
+      P.fill('#9CA3AF'); P.textSize(9);
+      P.text('arrondi à c=' + cInt, panelX + 16, panelY + 78);
+    }
+
+    const sep1 = panelX + 100;
+    P.stroke(color + '40'); P.strokeWeight(1);
+    P.line(sep1, panelY + 10, sep1, panelY + panelH - 10);
+
+    // ── colonne 2 : Jacobi ─────────────────────────────────────────
+    const dx = sep1 + 14;
+    const col2W = (panelW - 100) * 0.55;
+
+    P.noStroke(); P.fill(color); P.textSize(11);
+    P.textAlign(P.LEFT, P.TOP);
+    P.text('Jacobi  ·  c² = ' + cSq + ' = ' + factorStr, dx, panelY + 8);
+
+    P.fill('#4B5563'); P.textSize(10);
+    P.text('d₁ = ' + d1 + '  ·  d₃ = ' + d3, dx, panelY + 26);
+
+    P.fill(color); P.textSize(11);
+    P.text('r₂ = 4·(d₁ − d₃) = ' + r2 + '  paires signées', dx, panelY + 42);
+
+    P.fill('#4B5563'); P.textSize(10);
+    let txt2 = decs.map(([m, n]) => m + '²+' + n + '²').join(' · ');
+    while (P.textWidth(txt2) > col2W - 8 && txt2.length > 20) {
+      txt2 = txt2.slice(0, -1);
+    }
+    P.text(txt2, dx, panelY + 60);
+
+    // hint
+    if (decs.length === 1) {
+      P.fill('#9CA3AF'); P.textSize(9);
+      P.text('seule (0,c) — essayer c = 5, 13, 17, 25, 65', dx, panelY + 80);
+    }
+
+    // ── colonne 3 : factorisation arithmétique χ₄ ──────────────────
+    const sep2 = sep1 + col2W + 14;
+    P.stroke(color + '40'); P.strokeWeight(1);
+    P.line(sep2, panelY + 10, sep2, panelY + panelH - 10);
+
+    const ex = sep2 + 14;
+    P.noStroke(); P.fill(color); P.textSize(11);
+    P.textAlign(P.LEFT, P.TOP);
+    P.text('χ₄ — factorisation dans ℤ[i]', ex, panelY + 8);
+
+    let yy = panelY + 26;
+    if (split.length > 0) {
+      P.fill('#10B981'); P.textSize(10);
+      const s = split.map(([p, e]) => p + (e > 1 ? '^' + e : '')).join(', ');
+      P.text('● scindés (≡1) : ' + s, ex, yy);
+      yy += 14;
+    }
+    if (inert.length > 0) {
+      P.fill('#EF4444'); P.textSize(10);
+      const s = inert.map(([p, e]) => p + (e > 1 ? '^' + e : '')).join(', ');
+      P.text('● inertes (≡3) : ' + s, ex, yy);
+      yy += 14;
+    }
+    if (ramif.length > 0) {
+      P.fill('#F59E0B'); P.textSize(10);
+      const s = ramif.map(([p, e]) => p + (e > 1 ? '^' + e : '')).join(', ');
+      P.text('● ramifié (=2) : ' + s, ex, yy);
+      yy += 14;
+    }
+
+    // verdict de Fermat
+    const inertOdd = inert.filter(([p, e]) => e % 2 === 1).length;
+    const fermatOK = inertOdd === 0;
+    P.fill(fermatOK ? '#10B981' : '#EF4444');
+    P.textSize(10);
+    P.text(fermatOK ? '✓ Fermat : c² s\'écrit a²+b²' : '✗ Fermat : décomposition impossible',
+           ex, yy + 4);
+  }
+}
+
+function drawParseval(x, y, w, h, a, b, c, color) {
+  // diagramme commutatif :
+  //
+  //   (a,b)  ──Synthétiser──→  v
+  //     ↑ Analyser              │ Normer
+  //     │  (isométrie           │
+  //     │   car Gram=I)         ↓
+  //   ²↓                        ↓²
+  //  a²+b²  ═══════════════════ c²
+  //          PARSEVAL
+
+  const PAD = 32;
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+
+  // titre
+  P.noStroke(); P.fill(color);
+  P.textSize(13); P.textAlign(P.LEFT, P.TOP);
+  P.text('Parseval — diagramme commutatif', x + PAD, y + 12);
+  P.fill('#6B7280'); P.textSize(10);
+  P.text('frame orthonormal {e₁, e₂}  ·  Gram = I', x + PAD, y + 30);
+
+  // 4 nœuds disposés en carré
+  const nodeR = Math.min(w, h) * 0.07;
+  const dx = (w - PAD * 2) * 0.32;
+  const dy = (h - 90) * 0.30;
+
+  const TL = { x: cx - dx, y: cy - dy, label: '(a, b)', sub: 'ℓ²',
+               val: '(' + a.toFixed(2) + ', ' + b.toFixed(2) + ')' };
+  const TR = { x: cx + dx, y: cy - dy, label: 'v',       sub: 'E',
+               val: 'a·e₁ + b·e₂' };
+  const BL = { x: cx - dx, y: cy + dy, label: 'a²+b²',   sub: 'ℝ',
+               val: (a*a + b*b).toFixed(3) };
+  const BR = { x: cx + dx, y: cy + dy, label: 'c²',      sub: 'ℝ',
+               val: (c*c).toFixed(3) };
+
+  // ── flèches du diagramme ──────────────────────────────────────
+  // TL → TR : Synthétiser
+  drawArrow(TL.x + nodeR, TL.y, TR.x - nodeR, TR.y,
+            color, 2.5, 'Synthétiser', 'top');
+  // TR → BR : Normer + ²
+  drawArrow(TR.x, TR.y + nodeR, BR.x, BR.y - nodeR,
+            color, 2.5, 'Normer + ²', 'right');
+  // TL → BL : Analyser + Σ²
+  drawArrow(TL.x, TL.y + nodeR, BL.x, BL.y - nodeR,
+            color, 2.5, 'Analyser + Σ²', 'left');
+  // BL ═══ BR : Parseval (double trait épais)
+  P.stroke(color); P.strokeWeight(3);
+  P.line(BL.x + nodeR + 2, BL.y - 3, BR.x - nodeR - 2, BR.y - 3);
+  P.line(BL.x + nodeR + 2, BL.y + 3, BR.x - nodeR - 2, BR.y + 3);
+  P.noStroke(); P.fill(color);
+  P.textSize(11); P.textAlign(P.CENTER, P.BOTTOM);
+  P.text('PARSEVAL', (BL.x + BR.x) / 2, BL.y - 8);
+
+  // ── nœuds ────────────────────────────────────────────────────
+  [TL, TR, BL, BR].forEach(n => {
+    P.noStroke(); P.fill(color + '20');
+    P.circle(n.x, n.y, nodeR * 2.4);
+    P.stroke(color); P.strokeWeight(2); P.fill('#fff');
+    P.circle(n.x, n.y, nodeR * 2);
+    P.noStroke(); P.fill(color);
+    P.textSize(13); P.textAlign(P.CENTER, P.CENTER);
+    P.text(n.label, n.x, n.y - 6);
+    P.fill(color + '99'); P.textSize(9);
+    P.text(n.sub, n.x, n.y + 8);
+    // valeur sous le nœud
+    P.fill('#4B5563'); P.textSize(10);
+    P.textAlign(P.CENTER, P.TOP);
+    P.text(n.val, n.x, n.y + nodeR + 6);
+  });
+
+  // ── conclusion en bas ────────────────────────────────────────
+  P.noStroke(); P.fill(color);
+  P.textSize(13); P.textAlign(P.CENTER, P.BOTTOM);
+  P.text('le diagramme commute  ⟹  a² + b² = c²', cx, y + h - 16);
+  P.fill('#6B7280'); P.textSize(10);
+  P.text('Pythagore = Analyser est une isométrie  (car frame orthonormal)',
+         cx, y + h - 36);
+}
+
+function drawArrow(x1, y1, x2, y2, color, lw, label, side) {
+  P.stroke(color); P.strokeWeight(lw);
+  P.line(x1, y1, x2, y2);
+  // pointe
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  P.fill(color); P.noStroke();
+  P.push();
+  P.translate(x2, y2); P.rotate(ang);
+  P.triangle(0, 0, -10, -4, -10, 4);
+  P.pop();
+  // label
+  if (label) {
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+    P.noStroke(); P.fill(color);
+    P.textSize(10);
+    if (side === 'top')      { P.textAlign(P.CENTER, P.BOTTOM); P.text(label, mx, my - 4); }
+    else if (side === 'left') { P.textAlign(P.RIGHT, P.CENTER); P.text(label, mx - 6, my); }
+    else if (side === 'right'){ P.textAlign(P.LEFT, P.CENTER);  P.text(label, mx + 6, my); }
+    else                       { P.textAlign(P.CENTER, P.TOP);  P.text(label, mx, my + 4); }
+  }
+}
+
+function drawHilbert(x, y, w, h, a, b, c, color) {
+  // place pour titre haut + équation bas
+  const padTop = 16, padBot = 30;
+  const availH = h - padTop - padBot;
+  const sc = Math.min((w - 60) * 0.7, availH * 0.7) / Math.max(a, b);
+  const cx = x + w/2 - b*sc/3;
+  const cy = y + padTop + availH/2 + a*sc/3;
+
+  // grille fine
+  P.stroke(235); P.strokeWeight(.5);
+  for (let g = -4; g <= 4; g++) {
+    P.line(cx + g*sc, y, cx + g*sc, y+h);
+    P.line(x, cy + g*sc, x+w, cy + g*sc);
+  }
+
+  // axes
+  P.stroke(180); P.strokeWeight(1);
+  P.line(x, cy, x+w, cy);
+  P.line(cx, y, cx, y+h);
+
+  // pointillés du parallélogramme
+  P.stroke(color); P.strokeWeight(1);
+  P.drawingContext.setLineDash([3,4]);
+  P.line(cx + b*sc, cy, cx + b*sc, cy - a*sc);
+  P.line(cx, cy - a*sc, cx + b*sc, cy - a*sc);
+  P.drawingContext.setLineDash([]);
+
+  // v et w
+  arrow(cx, cy, cx + b*sc, cy, color, 2.5);
+  arrow(cx, cy, cx, cy - a*sc, color, 2.5);
+  // diagonale v+w
+  arrow(cx, cy, cx + b*sc, cy - a*sc, '#0F766E', 2);
+
+  // angle droit
+  P.noFill(); P.stroke(color); P.strokeWeight(1);
+  P.rect(cx, cy - 10, 10, 10);
+
+  // labels
+  P.noStroke();
+  P.fill(color); P.textSize(13);
+  P.textAlign(P.CENTER, P.TOP);
+  P.text('v  ||v||=' + b.toFixed(1), cx + b*sc/2, cy + 6);
+  P.textAlign(P.RIGHT, P.CENTER);
+  P.text('w  ||w||=' + a.toFixed(1), cx - 4, cy - a*sc/2);
+  P.fill('#0F766E'); P.textAlign(P.LEFT, P.BOTTOM);
+  P.text('v+w  ||v+w||=' + c.toFixed(2), cx + b*sc*0.6, cy - a*sc*0.6 - 4);
+
+  // équation
+  P.fill(color); P.textSize(13); P.textAlign(P.CENTER, P.TOP);
+  P.text('⟨v+w,v+w⟩ = ⟨v,v⟩ + 2⟨v,w⟩ + ⟨w,w⟩  →  ⟨v,w⟩=0', x + w/2, y + h - 18);
+}
+
+function arrow(x1, y1, x2, y2, color, lw) {
+  const ang = Math.atan2(y2-y1, x2-x1);
+  P.stroke(color); P.strokeWeight(lw);
+  P.line(x1, y1, x2, y2);
+  P.fill(color); P.noStroke();
+  P.push();
+  P.translate(x2, y2); P.rotate(ang);
+  P.triangle(0, 0, -8, -3, -8, 3);
+  P.pop();
+}
+
+
+
+function wrapToLines(str, maxW) {
+  const words = str.split(' ');
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (P.textWidth(test) > maxW && line) {
+      lines.push(line);
+      line = w;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+
+function drawAxiomRow(entry, lineY, tx, textW, color, maxR, maxNum) {
+  const weight = Math.abs(entry.weight);
+  const active = weight > 0.001;
+
+  // taille cercle
+  let r;
+  if (entry.isStructural) {
+    r = active ? 7 : 5;
+  } else {
+    const ratio = maxNum > 0 ? weight / maxNum : 0;
+    r = active ? 4 + ratio * 6 : 3;
+  }
+  const cxC = tx + maxR + 2;
+  const cyC = lineY + 11;
+
+  if (active) {
+    P.noStroke();
+    P.fill(color + '25');
+    P.circle(cxC, cyC, r * 2.6);
+  }
+  P.noStroke();
+  P.fill(active ? color : 'rgb(200,205,215)');
+  P.circle(cxC, cyC, r * 2);
+
+  const textX = tx + maxR * 2 + 10;
+
+  // ligne 1 : description
+  P.fill(active ? 'rgb(70,80,100)' : 'rgb(180,185,200)');
+  P.textSize(11);
+  P.textAlign(P.LEFT, P.TOP);
+  P.text(entry.ax[0], textX, lineY);
+
+  // ligne 2 : formule rigoureuse
+  P.fill(active ? color : 'rgb(200,205,215)');
+  P.textSize(10.5);
+  P.text(entry.ax[1], textX + 4, lineY + 13);
+
+  // ligne 3 : rôle + poids (italique, plus petit, atténué)
+  if (entry.ax[3]) {
+    P.fill(active ? 'rgb(120,130,150)' : 'rgb(200,205,215)');
+    P.textSize(9.5);
+    P.text('↳ ' + entry.ax[3], textX + 4, lineY + 26);
+  }
+}
+
+</script>
+</body>
+</html>
