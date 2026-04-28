@@ -15,19 +15,22 @@ graph TD
     S["Sens\naligner, observer, ponderer..."]
     C["Cablages\nprojeter, ecouter, concentration"]
     M["Meta-objets\nGodel, currying"]
+    E["Experiences\ndécompression de phrases, protocoles"]
     R["Roadmap\nP0 a P4, references"]
 
     A --- V
     V --- S
     S --- C
     C --- M
-    M --- R
+    M --- E
+    E --- R
 
     click A "docs/architecture.md"
     click V "docs/vocabulaire/README.md"
     click S "docs/sens/README.md"
     click C "docs/cablages/README.md"
     click M "docs/meta-objets/README.md"
+    click E "docs/experience/README.md"
     click R "docs/roadmap.md"
 ```
 
@@ -54,7 +57,112 @@ graph TD
 | -- [Godel](docs/meta-objets/README.md) | Encoder un circuit comme un nombre |
 | -- [Encodage](docs/meta-objets/encodage.md) | Encodage concret du catalogue |
 | -- [Currying](docs/meta-objets/currying.md) | Fixer une entree pour produire un bloc |
+| [Expériences](docs/experience/) | Déploiement rigoureux d'intuitions mathématiques |
+| -- [Décompression de phrase](docs/experience/decompress-phrase/) | Solidité via zêta arithmétique et encodage de Gödel |
 | [Feuille de route](docs/roadmap.md) | Phases P0 a P4, references theoriques |
+
+---
+
+## Vue d'ensemble
+
+### Les objets ont trois dimensions
+
+```
+sens     →  ce qu'ils sont
+contrat  →  ce qu'ils garantissent
+cablage  →  ce qu'ils font
+```
+
+### Le cablage determine deux choses simultanement
+
+```
+cablage  →  cout d'evaluation
+         →  topologie des ports (forme, ouverture, direction)
+```
+
+Une lecture du cablage donne la performance, l'autre donne la connectabilite.
+
+### Les ports peuvent etre
+
+```
+ouverts          →  laissent passer le sens
+fermes           →  bloquent
+demi-ouverts     →  acceptent partiellement (filtre, projection, poids)
+```
+
+L'ouverture est continue, pas binaire.
+
+### Les meta-sens agissent sur les objets
+
+Plusieurs niveaux :
+
+```
+mesure d'invariance   →  identifie les transformations qui preservent un sens
+mesure de cyclicite   →  detecte l'auto-reference dans un cablage
+extraction de cycle   →  cristallise un cycle en nouveau bloc, reduit la cyclicite totale
+modification de contrat →  redessine la carte des compatibilites
+frontiere de constructibilite →  revele les invariances structurelles vs accidentelles
+```
+
+Les meta-sens peuvent etre **passifs** (mesurer) ou **actifs** (transformer).
+
+### La compatibilite entre objets
+
+```
+incompatibles  →  les ports ne matchent pas
+compatibles    →  les ports matchent par adaptation
+                  par modification de contrat
+                  par dezoom vers un parent commun
+```
+
+Trois manieres de resoudre une incompatibilite, chacune avec son cout.
+
+### Le mouvement zoom / dezoom
+
+```
+zoom    →  voir le cablage interne d'un bloc
+dezoom  →  encapsuler un assemblage en nouveau bloc
+           cristalliser un sens
+           cacher la cyclicite dans le contrat
+```
+
+Le dezoom convertit topologie complexe en semantique -- un cycle dans le cablage devient un nom dans le contrat.
+
+### Les invariants scalaires
+
+```
+ouverture totale   →  conductance du cablage
+cyclicite          →  signature de l'auto-reference
+mesure d'invariance →  groupe de symetries du sens
+```
+
+Chaque invariant cristallise un aspect du cablage en un seul nombre -- comparable, transmissible.
+
+### La limite Godel
+
+```
+certains cycles sont irreductibles
+   →  ils ne peuvent pas etre extraits
+   →  ils definissent l'identite du systeme
+   →  ils sont la signature de ce que le systeme ne peut pas dire de lui-meme
+```
+
+Le meta-sens capture beaucoup, jamais tout. C'est structurel.
+
+### Le mouvement central
+
+```
+construire un objet  →  assembler des sens existants
+mesurer un objet     →  appliquer un meta-sens
+modifier un objet    →  agir sur sens, contrat ou cablage
+extraire un sens     →  cristalliser un cycle en nouveau bloc
+```
+
+Tout l'outil se resume a ces quatre gestes appliques recursivement.
+
+### La phrase cle
+
+Un objet est ses contrats. Un meta-objet est ce qui modifie ces contrats. Un meta-meta-objet est ce qui modifie les meta-objets. Cette tour n'a pas de sommet -- Godel garantit qu'il existera toujours un niveau au-dessus du systeme courant. L'outil n'est pas une carte complete, c'est un explorateur qui rend visible le mouvement entre les niveaux.
 
 ---
 

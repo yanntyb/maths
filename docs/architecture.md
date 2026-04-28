@@ -50,7 +50,7 @@ Agda est le coeur du projet. Tout le modele formel est ecrit en Agda.
 - Le JS genere peut etre appele depuis le frontend pour evaluer / verifier
 
 **Ce qu'Agda gere :**
-- Definition des [espaces](sens/espaces.md) (`E`, `E*`, `R`, `Omega`)
+- Definition des [espaces](vocabulaire/espaces.md) (`E`, `E*`, `R`, `Omega`)
 - Types des ports (entree/sortie, espace associe)
 - [Contrats](vocabulaire/triple-distinction.md) des objets (signature typee)
 - Regles d'assemblage (unification de ports)
@@ -61,9 +61,9 @@ Agda est le coeur du projet. Tout le modele formel est ecrit en Agda.
 | Couche | Role | Exemples |
 |--------|------|----------|
 | **[Sens](sens/)** | blocs atomiques, un seul contrat chacun | aligner, observer, ponderer, attirer, deplacer, concentrer |
-| **[Cablages](cablages/)** | circuits qui assemblent plusieurs sens | [projeter](cablages/projeter.md), [ecouter](cablages/ecouter.md), [concentration](cablages/concentration.md) |
+| **Cablages** | circuits qui assemblent plusieurs sens | [projeter](sens/observer/projeter.md), [ecouter](sens/concentrer/ecouter.md), [concentration](sens/concentrer/exemples.md) |
 | **[Meta-objets](meta-objets/)** | operent sur les objets eux-memes | [Godel](meta-objets/README.md), [currying](meta-objets/currying.md) |
-| **[Espaces](sens/espaces.md)** | espaces et regles de typage | `E`, `E*`, `R`, `Omega` |
+| **[Espaces](vocabulaire/espaces.md)** | espaces et regles de typage | `E`, `E*`, `R`, `Omega` |
 
 Un cablage ne definit rien de nouveau — il montre comment les sens se connectent.
 

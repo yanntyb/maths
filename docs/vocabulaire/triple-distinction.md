@@ -30,7 +30,7 @@ Modifier un cablage modifie l'objet, pas la structure.
 
 ## Application : le circuit de la sphere
 
-| Dimension | Circuit de la [sphere](../cablages/projeter.md) |
+| Dimension | Circuit de la [sphere](../sens/observer/projeter.md) |
 |-----------|---------------------------------------------------------------------------|
 | **Sens** | ombre et intensite de la sphere |
 | **Contrat** | `Omega x E* x R -> R` |

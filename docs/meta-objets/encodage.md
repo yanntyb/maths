@@ -1,14 +1,36 @@
 # Numerotation de Godel -- encodage
 
-> [Retour](README.md)
+> [Retour aux meta-objets](README.md) | [Sens](../sens/)
+
+## Triple distinction
+
+| Dimension | Encodage |
+|-----------|----------|
+| **Sens** | encoder un circuit comme un nombre, pour pouvoir raisonner *sur* les circuits |
+| **Contrat** | `Circuit -> N` |
+| **Cablage** | chaque bloc -> un code, chaque connexion -> une puissance de premier, le circuit entier -> un produit |
+
+```mermaid
+graph LR
+    C["Circuit\n(blocs + connexions)"]:::red --> B["encoder\nles blocs"]
+    B --> ID["id_1, ..., id_n"]:::blue
+    C --> X["encoder\nles connexions"]
+    X --> CX["c_1, ..., c_m"]:::blue
+    ID --> G["G = p_1^c_1 * ... * p_m^c_m\nnombre de Godel"]:::green
+    CX --> G
+
+    classDef blue fill:#3B82F6,color:#fff
+    classDef green fill:#10B981,color:#fff
+    classDef red fill:#EF4444,color:#fff
+```
 
 ## Principe
 
-Chaque element du VPA recoit un **code**. Un circuit entier devient un produit de puissances de nombres premiers. Le nombre obtenu est unique (theoreme fondamental de l'arithmetique) et decodable.
+Chaque element du projet (type, objet, connexion) recoit un **code**. Un circuit entier devient un produit de puissances de nombres premiers. Le nombre obtenu est unique (theoreme fondamental de l'arithmetique) et decodable.
 
 ## Etape 1 -- encoder les types
 
-Les [espaces](../sens/espaces.md) sont les atomes. On leur attribue les premiers nombres premiers :
+Les [espaces](../vocabulaire/espaces.md) sont les atomes. On leur attribue les premiers nombres premiers :
 
 | Type | Code |
 |------|------|
@@ -53,7 +75,7 @@ Remarque : valeur absolue et inverse carre ont le **meme encodage de contrat** (
 
 Un circuit est une liste ordonnee de *connexions*. Chaque connexion est un triplet `(source, port_sortie, destination, port_entree)`.
 
-Le circuit [projeter](../cablages/projeter.md) :
+Le circuit [projeter](../sens/observer/projeter.md) :
 
 ```
 connexions = [
@@ -78,7 +100,7 @@ ou `p_i` est le i-eme nombre premier et `c_i` est l'encodage du i-eme triplet de
 
 ## Deuxieme circuit : teleportation
 
-Le circuit complet de teleportation -- `n` destinations attirent la sphere, les premiers controlent les poids, la boucle passe par Godel -- est developpe dans [deplacer](../sens/deplacer.md#circuit-complet--teleportation). C'est le deuxieme exemple (apres [ecouter](../cablages/ecouter.md)) du pattern "boucle auto-referente via Godel".
+Le circuit complet de teleportation -- `n` destinations attirent la sphere, les premiers controlent les poids, la boucle passe par Godel -- est developpe dans [deplacer](../sens/deplacer/#circuit-complet--teleportation). C'est le deuxieme exemple (apres [ecouter](../sens/concentrer/ecouter.md)) du pattern "boucle auto-referente via Godel".
 
 ## Ce que l'encodage revele
 
@@ -88,6 +110,11 @@ Le circuit complet de teleportation -- `n` destinations attirent la sphere, les 
 
 **Decodage** : factoriser `G` en nombres premiers reconstitue exactement le circuit. Aucune information n'est perdue.
 
-## Prochaine etape
+## Lien avec zeta
 
-Construire un circuit dont l'**entree** est un nombre de Godel -- un circuit qui raisonne sur un autre circuit. C'est la que l'auto-reference devient possible.
+Le nombre de Godel `G` est un produit de puissances de premiers : `G = p_1^{a_1} * ... * p_n^{a_n}`. La fonction zeta de Riemann, via son produit d'Euler, opere sur ces memes premiers.
+
+- [Sonder](../sens/sonder/) calcule `zeta_G(s) = PI 1/(1 - p_i^{-s})` -- le produit d'Euler partiel sur les premiers de `G`
+- [Frontiere](../meta-sens/frontiere.md) trouve `sigma_c`, le `s` critique ou la convergence bascule
+
+Le parametre `s` controle l'ouverture : plus `s` est grand, plus les grands premiers sont ecrases. La factorisation de `G` -- deja utilisee pour decoder le circuit -- devient l'entree du produit d'Euler.

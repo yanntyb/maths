@@ -16,7 +16,7 @@ graph LR
 
 ## Exemple : contraction dans la sphere
 
-Dans la [projection de la sphere](../cablages/projeter.md), la sphere fournit ses normales `n(x)` au produit de dualite et son domaine a l'integration. Ce partage revele une **contraction tensorielle** : la variable `n(x)` est produite et consommee par le meme objet (la sphere).
+Dans la [projection de la sphere](../sens/observer/projeter.md), la sphere fournit ses normales `n(x)` au produit de dualite et son domaine a l'integration. Ce partage revele une **contraction tensorielle** : la variable `n(x)` est produite et consommee par le meme objet (la sphere).
 
 | Signal | Pattern | Dans la sphere |
 |--------|---------|----------------|

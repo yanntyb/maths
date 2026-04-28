@@ -1,6 +1,6 @@
 # Espaces
 
-> [Retour aux sens](README.md)
+> [Retour au vocabulaire](README.md)
 
 ```mermaid
 graph LR
@@ -30,4 +30,4 @@ Deux ports se connectent seulement si leurs espaces sont identiques. L'incompati
 
 ---
 
-[← Concentrer](concentrer.md)
+[← Concentrer](../sens/concentrer/)
