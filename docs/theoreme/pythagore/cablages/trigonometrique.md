@@ -94,17 +94,19 @@ graph LR
 
 ## Axiomes mobilises
 
-| Code | Role | Type |
-|------|------|------|
-| A1 | definition de cos par serie entiere | structurel |
-| A2 | definition de sin par serie entiere | structurel |
-| A3 | derivation terme-a-terme valide pour cos, sin | structurel |
-| A4 | cos'(θ) = -sin(θ) | structurel |
-| A5 | sin'(θ) = cos(θ) | structurel |
-| N1 | derivation du produit et simplification | numerique |
-| N2 | fonction derivee nulle => fonction constante | numerique |
-| N3 | evaluation a θ = 0 : cos(0) = 1, sin(0) = 0 | numerique |
-| N4 | rapports trigonometriques dans triangle rectangle | numerique |
+Statuts etablis par Lean : un axiome **essentiel** a un contre-modele, un axiome **superflu** a une preuve qui s'en passe ; les autres codes ne sont pas des axiomes du modele (motif entre parentheses). Details : [lean/README.md](../../../../lean/README.md), visualiseur [V10](../../../../app/10_statuts/).
+
+| Code | Role | Statut (Lean) | Type |
+|------|------|---------------|------|
+| A1 | definition de cos par serie entiere | en amont (sert a etablir A4, A5, N3) | structurel |
+| A2 | definition de sin par serie entiere | en amont (sert a etablir A4, A5, N3) | structurel |
+| A3 | derivation terme-a-terme valide pour cos, sin | en amont (sert a etablir A4, A5) | structurel |
+| A4 | cos'(θ) = -sin(θ) | essentiel | structurel |
+| A5 | sin'(θ) = cos(θ) | essentiel | structurel |
+| N1 | derivation du produit et simplification | etape de calcul | numerique |
+| N2 | fonction derivee nulle => fonction constante | hypothese cachee : repose sur la completude de R | numerique |
+| N3 | evaluation a θ = 0 : cos(0) = 1, sin(0) = 0 | essentiel (cos 0 = 1 et sin 0 = 0, chacun) | numerique |
+| N4 | rapports trigonometriques dans triangle rectangle | hors preuve | numerique |
 
 ## Triple distinction
 

@@ -3,7 +3,7 @@
   "cosinus.orthogonal": { "angle": "essentiel", "addL": "superflu", "addR": "superflu", "symm": "essentiel", "droit": "essentiel" },
   "groupes.homogene": { "inv": "essentiel", "c4": "superflu", "homog": "essentiel", "norm": "essentiel" },
   "groupes.polynomial": { "inv": "superflu", "c4": "superflu", "c4+inv": "essentiel", "norm": "essentiel" },
-  "scalaire.carre": { "addL": "superflu", "addR": "superflu", "homog": "superflu", "symm": "essentiel", "pos": "superflu", "orth": "non testé", "addL+addR+homog": "essentiel" },
-  "scalaire.norme": { "addL": "superflu", "addR": "superflu", "homog": "superflu", "symm": "essentiel", "pos": "essentiel", "orth": "non testé" },
+  "scalaire.carre": { "addL": "superflu", "addR": "superflu", "homog": "superflu", "symm": "essentiel", "pos": "superflu", "orth": "essentiel", "addL+addR+homog": "essentiel" },
+  "scalaire.norme": { "addL": "superflu", "addR": "superflu", "homog": "superflu", "symm": "essentiel", "pos": "essentiel", "orth": "essentiel" },
   "trigonometrique.identite": { "derivC": "essentiel", "derivS": "essentiel", "C0": "essentiel", "S0": "essentiel" }
 }

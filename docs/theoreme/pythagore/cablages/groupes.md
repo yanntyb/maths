@@ -85,16 +85,18 @@ graph LR
 
 ## Axiomes mobilises
 
-| Code | Role | Type |
-|------|------|------|
-| G1 | SO(2) est un groupe : composition, identite, inverse | structurel |
-| G2 | action lineaire preservant la structure euclidienne | structurel |
-| G3 | derivation d'une fonction invariante par un groupe en l'identite | structurel |
-| A1 | forme quadratique : Q(λv) = λ² Q(v) | structurel |
-| N1 | derivation et resolution d'equations differentielles | numerique |
-| N2 | espace des solutions d'une equation lineaire homogene | numerique |
-| N3 | normalisation : Q(v₀) = 1 pour v₀ unitaire | numerique |
-| N4 | unicite a scalaire pres | numerique |
+Statuts etablis par Lean : un axiome **essentiel** a un contre-modele, un axiome **superflu** a une preuve qui s'en passe ; les autres codes ne sont pas des axiomes du modele (motif entre parentheses). Details : [lean/README.md](../../../../lean/README.md), visualiseur [V10](../../../../app/10_statuts/).
+
+| Code | Role | Statut (Lean) | Type |
+|------|------|---------------|------|
+| G1 | SO(2) est un groupe : composition, identite, inverse | hors preuve : la preuve ne compose pas de rotations | structurel |
+| G2 | action lineaire preservant la structure euclidienne | essentiel si A1 est l'homogeneite (le quart de tour ne suffit pas) ; superflu si A1 est une forme polynomiale (le quart de tour suffit) | structurel |
+| G3 | derivation d'une fonction invariante par un groupe en l'identite | hors preuve : aucune equation differentielle | structurel |
+| A1 | forme quadratique : Q(λv) = λ² Q(v) | essentiel | structurel |
+| N1 | derivation et resolution d'equations differentielles | hors preuve | numerique |
+| N2 | espace des solutions d'une equation lineaire homogene | hors preuve | numerique |
+| N3 | normalisation : Q(v₀) = 1 pour v₀ unitaire | essentiel | numerique |
+| N4 | unicite a scalaire pres | etape de calcul | numerique |
 
 ## Triple distinction
 

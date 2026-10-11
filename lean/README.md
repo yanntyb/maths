@@ -58,12 +58,12 @@ Statuts établis par les théorèmes `Superflu` et `Essentiel`. Les contre-modè
 | | | homog (S1) | superflu | `carre_sans_homog` |
 | | | symm (S2) | essentiel | `carre_sans_symm` : matrice [[1,0],[1,1]] |
 | | | pos (S3) | superflu | `carre_sans_pos` |
-| | | orth (N2) | non testé | — |
+| | | orth (N2) | essentiel | `carre_sans_orth` : produit usuel, u = v = (1,0) |
 | | | addL + addR + homog | essentiel | `carre_sans_addL_addR_homog` : (u·v)² |
 | | `norme` (`(a, b) ∈ ℝ₊² → c ∈ ℝ₊`) | addL, addR, homog (S1) | superflus | `norme_sans_addL`, `norme_sans_addR`, `norme_sans_homog` |
 | | | symm (S2) | essentiel | `norme_sans_symm` : matrice [[1,0],[1,1]] |
 | | | pos (S3) | essentiel | `norme_sans_pos` : forme de Minkowski |
-| | | orth (N2) | non testé | — |
+| | | orth (N2) | essentiel | `norme_sans_orth` : produit usuel, u = v = (1,0) |
 | complexe | `module` (`K × K → K`) | inverses (C1) | superflu | `sans_inverses` : un anneau commutatif suffit |
 | | | conj (C2) | essentiel | `sans_conj` : ℂ, conjugaison identité |
 | | | isq (C3) | essentiel | `sans_isq` : ℝ, i = 0 |

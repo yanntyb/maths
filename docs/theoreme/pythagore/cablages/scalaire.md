@@ -76,14 +76,16 @@ graph LR
 
 ## Axiomes mobilises
 
-| Code | Role | Type |
-|------|------|------|
-| S1 | bilinearite du produit scalaire : `(au+bv, w) = a(u,w) + b(v,w)` | structurel |
-| S2 | symetrie : `(u,v) = (v,u)` | structurel |
-| S3 | positivite : `(u,u) ≥ 0` et `(u,u) = 0 ⟺ u = 0` | structurel |
-| N1 | definition de la norme : `‖x‖² = (x,x)` | structurel |
-| N2 | orthogonalite : `u ⊥ v ⟺ (u,v) = 0` | numerique |
-| N3 | developpement bilineaire : `(u+v,u+v) = ‖u‖² + 2(u,v) + ‖v‖²` | numerique |
+Statuts etablis par Lean : un axiome **essentiel** a un contre-modele, un axiome **superflu** a une preuve qui s'en passe ; les autres codes ne sont pas des axiomes du modele (motif entre parentheses). Details : [lean/README.md](../../../../lean/README.md), visualiseur [V10](../../../../app/10_statuts/).
+
+| Code | Role | Statut (Lean) | Type |
+|------|------|---------------|------|
+| S1 | bilinearite du produit scalaire : `(au+bv, w) = a(u,w) + b(v,w)` | superflue en partie : addL, addR, homog superflus un a un, essentiels tous les trois ensemble | structurel |
+| S2 | symetrie : `(u,v) = (v,u)` | essentiel | structurel |
+| S3 | positivite : `(u,u) ≥ 0` et `(u,u) = 0 ⟺ u = 0` | superflu pour `carre`, essentiel pour `norme` (le statut depend du contrat) | structurel |
+| N1 | definition de la norme : `‖x‖² = (x,x)` | definition, integree a l'enonce `norme` | structurel |
+| N2 | orthogonalite : `u ⊥ v ⟺ (u,v) = 0` | essentiel | numerique |
+| N3 | developpement bilineaire : `(u+v,u+v) = ‖u‖² + 2(u,v) + ‖v‖²` | etape de calcul | numerique |
 
 ## Triple distinction
 

@@ -86,15 +86,17 @@ graph LR
 
 ## Axiomes mobilises
 
-| Code | Role | Type |
-|------|------|------|
-| S1 | definition de l'angle entre vecteurs : (u,v) = ‖u‖‖v‖cos(θ) | structurel |
-| S2 | bilinearite du produit scalaire | structurel |
-| S3 | symetrie du produit scalaire | structurel |
-| N1 | loi des cosinus derivee du produit scalaire | numerique |
-| N2 | angle droit : θ = π/2 | numerique |
-| N3 | cos(π/2) = 0 | numerique |
-| N4 | identite remarquable : (a-b)² = a² - 2ab + b² | numerique |
+Statuts etablis par Lean : un axiome **essentiel** a un contre-modele, un axiome **superflu** a une preuve qui s'en passe ; les autres codes ne sont pas des axiomes du modele (motif entre parentheses). Details : [lean/README.md](../../../../lean/README.md), visualiseur [V10](../../../../app/10_statuts/).
+
+| Code | Role | Statut (Lean) | Type |
+|------|------|---------------|------|
+| S1 | definition de l'angle entre vecteurs : (u,v) = ‖u‖‖v‖cos(θ) | essentiel | structurel |
+| S2 | bilinearite du produit scalaire | un cote superflu (addL ou addR, avec la symetrie) | structurel |
+| S3 | symetrie du produit scalaire | essentiel | structurel |
+| N1 | loi des cosinus derivee du produit scalaire | lemme derivable (`Cosinus.loi_cos`) | numerique |
+| N2 | angle droit : θ = π/2 | hors preuve : theta n'intervient pas | numerique |
+| N3 | cos(π/2) = 0 | essentiel | numerique |
+| N4 | identite remarquable : (a-b)² = a² - 2ab + b² | etape de calcul | numerique |
 
 ## Triple distinction
 

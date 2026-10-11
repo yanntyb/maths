@@ -454,6 +454,20 @@
        [{"source":
          "/-- Lemme commun : additivité des deux côtés, symétrie et orthogonalité suffisent ; un\ngroupe abélien suffit, sans structure de module. Réutilisé par le câblage cosinus. -/\ntheorem lemme_carre {V : Type*} [AddCommGroup V] (B : V → V → ℝ)\n    (addL : ∀ u v w, B (u + v) w = B u w + B v w)\n    (addR : ∀ u v w, B u (v + w) = B u v + B u w)\n    (symm : ∀ u v, B u v = B v u)\n    (u v : V) (h : B u v = 0) : B (u + v) (u + v) = B u u + B v v := by\n  grind",
          "nom": "Scalaire.lemme_carre"}]},
+      {"theoreme": "Scalaire.carre_sans_orth",
+       "statut": "essentiel",
+       "source":
+       "/-- Sans N2 : B(2u, 2u) = 4 ≠ 2 = B(u,u) + B(v,v). -/\ntheorem carre_sans_orth : Essentiel carre [\"orth\"] := by\n  refine ⟨⟨ℝ × ℝ, Bstd, (1, 0), (1, 0)⟩, axiomes_sans_orth, ?_⟩\n  simp only [carre]; norm_num [Bstd]",
+       "retires": ["orth"],
+       "lignes": [217, 220],
+       "fichier": "Derivabilite/Scalaire.lean",
+       "definitions":
+       [{"source":
+         "/-- Produit scalaire usuel sur ℝ². -/\ndef Bstd (u v : ℝ × ℝ) : ℝ := u.1 * v.1 + u.2 * v.2",
+         "nom": "Scalaire.Bstd"},
+        {"source":
+         "/-- Le produit usuel avec u = v = (1,0) satisfait tout sauf l'orthogonalité. -/\ntheorem axiomes_sans_orth : carre.sans [\"orth\"] ⟨ℝ × ℝ, Bstd, (1, 0), (1, 0)⟩ := by\n  deplier [carre, axiomes]\n  refine ⟨?_, ?_, ?_, ?_, ?_⟩\n  · intro x y z; simp only [Bstd, Prod.fst_add, Prod.snd_add]; ring\n  · intro x y z; simp only [Bstd, Prod.fst_add, Prod.snd_add]; ring\n  · intro r x y; simp only [Bstd, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]; ring\n  · intro x y; simp only [Bstd]; ring\n  · intro x; simp only [Bstd]; nlinarith [sq_nonneg x.1, sq_nonneg x.2]",
+         "nom": "Scalaire.axiomes_sans_orth"}]},
       {"theoreme": "Scalaire.carre_sans_pos",
        "statut": "superflu",
        "source":
@@ -478,7 +492,7 @@
          "nom": "Scalaire.Bnonsym"}]}],
      "sens":
      "deux vecteurs orthogonaux : la forme de leur somme est la somme de leurs formes",
-     "nonTestes": ["orth"],
+     "nonTestes": [],
      "id": "carre",
      "contrat": "E × E → R",
      "conclusion": "m.B (m.u + m.v) (m.u + m.v) = m.B m.u m.u + m.B m.v m.v",
@@ -548,6 +562,20 @@
        [{"source":
          "/-- Lemme commun : additivité des deux côtés, symétrie et orthogonalité suffisent ; un\ngroupe abélien suffit, sans structure de module. Réutilisé par le câblage cosinus. -/\ntheorem lemme_carre {V : Type*} [AddCommGroup V] (B : V → V → ℝ)\n    (addL : ∀ u v w, B (u + v) w = B u w + B v w)\n    (addR : ∀ u v w, B u (v + w) = B u v + B u w)\n    (symm : ∀ u v, B u v = B v u)\n    (u v : V) (h : B u v = 0) : B (u + v) (u + v) = B u u + B v v := by\n  grind",
          "nom": "Scalaire.lemme_carre"}]},
+      {"theoreme": "Scalaire.norme_sans_orth",
+       "statut": "essentiel",
+       "source":
+       "/-- Sans N2, même modèle : √4² = 4 ≠ 2. -/\ntheorem norme_sans_orth : Essentiel norme [\"orth\"] := by\n  refine ⟨⟨ℝ × ℝ, Bstd, (1, 0), (1, 0)⟩, axiomes_sans_orth, ?_⟩\n  simp only [norme]\n  rw [Real.sq_sqrt (by norm_num [Bstd]), Real.sq_sqrt (by norm_num [Bstd])]\n  norm_num [Bstd]",
+       "retires": ["orth"],
+       "lignes": [222, 227],
+       "fichier": "Derivabilite/Scalaire.lean",
+       "definitions":
+       [{"source":
+         "/-- Produit scalaire usuel sur ℝ². -/\ndef Bstd (u v : ℝ × ℝ) : ℝ := u.1 * v.1 + u.2 * v.2",
+         "nom": "Scalaire.Bstd"},
+        {"source":
+         "/-- Le produit usuel avec u = v = (1,0) satisfait tout sauf l'orthogonalité. -/\ntheorem axiomes_sans_orth : carre.sans [\"orth\"] ⟨ℝ × ℝ, Bstd, (1, 0), (1, 0)⟩ := by\n  deplier [carre, axiomes]\n  refine ⟨?_, ?_, ?_, ?_, ?_⟩\n  · intro x y z; simp only [Bstd, Prod.fst_add, Prod.snd_add]; ring\n  · intro x y z; simp only [Bstd, Prod.fst_add, Prod.snd_add]; ring\n  · intro r x y; simp only [Bstd, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]; ring\n  · intro x y; simp only [Bstd]; ring\n  · intro x; simp only [Bstd]; nlinarith [sq_nonneg x.1, sq_nonneg x.2]",
+         "nom": "Scalaire.axiomes_sans_orth"}]},
       {"theoreme": "Scalaire.norme_sans_pos",
        "statut": "essentiel",
        "source":
@@ -572,7 +600,7 @@
          "nom": "Scalaire.Bnonsym"}]}],
      "sens":
      "deux vecteurs orthogonaux : le carré de la longueur de leur somme est la somme des carrés des longueurs",
-     "nonTestes": ["orth"],
+     "nonTestes": [],
      "id": "norme",
      "contrat": "(a, b) ∈ ℝ₊² → c ∈ ℝ₊",
      "conclusion":

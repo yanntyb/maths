@@ -202,4 +202,28 @@ theorem carre_coherent : Coherent carre := by
 /-- Mêmes modèles et mêmes axiomes que `carre`. -/
 theorem norme_coherent : Coherent norme := carre_coherent
 
+/-! ## Sans orthogonalité -/
+
+/-- Le produit usuel avec u = v = (1,0) satisfait tout sauf l'orthogonalité. -/
+theorem axiomes_sans_orth : carre.sans ["orth"] ⟨ℝ × ℝ, Bstd, (1, 0), (1, 0)⟩ := by
+  deplier [carre, axiomes]
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro x y z; simp only [Bstd, Prod.fst_add, Prod.snd_add]; ring
+  · intro x y z; simp only [Bstd, Prod.fst_add, Prod.snd_add]; ring
+  · intro r x y; simp only [Bstd, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]; ring
+  · intro x y; simp only [Bstd]; ring
+  · intro x; simp only [Bstd]; nlinarith [sq_nonneg x.1, sq_nonneg x.2]
+
+/-- Sans N2 : B(2u, 2u) = 4 ≠ 2 = B(u,u) + B(v,v). -/
+theorem carre_sans_orth : Essentiel carre ["orth"] := by
+  refine ⟨⟨ℝ × ℝ, Bstd, (1, 0), (1, 0)⟩, axiomes_sans_orth, ?_⟩
+  simp only [carre]; norm_num [Bstd]
+
+/-- Sans N2, même modèle : √4² = 4 ≠ 2. -/
+theorem norme_sans_orth : Essentiel norme ["orth"] := by
+  refine ⟨⟨ℝ × ℝ, Bstd, (1, 0), (1, 0)⟩, axiomes_sans_orth, ?_⟩
+  simp only [norme]
+  rw [Real.sq_sqrt (by norm_num [Bstd]), Real.sq_sqrt (by norm_num [Bstd])]
+  norm_num [Bstd]
+
 end Scalaire

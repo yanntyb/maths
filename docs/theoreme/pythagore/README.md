@@ -1,4 +1,4 @@
-# Pythagore — quatre cablages
+# Pythagore — cinq cablages algebriques
 
 > [Retour a Aligner](../README.md) | [Triple distinction](../../../vocabulaire/triple-distinction.md)
 
@@ -6,7 +6,9 @@
 
 > « la longueur de l'hypotenuse d'un triangle rectangle se deduit des deux autres cotes »
 
-L'invariant `a² + b² = c²` precede ses formalisations. Quatre axiomatiques independantes produisent le meme scalaire — le sens est ce qui survit au changement de cablage.
+L'invariant `a² + b² = c²` precede ses formalisations. Cinq axiomatiques independantes — **sans aucune decomposition geometrique** — produisent le meme scalaire. Chacune evite le dessin et repose sur une structure algebrique ou analytique: produit scalaire, complexes, series, loi des cosinus, symetries de groupe.
+
+Lean nuance « independantes » : cosinus se ramene au scalaire, et chaque liste d'axiomes contient des axiomes superflus. Voir [Ce que Lean etablit](#ce-que-lean-etablit).
 
 ## Contrat
 
@@ -14,146 +16,123 @@ L'invariant `a² + b² = c²` precede ses formalisations. Quatre axiomatiques in
 (a, b) ∈ R_+²  -->  c ∈ R_+
 ```
 
-Signature commune aux quatre cablages. Deux longueurs entrent, une longueur sort. Le contrat ne dit rien sur *comment* — il garantit seulement le type.
+Signature annoncee commune aux cinq cablages. Deux longueurs entrent, une longueur sort. Parmi les enonces formalises en Lean, seul `scalaire.norme` la respecte ; les autres ont leur propre contrat (`E x E -> R`, `K x K -> K`, `R -> R`, `R² -> R`). Le contrat ne dit rien sur *comment* — il garantit seulement le type.
 
 ## Cinq cablages
 
-Quatre operent **dans** un espace (sens ordinaires). Le cinquieme opere **sur** l'espace (meta-sens).
+Tous operent **dans** des espaces algebriques ou analytiques : corps des complexes, espaces prehilbertiens, anneaux de polynomes, corps de rotations. Aucun n'invoque la geometrie ordinaire (Omega) ni les formes discretes (N).
 
-### 0. Algebre — cablage par identites algebriques (R[a,b,c])
-
-| | |
-|---|---|
-| Espace | `R[a,b,c]` — polynomes en trois variables |
-| Methode | developper `(a+b)²`, regrouper terms, annuler `2ab` |
-| Formule | `(a+b)² = a² + 2ab + b² = c² + 2ab  ==>  a² + b² = c²` |
-| Axiomes structurels | A1 (identite binome), A2 (commutativite), A3 (associativite), A4 (annulation) |
-| Axiomes numeriques | N1 (identite `(a+b)² = c² + 2ab`), N2 (egalite des formes) |
-
-Ce cablage est le plus **synthetique** : il montre Pythagore comme une pure rearrangement de termes algebriques, sans invoquer ni geometrie ni analyse fonctionnelle. [Details](cablages/algebre.md)
-
-### 1. Euclide — cablage geometrique (Omega)
+### 0. Scalaire — cablage par produit scalaire (espace prehilbertien)
 
 | | |
 |---|---|
-| Espace | `Omega` — domaine geometrique |
-| Methode | decouper `(a+b)²` en 4 triangles + carre central `c²` |
-| Formule | `(a+b)² = 4·½ab + c²  ==>  a² + b² = c²` |
-| Axiomes structurels | P1 (droite unique), P2 (prolongement), P3 (cercle), CN1 (transitivite), CN5 (tout > partie) |
-| Axiomes numeriques | P4 (angles droits → triangles ½ab), P5 (paralleles → carre c²), CN2 (additivite des aires), CN4 (congruence) |
+| Espace | `E` — espace vectoriel prehilbertien |
+| Methode | developper `‖u+v‖² = (u+v, u+v)` et annuler le terme croise par orthogonalite |
+| Formule | `‖u+v‖² = ‖u‖² + 2(u,v) + ‖v‖²  si  (u,v)=0  alors  c² = a² + b²` |
+| Axiomes structurels | S1 (bilinearite), S2 (symetrie), S3 (positivite), N1 (definition norme) |
+| Axiomes numeriques | N2 (orthogonalite → (u,v)=0), N3 (developpement bilineaire) |
+| Statuts (Lean) | S2, N2 essentiels ; S3 essentiel pour la norme seulement ; S1 superflu en partie (un cote d'additivite et l'homogeneite suffisent a retirer un a un) |
 
-### 2. Mesure — cablage par sigma-additivite (R)
+Montage pur : deux vecteurs orthogonaux, leur somme a pour norme carree la somme des carres des normes. [Details](cablages/scalaire.md)
 
-| | |
-|---|---|
-| Espace | `R` — scalaires (mesure de Lebesgue) |
-| Methode | recomposer les carres `a²` et `b²` en `c²` par isometries |
-| Formule | `mu(a²) + mu(b²) = mu(c²)` |
-| Axiomes structurels | M1 (positivite), M2 (vide), M5 (normalisation), M6 (existence) |
-| Axiomes numeriques | M3 (sigma-additivite → decompose les aires), M4 (invariance par translation → recompose) |
-
-### 3. Hilbert — cablage prehilbertien (E)
+### 1. Complexe — cablage par module d'un complexe (corps C)
 
 | | |
 |---|---|
-| Espace | `E` — espace vectoriel |
-| Methode | developper `<v+w, v+w>` et annuler le terme croise par orthogonalite |
-| Formule | `||v+w||² = ||v||² + ||w||²  si  <v,w> = 0` |
-| Axiomes structurels | E1 (R-EV), E2 (produit scalaire), E4 (symetrie), E6 (definie) |
-| Axiomes numeriques | E3 (bilinearite → developpe), E5 (positivite → norme), D1 (norme induite), D2 (orthogonalite → annule 2ab) |
+| Espace | `C` — corps des nombres complexes |
+| Methode | definir |z|² = z · z̄, developper (a+ib)(a-ib), simplifier i² = -1 |
+| Formule | `|z|² = z·z̄ = (a+ib)(a-ib) = a² + b²` |
+| Axiomes structurels | C1 (structure corps), C2 (conjugaison), C3 (i²=-1), N1 (definition module) |
+| Axiomes numeriques | N2 (identite remarquable), N3 (simplification i²) |
+| Statuts (Lean) | C2, C3 essentiels ; C1 se reduit a un anneau commutatif (inverses superflus, commutativite non testee) |
 
-Ce cablage utilise directement les sens du vocabulaire :
-- **Aligner** = `<v,w>` (produit scalaire, `E x E -> R`)
-- **Normer** = `||v|| = sqrt(<v,v>)` (auto-application d'Aligner, `E -> R`)
-- **D2** = l'orthogonalite annule le terme croise d'Aligner
+Pont algebrique : les complexes transportent Pythagore au coeur de leur definition du module. [Details](cablages/complexe.md)
 
-### 4. Frontiere — cablage par la zeta d'Epstein (N)
+### 2. Trigonometrique — cablage par series entieres (analyse reelle)
 
 | | |
 |---|---|
-| Espace | `N` — encodage de Godel (meta-sens) |
-| Methode | encoder la forme `Q(m,n) = m² + n²`, trouver `sigma_c = 1` via [Frontiere](../../../meta-sens/frontiere.md) |
-| Formule | `sigma_c = d/2 = 1  ==>  Q est une norme sur R²  ==>  a² + b² = c²` |
-| Blocs | [Encodage](../../../meta-objets/encodage.md), [Sonder](../../sonder/), [Peser](../../../meta-sens/peser.md), [Frontiere](../../../meta-sens/frontiere.md) |
+| Espace | `R` — scalaires definis par series |
+| Methode | developper cos, sin par series entieres, deriver terme a terme, montrer que f(θ)=cos²θ+sin²θ est constante |
+| Formule | `cos'(θ)=-sin(θ), sin'(θ)=cos(θ) => f'=0 => f(θ)=f(0)=1` |
+| Axiomes structurels | A1 (series de cos,sin), A3 (derivation terme-a-terme), A4 (cos'=-sin), A5 (sin'=cos) |
+| Axiomes numeriques | N1 (derivation f), N2 (f constante), N3 (evaluation), N4 (triangles rectangles) |
+| Statuts (Lean) | A4, A5, N3 essentiels ; A1-A3 en amont ; N2 repose sur la completude de R |
 
-Ce cablage ne prouve pas Pythagore de l'interieur (figures, mesures, vecteurs) mais de **l'exterieur** : il interroge les conditions de possibilite de la forme quadratique elle-meme.
+Fondement analytique : Pythagore emerge de l'analyse plutot que de la geometrie. [Details](cablages/trigonometrique.md)
 
-### 4b. Arithmetique — cablage par la factorisation de la zeta de Dedekind (N)
-
-| | |
-|---|---|
-| Espace | `N` — encodage de Godel (prolongement arithmetique de Frontiere) |
-| Methode | factoriser `zeta_{Z[i]}(s) = zeta(s) · L(s, chi_4)`, lire quels premiers sont sommes de deux carres |
-| Formule | `p ≡ 1 (mod 4)  <==>  p = a² + b²` (theoreme de Fermat) |
-| Blocs | [Sonder](../../sonder/) x2, [Ponderer](../../ponderer/), [Frontiere](../../../meta-sens/frontiere.md) |
-
-Ce cablage prolonge Frontiere : il ne dit pas seulement "la forme est valide" mais "quels nombres la voient". Les premiers qui scindent dans Z[i] sont exactement ceux qui sont sommes de deux carres.
-
-### 4c. Entiers — cablage par filtrage discret (N² ∩ R_+²)
+### 3. Cosinus — cablage par loi des cosinus (geometrie algebrisee)
 
 | | |
 |---|---|
-| Espace | `N² ∩ R_+²` — reseau entier positif |
-| Methode | on connait `c ∈ N`, on filtre le cercle par le reseau : quels `(a, b) ∈ N²` satisfont `a² + b² = c²` ? |
-| Formule | `c` est hypotenuse ssi `c` a au moins un facteur premier `p ≡ 1 (mod 4)` |
-| Blocs | factoriser, chi_4, r_2, enumerer |
+| Espace | `E` — espace vectoriel prehilbertien |
+| Methode | derivation generale ‖u-v‖² = ‖u‖² + ‖v‖² - 2‖u‖‖v‖cos(θ), cas particulier θ=π/2 |
+| Formule | `cos(π/2)=0  =>  ‖u-v‖² = ‖u‖² + ‖v‖²` |
+| Axiomes structurels | S1 (definition angle), S2 (bilinearite), S3 (symetrie) |
+| Axiomes numeriques | N1 (loi cosinus), N2 (angle droit), N3 (cos(π/2)=0) |
+| Statuts (Lean) | S1, S3, N3 essentiels ; S2 un cote superflu ; N1 derivable ; se ramene au cablage scalaire |
 
-Ce cablage consomme le verdict de chi_4 (cablage arithmetique) et le transforme en enumeration concrete de triplets pythagoriciens. C'est le passage du continu au discret.
+Cas particulier d'une formule universelle : Pythagore est le cas θ=π/2 d'une identite valable pour tous les angles. [Details](cablages/cosinus.md)
 
-### 5. Parseval — cablage par frame orthonormal (E, frame)
+### 4. Groupes — cablage par invariants de SO(2) (theorie des groupes)
 
 | | |
 |---|---|
-| Espace | `E` — espace vectoriel + frame `{e_1, e_2}` |
-| Methode | decomposer `v = a·e_1 + b·e_2` sur le frame, montrer que [Analyser](../../observer/analyser.md) conserve la norme |
-| Formule | `||Phi* v||² = somme |<e_k|v>|² = a² + b² = ||v||² = c²` |
-| Axiomes structurels | F1 (frame existe), F2 (linearite de Phi*), E1 (R-EV), E2 (produit scalaire) |
-| Axiomes numeriques | F3 ([Gram](../gram.md) = I), F4 (resolution de l'identite), F5 (v dans V) |
+| Espace | `ℝ²` avec action du groupe SO(2) |
+| Methode | montrer que l'unique forme quadratique invariante sous SO(2) (normalisee) est Q(x,y)=x²+y² |
+| Formule | `Dim(Inv_{SO(2)}(Q))=1, engendre par x²+y²  =>  ‖(a,b)‖²=a²+b²` |
+| Axiomes structurels | G1 (groupe SO(2)), G2 (action lineaire), A1 (forme quadratique), A2 (invariance) |
+| Axiomes numeriques | N1 (derivation groupe), N2 (resolution EDP), N3 (normalisation), N4 (unicite) |
+| Statuts (Lean) | A1, N3 essentiels ; G2 essentiel ou superflu selon la lecture de A1 ; G1, G3, N1, N2 hors preuve |
 
-Ce cablage utilise les sens du vocabulaire :
-- **[Analyser](../../observer/analyser.md)** = Phi* (empiler des [Mesurer](../../mesurer/))
-- **[Synthetiser](../../observer/synthetiser.md)** = Phi (sommer des kets)
-- **[Gram](../gram.md)** = Phi* Phi (matrice des [Aligner](../README.md) entre elements du frame)
-- **[Normer](../../normer/)** = `||v|| = sqrt(<v,v>)` (auto-application d'Aligner)
-- **F3** = la Gram est I — [Analyser](../../observer/analyser.md) est une isometrie
+Profondeur abstraite : Pythagore comme necesssite logique d'une symetrie fondamentale. [Details](cablages/groupes.md)
 
-La difference avec Hilbert : Hilbert developpe `<v+w, v+w>` et annule `2<v,w>`. Parseval decompose `v` sur le frame et somme les carres des coefficients. Le premier raisonne sur le **terme croise**, le second sur la **conservation de la norme**.
-
-Fiche detaillee : [parseval.md](parseval.md)
-
-## Quatre niveaux
+## Cinq niveaux algebriques
 
 | Niveau | Cablages | Question |
 |--------|----------|----------|
-| **Synthetique** (R[a,b,c], algebraique) | Algebre | comment l'identite `(a+b)²` se rearrange-t-elle ? |
-| **Sens** (R_+², continu) | Euclide, Mesure, Hilbert, Parseval | `a² + b² = c²` est-il vrai ? |
-| **Meta-sens** (N, encodage) | Frontiere, Arithmetique | pourquoi cette forme ? quels premiers la voient ? |
-| **Filtre discret** (N², entier) | Entiers | quels entiers sont hypotenuses ? |
+| **Vectoriel** (espace prehilbertien) | Scalaire | l'orthogonalite annule-t-elle le terme croise ? |
+| **Corpique** (nombres complexes) | Complexe | le module preserve-t-il le produit ? |
+| **Analytique** (series entieres) | Trigonometrique | l'identite trigonometrique s'en deduit-elle ? |
+| **Universelle** (tous les angles) | Cosinus | Pythagore est-il le cas droit d'une formule generale ? |
+| **Symetrique** (groupe SO(2)) | Groupes | quelle forme est invariante sous rotations ? |
 
-## Poids des axiomes
+## Axiomes : structurels vs numeriques
 
 Chaque axiome a un **poids** qui varie avec `(a, b)`. Les axiomes se classent en deux categories :
 
 | Categorie | Comportement | Exemple |
 |-----------|-------------|---------|
-| **Structurel** | poids constant — toujours present en fond | P1 (droite unique), M1 (positivite), E1 (R-EV) |
-| **Numerique** | poids variable — croit avec les valeurs | P5 (poids = c²), M3 (poids = a² + b²), D2 (poids = 2ab) |
+| **Structurel** | poids constant — toujours present en fond | S1 (bilinearite), C1 (structure corps), A1 (series) |
+| **Numerique** | poids variable — croit avec les valeurs | N2 (orthogonalite), N3 (simplification i²), N1 (derivation) |
 
 Le poids est une forme de **cout d'evaluation** : le cablage determine le cout, et le cout change quand les entrees changent.
 
-## Deux vues
+Le poids ordonne les axiomes, il ne dit pas si un axiome sert : c'est le test de derivabilite qui tranche (section suivante). Le visualiseur V9 affiche les poids, V10 les statuts.
 
-| Vue | Ce qu'elle montre |
-|-----|-------------------|
-| **Animation** | visualisation geometrique du cablage (grand carre, trois carres, vecteurs orthogonaux) |
-| **Arbre** | graphe `a, b → axiomes → c²` — epaisseur des aretes proportionnelle au poids |
+## Ce que Lean etablit
+
+Chaque cablage est formalise dans `lean/` : axiomes du tableau en hypotheses, un statut par axiome. Un axiome est **essentiel** si un contre-modele satisfait tous les autres et contredit la conclusion, **superflu** si une preuve s'en passe. Les statuts sont des theoremes verifies par le noyau ; le [visualiseur V10](../../../app/10_statuts/) les affiche, le detail est dans [lean/README.md](../../../lean/README.md).
+
+- **Chaque liste contient des axiomes superflus.** Les cablages demandent moins qu'ils n'annoncent : un cote d'additivite (scalaire, cosinus), un anneau commutatif au lieu d'un corps (complexe), le quart de tour au lieu de SO(2) quand la forme est polynomiale (groupes).
+- **Le statut depend du contrat.** La positivite S3 est superflue pour `B(u+v, u+v) = B(u,u) + B(v,v)` (`E x E -> R`), essentielle pour `‖u+v‖² = ‖u‖² + ‖v‖²` avec `‖x‖ = √B(x,x)` (contrat commun).
+- **Cosinus se ramene au scalaire.** L'angle, θ et π n'interviennent pas : S1 et N3 servent seulement a obtenir B(x, y) = 0.
+- **Hypotheses cachees.** Trigonometrique : « derivee nulle => constante » repose sur la completude de R. Complexe : la commutativite. Groupes : SO(2) est defini par c² + s² = 1, c'est-a-dire par le cercle euclidien ; le cablage risque de presupposer ce qu'il demontre.
+- **Les numeriques sont souvent des etapes.** N2, N3 (complexe), N3 (scalaire), N4 (cosinus, groupes) sont des etapes de calcul faites par la tactique, pas des axiomes.
 
 ## Invariant
 
-Les six cablages cristallisent le meme nombre. Le bandeau du haut affiche ce resultat unique :
+Les cinq cablages cristallisent le meme nombre, issu de cinq univers algebriques distincts :
+- **Scalaire** : par bilinearite
+- **Complexe** : par conjugaison
+- **Trigonometrique** : par derivation de series
+- **Cosinus** : par angle particulier
+- **Groupes** : par symetrie rotationnelle
+
+Le bandeau affiche ce resultat unique :
 
 ```
 a² + b² = c²  -->  9.00 + 16.00 = 25.00
 ```
 
-C'est le sens qui reste quand on change de preuve.
+C'est l'invariant qui survit a tous les changements de formalisme. **Les cinq preuves ne sont pas des variations : ce sont cinq visions orthogonales du meme fait.** Lean tempere « orthogonales » : cosinus se ramene au scalaire (`Cosinus.via_scalaire`), et les quatre premiers cablages partagent 40 a 66 % de leurs dependances mathlib propres ; seul groupes en est presque disjoint (0 a 1 %).

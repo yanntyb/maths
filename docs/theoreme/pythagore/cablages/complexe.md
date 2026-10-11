@@ -76,15 +76,17 @@ graph LR
 
 ## Axiomes mobilises
 
-| Code | Role | Type |
-|------|------|------|
-| C1 | structure du corps C : addition et multiplication | structurel |
-| C2 | conjugaison : z̄ = Re(z) - i·Im(z) | structurel |
-| C3 | propriete i² = -1 | structurel |
-| N1 | definition du module : |z|² = z · z̄ | structurel |
-| N2 | identite remarquable : (a+ib)(a-ib) = a² - (ib)² | numerique |
-| N3 | simplification : -(ib)² = -i²b² = b² | numerique |
-| N4 | conservation du module par interpretation geometrique | numerique |
+Statuts etablis par Lean : un axiome **essentiel** a un contre-modele, un axiome **superflu** a une preuve qui s'en passe ; les autres codes ne sont pas des axiomes du modele (motif entre parentheses). Details : [lean/README.md](../../../../lean/README.md), visualiseur [V10](../../../../app/10_statuts/).
+
+| Code | Role | Statut (Lean) | Type |
+|------|------|---------------|------|
+| C1 | structure du corps C : addition et multiplication | inverses superflus (un anneau commutatif suffit) ; commutativite : hypothese cachee, non testee | structurel |
+| C2 | conjugaison : z̄ = Re(z) - i·Im(z) | essentiel | structurel |
+| C3 | propriete i² = -1 | essentiel | structurel |
+| N1 | definition du module : |z|² = z · z̄ | definition, integree a l'enonce | structurel |
+| N2 | identite remarquable : (a+ib)(a-ib) = a² - (ib)² | etape de calcul | numerique |
+| N3 | simplification : -(ib)² = -i²b² = b² | etape de calcul | numerique |
+| N4 | conservation du module par interpretation geometrique | hors preuve | numerique |
 
 ## Triple distinction
 
