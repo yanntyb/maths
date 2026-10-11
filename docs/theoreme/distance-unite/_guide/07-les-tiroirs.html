@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>07 · Les tiroirs — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="07">
+<main>
+  <p class="numero">Chapitre 07 / 14</p>
+  <h1>Les tiroirs</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> on fabrique énormément de candidats ; ils se rangent dans un petit nombre de tiroirs, et tout tiroir bien rempli fournit des pas magiques.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Le chapitre 06 sait fabriquer <em>un</em> pas magique à partir d'un nombre. Mais pour battre Erdős, il en faut énormément : un nombre qui grandit de façon exponentielle avec le nombre d'écrans. Où trouver autant de bons nombres de départ&nbsp;?</p>
+
+  <h2>L'idée</h2>
+  <p>On reprend le mécanisme « un premier, deux reflets, un choix » du chapitre 03, en beaucoup plus grand.</p>
+  <ul>
+    <li>On choisit une fois pour toutes t bons premiers ; on les appellera les <strong>clés</strong>. Dans les grands mondes de la preuve, chaque clé se casse en beaucoup de morceaux : autant de <strong>paires de reflets</strong> qu'il y a d'écrans. Avec t clés et f écrans, cela fait t × f paires.</li>
+    <li>On choisit un morceau dans chaque paire. Deux choix par paire, donc 2 × 2 × … × 2 combinaisons : un nombre colossal, qui double à chaque nouvelle paire.</li>
+  </ul>
+  <p>Hélas, il y a un hic que la grille d'Erdős n'avait pas. Dans ces grands mondes, une combinaison n'est pas toujours un vrai nombre. C'est parfois seulement un objet abstrait, un « idéal », qui se comporte comme un produit mais n'a pas de valeur numérique. On ne peut pas en faire un pas magique directement.</p>
+  <p>La solution : les <strong>tiroirs</strong>. Les combinaisons se rangent naturellement dans un nombre fini de tiroirs. Deux combinaisons du même tiroir ont une propriété précieuse : la première divisée par la seconde <em>est</em> un vrai nombre. Et un vrai nombre, on sait en faire un pas magique (chapitre 06). Deux combinaisons différentes donnent toujours des pas différents : on peut lire, dans le pas, quels morceaux ont été choisis.</p>
+  <p>Combien de pas obtient-on&nbsp;? Si on range un très grand nombre de combinaisons dans h tiroirs, le plus plein en contient au moins la moyenne : le nombre total divisé par h. Tant que h reste raisonnable, c'est encore un nombre énorme. Le chapitre 13 montrera que h reste raisonnable dans les mondes construits par la preuve. Le nombre de pas obtenu grandit alors de façon exponentielle avec le nombre d'écrans ; sa vitesse de croissance, on la note <strong>γ</strong> : c'est le gain net des clés sur les tiroirs.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Des chaussettes dans des tiroirs. Si tu ranges 1 000 chaussettes dans 10 tiroirs, un tiroir en contient au moins 100, quelle que soit ta façon de ranger. Personne ne te dit lequel, mais il existe.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> deux chaussettes du même tiroir n'ont rien de spécial. Ici, « même tiroir » veut dire quelque chose de précis et d'abstrait : « leur rapport est un vrai nombre ».</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Pense à des montants exprimés dans différentes monnaies. Diviser 50 euros par 10 euros donne un vrai nombre, 5. Diviser 50 euros par 10 yens n'a pas de sens sans taux de change. Le tiroir, c'est la monnaie : on ne compare que des combinaisons de la même monnaie.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Chaussettes et tiroirs</p>
+    <p class="widget-consigne">Chaque ticket est une combinaison : m interrupteurs donnent 2 × 2 × … × 2 tickets. Monte m, puis touche « ranger le plus équitablement » : même dans le rangement le plus équilibré, le tiroir le plus plein (vert) atteint la moyenne (ligne rouge).</p>
+    <div class="widget-zone" data-widget="tiroirs"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">m = t × f paires   →   2^m combinaisons A_ε</p>
+    <p>« Chaque combinaison choisit un idéal premier dans chacune des m paires conjuguées. »</p>
+    <p class="formule">h(K) tiroirs : le plus plein contient ≥ 2^m / h(K) combinaisons</p>
+    <p>« Principe des tiroirs, appliqué au groupe des classes, qui a h(K) éléments. »</p>
+    <p class="formule">|U| ≥ 2^(tf) / h(K) ≥ 2^(tf) / H^f = e^(γ f),  avec γ = t log 2 − log H</p>
+    <p>« Si le nombre de tiroirs ne dépasse pas H puissance f, on obtient une exponentielle en f de pas magiques, dès que 2^t dépasse H. Le taux γ de cette exponentielle est le gain net des clés sur les tiroirs. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« On combine les morceaux des bons premiers : deux choix par paire, donc une quantité de combinaisons qui double à chaque paire. Elles tombent dans h tiroirs. Le tiroir le plus plein donne au moins le total divisé par h pas magiques ; si h ne grandit pas trop vite, c'est exponentiel en le nombre d'écrans. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/etages/norme-un.md">l'étage « norme un »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/sens/moyenner/README.md">le bloc « Moyenner »</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/tiroirs.js"></script>
+</body>
+</html>

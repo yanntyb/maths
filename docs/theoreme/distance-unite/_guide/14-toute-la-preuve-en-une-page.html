@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14 · Toute la preuve en une page — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="14">
+<main>
+  <p class="numero">Chapitre 14 / 14</p>
+  <h1>Toute la preuve en une page</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> en travaillant sur de plus en plus d'écrans à la fois, avec des pas qui mesurent 1 partout et des mondes fabriqués sur mesure, on obtient, pour une infinité de nombres de clous, une vraie puissance de gain par clou, ce qu'Erdős croyait impossible.</p>
+
+  <h2>Le récit en 10 phrases</h2>
+  <ol>
+    <li>On plante n clous et on compte les paires à distance exactement 1 ; Erdős pensait qu'en moyenne un clou n'en porte qu'un bonus minuscule, dont l'exposant fond jusqu'à zéro.</li>
+    <li>Sa recette : une grille, et une longueur d'allumette égale à la racine d'un nombre qui est somme de deux carrés de beaucoup de façons, chaque bon premier doublant ces façons.</li>
+    <li>Elle plafonne : chaque bon premier ajouté double le gain par clou, mais multiplie le nombre de clous par un facteur de plus en plus grand.</li>
+    <li>La preuve change de bouton : elle travaille sur f écrans à la fois, les visages des nombres d'un monde, et ne publie que le premier ; chaque écran ajouté multiplie gain et coût par des facteurs fixes.</li>
+    <li>Elle fabrique des pas magiques, un nombre divisé par son reflet, qui mesurent 1 sur chaque écran parce que le miroir agit partout de la même façon.</li>
+    <li>En combinant les morceaux des bons premiers, puis en rangeant les combinaisons dans des tiroirs, elle obtient un nombre de pas magiques exponentiel en f.</li>
+    <li>Une fenêtre posée sur le pavage infini n'en garde qu'une fraction, mais assez : un argument de moyenne garantit une position où chaque clou garde une exponentielle de f voisins, à la moitié de la vitesse.</li>
+    <li>L'écart entier empêche les clous d'être proches sur tous les écrans à la fois : la fenêtre n'en contient qu'une exponentielle de f, et l'écran publié n'en superpose aucun.</li>
+    <li>Le gain par clou est donc une puissance fixe du nombre de clous, car le taux γ et le coût B ne dépendent pas de f.</li>
+    <li>Il reste à fabriquer des mondes de plus en plus grands, réels plus i, avec les mêmes clés partout et peu de tiroirs : une tour sans fissure, dont un budget de règles garantit qu'elle ne s'arrête jamais, et dont le prix par écran constant limite les tiroirs.</li>
+  </ol>
+
+  <h2>Le schéma</h2>
+  <figure>
+    <svg viewBox="0 0 320 770" role="img" aria-label="Schéma vertical de la preuve, des allumettes au résultat.">
+      <defs>
+        <marker id="pointe" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 Z" style="fill: var(--discret);"/>
+        </marker>
+      </defs>
+      <g style="font: 13.5px system-ui, sans-serif;">
+        <rect x="10" y="6" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--bleu); stroke-width: 2;"/>
+        <text x="22" y="36" style="fill: var(--texte);">01 · Allumettes : le défi</text>
+        <rect x="10" y="74" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--ambre); stroke-width: 2; stroke-dasharray: 6 4;"/>
+        <text x="22" y="104" style="fill: var(--texte);">03-04 · Recette d'Erdős</text>
+        <text x="300" y="104" text-anchor="end" style="fill: var(--ambre); font-weight: 600;">s'essouffle</text>
+        <rect x="10" y="142" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="22" y="172" style="fill: var(--texte);">05 · Plusieurs écrans, un seul publié</text>
+        <rect x="10" y="210" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="22" y="240" style="fill: var(--texte);">06 · Pas magiques : nombre ÷ reflet</text>
+        <rect x="10" y="278" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="22" y="308" style="fill: var(--texte);">07 · Tiroirs : beaucoup de pas</text>
+        <rect x="10" y="346" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="22" y="376" style="fill: var(--texte);">08 · Fenêtre : une position bat la moyenne</text>
+        <rect x="10" y="414" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="22" y="444" style="fill: var(--texte);">09 · Écart entier : pas trop de clous</text>
+        <rect x="10" y="482" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="22" y="512" style="fill: var(--texte);">10 · Bilan : un exposant qui ne fond pas</text>
+        <rect x="10" y="550" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--indigo); stroke-width: 2;"/>
+        <text x="22" y="580" style="fill: var(--texte);">11 · Cahier des charges des mondes</text>
+        <rect x="10" y="618" width="300" height="50" rx="10" style="fill: var(--surface); stroke: var(--indigo); stroke-width: 2;"/>
+        <text x="22" y="648" style="fill: var(--texte);">12-13 · Tour sans fissure, peu de tiroirs</text>
+        <rect x="10" y="686" width="300" height="70" rx="10" style="fill: var(--encadre); stroke: var(--vert); stroke-width: 2;"/>
+        <text x="160" y="716" text-anchor="middle" style="fill: var(--texte); font-weight: 600;">Pour une infinité de n :</text>
+        <text x="160" y="740" text-anchor="middle" style="fill: var(--texte); font-weight: 600;">n clous portent ≥ n^(1+δ) allumettes</text>
+        <g style="stroke: var(--discret); stroke-width: 2;" marker-end="url(#pointe)">
+          <line x1="160" y1="56" x2="160" y2="72"/>
+          <line x1="160" y1="124" x2="160" y2="140"/>
+          <line x1="160" y1="192" x2="160" y2="208"/>
+          <line x1="160" y1="260" x2="160" y2="276"/>
+          <line x1="160" y1="328" x2="160" y2="344"/>
+          <line x1="160" y1="396" x2="160" y2="412"/>
+          <line x1="160" y1="464" x2="160" y2="480"/>
+          <line x1="160" y1="532" x2="160" y2="548"/>
+          <line x1="160" y1="600" x2="160" y2="616"/>
+          <line x1="160" y1="668" x2="160" y2="684"/>
+        </g>
+      </g>
+    </svg>
+    <figcaption>La preuve d'un coup d'œil : l'échec d'Erdős (en pointillés), la géométrie (en vert sarcelle), la fabrication des mondes (en indigo), le résultat.</figcaption>
+  </figure>
+
+  <h2>Pour le dessiner ou l'animer</h2>
+  <ol>
+    <li><strong>Clous et allumettes.</strong> Des clous apparaissent un à un ; une allumette se pose chaque fois que deux clous sont pile à la bonne distance. Le compteur « allumettes par clou » grimpe lentement.</li>
+    <li><strong>Le cercle qui s'allume.</strong> Un cercle de la grille ; à chaque bon premier ajouté, le nombre de points rouges double, mais la grille grandit encore plus vite.</li>
+    <li><strong>Deux écrans côte à côte.</strong> Le même point sur deux écrans ; un pas magique le déplace d'une longueur 1 sur chacun, dans deux directions différentes. On efface l'écran caché : il reste un dessin plein d'allumettes.</li>
+    <li><strong>Le filet.</strong> Une fenêtre lancée au hasard sur un pavage ; un histogramme se remplit autour de la moyenne ; on fige un lancer au-dessus.</li>
+    <li><strong>La jauge des règles.</strong> Des pièces libres d'un côté, des règles de l'autre ; on ajoute les règles des clés une à une, et la jauge reste sous le plafond pendant que la tour monte à l'infini.</li>
+  </ol>
+
+  <h2>Auto-test</h2>
+  <details class="curieux">
+    <summary>Que demande exactement le problème&nbsp;?</summary>
+    <p>Placer n points dans le plan pour avoir le plus possible de paires à distance exactement 1, et savoir à quelle vitesse ce maximum grandit avec n.</p>
+  </details>
+  <details class="curieux">
+    <summary>Pourquoi une puissance minuscule suffit-elle à réfuter Erdős&nbsp;?</summary>
+    <p>Erdős prédisait, pour tout n assez grand, un exposant qui fond jusqu'à zéro, quelle que soit la taille choisie pour son bonus. Un exposant fixe, même tout petit, finit toujours par le dépasser ; et il suffit d'une infinité de contre-exemples de plus en plus grands pour réfuter un « pour tout n assez grand ».</p>
+  </details>
+  <details class="curieux">
+    <summary>Pourquoi la recette d'Erdős plafonne-t-elle&nbsp;?</summary>
+    <p>Chaque bon premier ajouté double le gain par clou, mais multiplie le nombre de clous par un facteur de plus en plus grand (5, 13, 29…) : l'exposant du gain fond.</p>
+  </details>
+  <details class="curieux">
+    <summary>Qu'est-ce qu'un pas magique, et pourquoi mesure-t-il 1 partout&nbsp;?</summary>
+    <p>Un nombre divisé par son reflet. Dans un monde réel auquel on a ajouté i, le reflet est le vrai miroir sur chaque écran, donc les longueurs se compensent partout.</p>
+  </details>
+  <details class="curieux">
+    <summary>À quoi servent les tiroirs&nbsp;?</summary>
+    <p>Les combinaisons de morceaux de premiers ne sont pas toujours de vrais nombres. Deux combinaisons du même tiroir se divisent en un vrai nombre, et le tiroir le plus plein fournit beaucoup de pas magiques.</p>
+  </details>
+  <details class="curieux">
+    <summary>Pourquoi le dessin final ne superpose-t-il jamais deux clous&nbsp;?</summary>
+    <p>Si deux clous coïncidaient sur l'écran 1, leur différence vaudrait zéro sur cet écran ; or un nombre nul sur un écran est nul partout, donc les deux clous seraient le même.</p>
+  </details>
+  <details class="curieux">
+    <summary>Pourquoi l'exposant final ne fond-il pas&nbsp;?</summary>
+    <p>Pas magiques et clous grandissent tous deux comme des exponentielles du nombre d'écrans, avec des taux γ et B qui ne dépendent pas du nombre d'écrans : leur rapport reste fixe.</p>
+  </details>
+  <details class="curieux">
+    <summary>Que garantit Golod–Shafarevich, et que ne garantit-il pas&nbsp;?</summary>
+    <p>Peu de règles face à beaucoup de libertés (au plus d²/4 règles pour d libertés) garantit une tour infinie. Avec plus de règles, il ne dit rien : la tour pourrait être finie ou infinie.</p>
+  </details>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/README.md">le README technique du théorème</a> · <a href="lexique.html">le lexique : mot simple ↔ mot technique</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+</body>
+</html>

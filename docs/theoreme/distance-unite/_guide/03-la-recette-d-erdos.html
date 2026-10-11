@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 · La recette d'Erdős — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="03">
+<main>
+  <p class="numero">Chapitre 03 / 14</p>
+  <h1>La recette d'Erdős</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> Erdős plante les clous sur une grille et choisit la longueur de l'allumette pour que beaucoup de paires de la grille tombent pile à la bonne distance.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Pour avoir beaucoup d'allumettes par clou, il faut que chaque clou ait beaucoup de voisins exactement à la bonne distance. Planter des clous au hasard ne marche pas : les distances tombent presque toujours « à côté ». Il faut une structure très régulière.</p>
+
+  <h2>L'idée</h2>
+  <p>Erdős prend une grille, comme du papier quadrillé. Entre deux points de la grille, on avance de <em>a</em> cases à l'horizontale et de <em>b</em> cases à la verticale. Par Pythagore, le carré de la distance vaut alors a² + b².</p>
+  <p>Le truc : choisir un nombre <strong>N</strong> qui s'écrit comme « carré + carré » de beaucoup de façons différentes, puis décréter que la longueur de l'allumette est la racine de N. Chaque façon d'écrire N donne une direction dans laquelle une allumette tient pile.</p>
+  <p>Exemple : 25 = 0² + 5² = 3² + 4². En comptant les signes et l'ordre, cela fait 12 directions de longueur 5 dans la grille. Avec l'allumette de longueur 5, chaque clou peut avoir jusqu'à 12 voisins.</p>
+  <p>Il y a une règle étonnante. Certains nombres premiers sont « bons » : ceux qui laissent un reste de 1 quand on les divise par 4, comme 5, 13, 17, 29, 37… Chaque bon premier <em>différent</em> qu'on met dans N <strong>double</strong> le nombre de façons. Les autres premiers, comme 3, 7 ou 11, sont même nuisibles : s'ils apparaissent une seule fois dans N, N ne s'écrit plus du tout comme carré + carré. (L'exemple 25 = 5 × 5 utilise deux fois le même premier : la règle du doublement ne s'applique qu'à des premiers différents.)</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Un cadenas à interrupteurs. Chaque bon premier ajoute un interrupteur à deux positions. Avec un interrupteur, 2 combinaisons ; avec deux, 4 ; avec trois, 8. Chaque combinaison correspond à une direction dans laquelle une allumette tient pile.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> dans un vrai cadenas, une seule combinaison ouvre ; ici, <em>toutes</em> les combinaisons servent, chacune donne une direction. Et le cadenas n'explique pas pourquoi seuls les bons premiers fonctionnent, ni d'où vient le facteur 4 supplémentaire (les quatre quarts de tour de la grille).</p>
+
+  <h2>Autre point de vue</h2>
+  <p>On peut voir le point (a, b) de la grille comme un « nombre à deux étages », noté a + b<em>i</em> : ce sont les nombres de Gauss. Ici, <em>i</em> est un nombre « imaginaire » dont le carré vaut −1 ; il sert à repérer la direction verticale. Dans ce monde-là, un bon premier se casse en deux morceaux qui sont le reflet l'un de l'autre dans un miroir horizontal : 5 = (2 + <em>i</em>) × (2 − <em>i</em>). Vérifie : (2 + <em>i</em>) × (2 − <em>i</em>) = 4 − <em>i</em>² = 4 + 1 = 5.</p>
+  <p>Choisir, pour chaque bon premier, lequel des deux morceaux on garde, c'est exactement actionner l'interrupteur. Retiens bien ce mécanisme « un premier, deux reflets, un choix » : c'est lui que la preuve va reprendre, en beaucoup plus grand, aux chapitres 06 et 07.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Le cercle des façons</p>
+    <p class="widget-consigne">Allume 5, puis 13, puis 17 : le nombre de points entiers sur le cercle double à chaque fois. Chaque point rouge est une direction où l'allumette tient pile.</p>
+    <div class="widget-zone" data-widget="deux-carres" data-mode="cercle"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">r₂(N) = 4 × 2^t</p>
+    <p>« Si N est le produit de t bons premiers tous différents, il y a 4 × 2^t façons d'écrire N comme a² + b², en comptant les signes et l'ordre. »</p>
+    <p class="formule">5 = (2 + i)(2 − i)        13 = (3 + 2i)(3 − 2i)</p>
+    <p>« Un bon premier est le produit d'un nombre de Gauss et de son reflet. »</p>
+    <p class="formule">65 = 5 × 13 = 1² + 8² = 4² + 7²</p>
+    <p>« Deux bons premiers : 16 façons en comptant signes et ordre, soit 4 × 2². »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Dans une grille, la longueur d'un segment vient de Pythagore. Certains nombres s'écrivent comme somme de deux carrés de beaucoup de façons : chaque bon nombre premier double ce nombre de façons. En choisissant bien la longueur de l'allumette, toutes ces façons deviennent des allumettes. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/grille-erdos.md">la grille d'Erdős, version technique</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/pythagore/cablages/complexe.md">Pythagore par les nombres complexes</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/deux-carres.js"></script>
+</body>
+</html>

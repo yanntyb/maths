@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12 · Construire la tour — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="12">
+<main>
+  <p class="numero">Chapitre 12 / 14</p>
+  <h1>Construire la tour</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> on part d'un monde de base qui a beaucoup de libertés, on empile des étages sans fissure, et un budget de règles garantit que l'empilement ne s'arrête jamais, même en exigeant que les clés marchent à chaque étage.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Il faut fabriquer des mondes qui remplissent les conditions (0), (1) et (2) du chapitre 11, avec autant d'écrans qu'on veut. Ce chapitre s'occupe de (0) et (1) ; le chapitre 13 terminera avec (2).</p>
+
+  <h2>L'idée</h2>
+  <p>La construction se fait en quatre gestes.</p>
+  <ul>
+    <li><strong>La base : coller des cubes.</strong> Pour certains nombres premiers (ceux qui laissent un reste 1 quand on les divise par 3), il existe un petit monde naturel « à trois écrans ». On en colle ℓ ensemble, et on extrait de l'assemblage un monde de base. Ce monde a au moins ℓ − 1 <strong>libertés</strong> : autant de façons indépendantes de s'agrandir sans créer de fissure.</li>
+    <li><strong>Les étages : sans fissure.</strong> On empile des mondes de plus en plus grands, chacun s'agrandissant « sans fissure » (les mathématiciens disent : sans ramification). Un étage sans fissure garde le même <strong>prix par écran</strong>, une mesure de la complexité du monde ramenée à son nombre d'écrans. Ce point servira au chapitre 13.</li>
+    <li><strong>Les clés : Chebotarev.</strong> Un théorème profond, dû à Chebotarev, garantit qu'il existe toujours des nombres premiers qui se comportent parfaitement dans un monde fini donné. On choisit t clés qui se cassent déjà complètement dans un premier étage bien choisi. Puis on <em>impose</em> qu'elles se cassent complètement à chaque étage. Chaque imposition coûte une <strong>règle</strong>. Et parce que les clés se cassaient déjà dans ce premier étage, ces règles ne suppriment aucune liberté.</li>
+    <li><strong>Le budget : Golod–Shafarevich.</strong> Un autre théorème dit : si un empilement a d libertés et au plus d²/4 règles, il ne s'arrête jamais. Au départ, il y a au plus d règles, plus une petite constante. Les clés en ajoutent 3 par clé, soit 3t. En prenant t de l'ordre de ℓ²/100, le total reste sous d²/4 : la tour est infinie, et les clés marchent à chaque étage. La condition (1) est remplie.</li>
+  </ul>
+  <p><strong>Pourquoi 3, et pas 2&nbsp;?</strong> La tour est construite avec des briques « à 3 ». Or un nombre impair ne peut jamais faire apparaître de partie verticale sur un écran qui n'en avait pas : tous les écrans restent réels (chapitre 06), et la condition (0) est automatique. Avec des briques « à 2 », un écran réel pourrait devenir complexe, et le miroir cesserait de marcher. Remarque vérifiée hors de l'article : tout autre nombre premier impair conviendrait aussi ; 3 est simplement le plus petit.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Des LEGO. Tu disposes de d sortes de pièces libres et de r règles d'assemblage (« celle-ci ne va jamais sur celle-là »). Avec peu de règles face à beaucoup de sortes de pièces, tu peux construire indéfiniment. Et un immeuble sans fissure : chaque nouvel étage coûte le même prix au mètre carré que les précédents.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> les libertés ne sont pas des pièces qu'on épuise, ce sont des <em>sortes</em> de pièces réutilisables à volonté. Et Golod–Shafarevich ne conclut que dans un sens : avec beaucoup de règles, on ne sait pas, ce qui ne veut pas dire que l'empilement s'arrête.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>La preuve construit la tour du côté des <strong>symétries</strong>. Un groupe de symétries d'un monde, c'est l'ensemble des façons d'échanger les visages de ses nombres sans rien casser, comme échanger √2 et −√2 au chapitre 05. La preuve ajoute des règles à un tel groupe, puis vérifie qu'il reste infini. Elle lit ensuite le résultat du côté des <strong>mondes</strong>, grâce à une correspondance classique : plus le groupe de symétries qui fixe un monde est petit, plus ce monde est grand. Une chaîne infinie de groupes de plus en plus petits donne une tour infinie de mondes de plus en plus grands.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Le budget des règles</p>
+    <p class="widget-consigne">Monte ℓ : la jauge (règles de départ en gris, règles des clés en orange) reste sous le plafond vert. Coupe « t automatique » et force t jusqu'à dépasser : le verdict devient « on ne sait pas ». La constante de départ 2 est la valeur standard pour ce monde de base.</p>
+    <div class="widget-zone" data-widget="budget"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">d(G) ≥ ℓ − 1</p>
+    <p>« Le groupe de la tour, G, a au moins ℓ − 1 générateurs : les libertés. »</p>
+    <p class="formule">r(G) ≤ d(G) + C₀</p>
+    <p>« Estimation de Shafarevich : au départ, au plus d + C₀ relations (les règles). L'article dit seulement que C₀ est une constante ; la formule standard donne C₀ = 2 pour ce monde de base. »</p>
+    <p class="formule">r(Ḡ) ≤ d + C₀ + 3t < d²/4   ⇒   Ḡ infini</p>
+    <p>« Après avoir imposé les 3t règles des clés, on reste sous le seuil de Golod–Shafarevich : le groupe reste infini, donc la tour aussi. »</p>
+    <p class="formule">t = ⌊(ℓ − 1)² / 100⌋</p>
+    <p>« Le nombre de clés choisi par la preuve. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« On colle des mondes cubiques pour avoir beaucoup de libertés. On empile des étages sans fissure, ce qui garde le prix par écran constant. Imposer que les clés marchent partout coûte des règles, mais le budget de Golod–Shafarevich reste positif : la tour est infinie. Le choix de 3, un nombre impair, garde tous les écrans réels. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/etages/corps-de-base.md">l'étage « corps de base »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/etages/tour-pro-3.md">l'étage « tour pro-3 »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/meta-sens/seuil.md">le seuil de Golod–Shafarevich</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/sens/signer/README.md">Frobenius et Chebotarev</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/README.md#pourquoi-p--3">pourquoi p = 3</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/budget.js"></script>
+</body>
+</html>

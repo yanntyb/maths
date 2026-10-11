@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Fixture</title>
+<link rel="stylesheet" href="../../assets/guide.css"></head>
+<body>
+<main>
+  <p>Page de test : la valeur affichée devient invalide seulement au maximum du curseur.</p>
+  <label class="curseur"><span>curseur piège</span><output id="sortie">1</output><input id="entree" type="range" min="0" max="10" value="5"></label>
+</main>
+<script src="../../assets/guide.js"></script>
+<script>
+  document.getElementById('entree').addEventListener('input', function (e) {
+    document.getElementById('sortie').textContent = Number(e.target.value) === 10 ? String(1 / 0) : e.target.value;
+  });
+</script>
+</body>
+</html>

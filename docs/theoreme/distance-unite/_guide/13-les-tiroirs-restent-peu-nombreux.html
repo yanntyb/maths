@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13 · Les tiroirs restent peu nombreux — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="13">
+<main>
+  <p class="numero">Chapitre 13 / 14</p>
+  <h1>Les tiroirs restent peu nombreux</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> un « prix par écran » constant force un nombre de tiroirs au plus exponentiel, avec une base fixe, et les clés finissent par gagner la course contre cette base.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Il reste la condition (2) du cahier des charges (chapitre 11) : le nombre de tiroirs doit rester sous une exponentielle du nombre d'écrans, avec une base fixe H, plus petite que le gain des clés par écran. Sinon, le principe des tiroirs (chapitre 07) ne laisse presque rien, et le gain net γ devient négatif.</p>
+
+  <h2>L'idée</h2>
+  <p>Chaque monde a une sorte de <strong>« prix par écran »</strong> : une mesure de sa complexité arithmétique, ramenée à son nombre d'écrans (les mathématiciens l'appellent le discriminant racine). Le long de la tour sans fissure, ce prix ne bouge pas (chapitre 12) ; et ajouter <em>i</em> le double au plus.</p>
+  <p>Un résultat classique, dû à Minkowski, dit que chaque tiroir contient au moins un <strong>représentant de petite taille</strong>. Or il y a peu de petites choses : leur nombre ne dépasse pas une exponentielle du nombre d'écrans, avec une base qui ne dépend que du prix par écran. Comme ce prix est fixe le long de la tour, le nombre de tiroirs reste sous une exponentielle de base fixe, notée H.</p>
+  <p>Reste la course, par écran : d'un côté le gain des clés, 2 multiplié t fois par lui-même ; de l'autre la base H. Pour comparer deux nombres aussi grands, on compte leurs <strong>doublements</strong> : combien de fois il faut doubler 1 pour les atteindre.</p>
+  <ul>
+    <li>Le gain des clés compte t doublements, et t vaut à peu près le carré de ℓ (le nombre de cubes collés), divisé par 100.</li>
+    <li>La base H compte un nombre de doublements qui grandit à peine plus vite que ℓ : environ ℓ fois le nombre de chiffres de ℓ, à une constante près.</li>
+  </ul>
+  <p>Une croissance « au carré » finit toujours par battre une croissance « à peine plus vite que ℓ ». En collant assez de cubes, les clés gagnent : γ est positif, et le cahier des charges est entièrement rempli.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Imagine que chaque famille d'une ville compte au moins un enfant de moins de dix ans. S'il y a peu d'enfants, il y a forcément peu de familles. Ici, les familles sont les tiroirs, et les enfants sont les petits représentants.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> un « petit représentant » est un objet arithmétique abstrait, dont la « taille » peut elle-même être énorme : petite veut seulement dire bornée par une exponentielle du nombre d'écrans, de base fixe. Et « peu de familles » veut dire ici : pas plus qu'une exponentielle de base fixe.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>C'est une compétition de vitesses de croissance, comme au chapitre 02. On ne compare pas les nombres eux-mêmes, mais leurs nombres de doublements : d'un côté une croissance « au carré », de l'autre une croissance à peine plus rapide que ℓ. La première finit toujours devant, même si elle part derrière.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">La course</p>
+    <p class="widget-consigne">Monte ℓ, le nombre de cubes collés : la courbe des clés (verte) finit par passer au-dessus de celle des tiroirs (rouge), et le verdict bascule. Les deux courbes mesurent des nombres de doublements, à un même facteur près. La constante c est choisie pour l'illustration : la vraie n'est pas connue.</p>
+    <div class="widget-zone" data-widget="bilan" data-mode="course"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">h(K) ≤ max{2, rd(K)}^(C · [K:Q])</p>
+    <p>« Le nombre de classes est au plus le prix par écran, puissance une constante fois le degré. »</p>
+    <p class="formule">rd(K_j) ≤ 2 rd(F)   ⇒   h(K_j) ≤ H_ℓ^(f_j)</p>
+    <p>« Le prix reste fixe le long de la tour, donc la base H ne dépend pas de l'étage. »</p>
+    <p class="formule">log H_ℓ = O(ℓ log ℓ)        t log 2 ≥ (ℓ − 1)² log 2 / 200</p>
+    <p>« Compter des doublements, c'est prendre un logarithme : la perte grandit comme ℓ log ℓ, le gain comme ℓ². Le gain l'emporte, donc γ = t log 2 − log H_ℓ > 0. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Comme le prix par écran ne bouge pas, le nombre de tiroirs ne peut pas exploser : il reste sous une exponentielle de base fixe H. Et avec assez de cubes collés, le gain des clés, dont le nombre de doublements grandit comme un carré, bat la base H, dont le nombre de doublements grandit à peine plus vite que ℓ. Le cahier des charges est rempli : la preuve est complète. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/etages/nombre-classes.md">l'étage « nombre de classes »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/sens/jauger/borne-minkowski.md">la borne de Minkowski</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/deux-carres.js"></script>
+<script src="assets/widgets/bilan.js"></script>
+</body>
+</html>

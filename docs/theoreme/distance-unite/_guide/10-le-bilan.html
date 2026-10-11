@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10 · Le bilan — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="10">
+<main>
+  <p class="numero">Chapitre 10 / 14</p>
+  <h1>Le bilan</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> les allumettes par clou et le nombre de clous grandissent tous deux de façon exponentielle avec le nombre d'écrans, chacun à un rythme fixe ; le gain par clou est donc une vraie puissance du nombre de clous, qui ne fond pas, contrairement à la recette d'Erdős.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>On a maintenant toutes les pièces : des pas magiques en masse (chapitres 06 et 07), une fenêtre qui en garde assez (chapitre 08), et une limite sur le nombre de clous (chapitre 09). Reste à les assembler, et à vérifier que le gain ne fond pas comme au chapitre 04.</p>
+
+  <h2>L'idée</h2>
+  <p>Trois comptes, tous exprimés en fonction du nombre d'écrans f. Chaque fois, on parle de vitesse de croissance : de combien de fois une quantité est multipliée quand on ajoute un écran.</p>
+  <ul>
+    <li><strong>Les pas magiques</strong> : leur nombre grandit comme une exponentielle de f, à une vitesse notée γ, le gain net des clés sur les tiroirs (chapitre 07).</li>
+    <li><strong>Les allumettes par clou</strong> : la fenêtre n'en garde qu'une fraction, mais assez pour grandir encore comme une exponentielle de f, à la vitesse γ/2 (chapitre 08).</li>
+    <li><strong>Les clous</strong> : leur nombre ne dépasse pas une autre exponentielle de f, à une vitesse notée B, qui ne dépend que de la fenêtre et des clés (chapitre 09).</li>
+  </ul>
+  <p>Le nombre de clous grandit lui aussi sans limite : chaque clou a en moyenne au moins une exponentielle de f voisins, et ces voisins sont eux-mêmes des clous de la fenêtre. Quand f augmente, on obtient donc des dessins de plus en plus grands : une infinité de tailles, comme le demande le chapitre 02.</p>
+  <p>Quand deux quantités grandissent toutes les deux comme des exponentielles du même f, l'une est une <strong>puissance fixe</strong> de l'autre, d'exposant égal au rapport des vitesses. Comme le nombre de clous grandit au plus à la vitesse B et les allumettes par clou au moins à la vitesse γ/2, les allumettes par clou valent au moins le nombre de clous puissance γ divisé par deux fois B. En gardant une marge pour absorber les petites pertes, on obtient l'exposant garanti δ, égal à γ divisé par quatre fois B.</p>
+  <p>L'essentiel : <strong>γ et B ne dépendent pas de f</strong>. γ dépend des clés et du nombre de tiroirs par écran ; B dépend de la fenêtre et de la taille des cases du pavage, donc des clés choisies une fois pour toutes. On peut augmenter f sans toucher à γ ni à B. Comparé au chapitre 04 : là-bas, chaque cran du bouton (un premier de plus) multipliait le coût par un facteur de plus en plus grand ; ici, chaque cran (un écran de plus) multiplie gain et coût par des facteurs fixes.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Deux placements à intérêts composés, à taux fixes différents, démarrés le même jour. Le capital de l'un est toujours égal au capital de l'autre élevé à une puissance fixe : le rapport des deux taux. Le nombre d'écrans joue le rôle du temps, les vitesses γ/2 et B celui des taux.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> ici, la vitesse B n'est qu'un plafond (le nombre de clous peut grandir moins vite), ce qui ne fait qu'améliorer l'exposant. Et l'exposant δ obtenu est minuscule ; l'article n'en donne pas de valeur numérique. C'est une victoire théorique : elle réfute la conjecture, mais ne fournit pas de dessin spectaculaire pour des nombres de clous raisonnables.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Tout le théorème tient dans un changement de bouton. Le bouton d'Erdős, c'est le nombre de bons premiers : chaque cran double le gain mais multiplie le coût par un facteur de plus en plus grand. Le bouton de la preuve, c'est le nombre d'écrans : chaque cran multiplie le gain et le coût par des facteurs fixes, si bien que l'un reste une puissance fixe de l'autre.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Le tableau de bord</p>
+    <p class="widget-consigne">Monte f : les trois barres grandissent, mais l'exposant se rapproche d'une valeur fixe. Active « grille d'Erdős » : on trace ici l'exposant total, 1 plus l'exposant gagné du chapitre 04. Celui de la grille (points orange) s'écrase vers 1, celui de la preuve (ligne verte) reste fixe.</p>
+    <div class="widget-zone" data-widget="bilan" data-mode="bilan"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">ν(P) ≥ ½ · n · e^(γ f / 2)        n ≤ e^(B f)</p>
+    <p>« Au moins la moitié de n fois une exponentielle de f d'allumettes ; au plus une exponentielle de f de clous. »</p>
+    <p class="formule">n ≥ e^(γ f / 2)   ⇒   n → ∞ quand f → ∞</p>
+    <p>« Un clou a au moins e^(γf/2) voisins dans la fenêtre, donc il y a au moins autant de clous. »</p>
+    <p class="formule">f ≥ log n / B   ⇒   ν(P) ≥ ½ · n^(1 + γ / 2B)</p>
+    <p>« Comme le nombre de clous borne f par en dessous, le gain devient une puissance de n. »</p>
+    <p class="formule">δ = γ / 4B   ⇒   ν(P) ≥ n^(1 + δ) pour n assez grand</p>
+    <p>« En sacrifiant la moitié de l'exposant, on absorbe le facteur ½. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Les allumettes par clou croissent comme une exponentielle du nombre d'écrans, et le nombre de clous au plus comme une autre exponentielle, chacune à une vitesse fixe. Le gain par clou est donc une puissance fixe du nombre de clous. Il ne reste qu'à trouver des mondes avec autant d'écrans qu'on veut, sans changer γ ni B. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/README.md#pourquoi-ca-marche">« Pourquoi ça marche », version technique</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/deux-carres.js"></script>
+<script src="assets/widgets/bilan.js"></script>
+</body>
+</html>

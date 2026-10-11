@@ -1,0 +1,12 @@
+{
+  "name": "guide-distance-unite-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verifier": "node verifier.mjs",
+    "final": "node verifier.mjs --final"
+  },
+  "devDependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}

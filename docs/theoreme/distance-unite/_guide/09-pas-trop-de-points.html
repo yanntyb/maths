@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>09 · Pas trop de points — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="09">
+<main>
+  <p class="numero">Chapitre 09 / 14</p>
+  <h1>Pas trop de points</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> deux points du pavage ne peuvent pas être proches sur tous les écrans à la fois ; la fenêtre ne contient donc qu'un nombre limité de points, et l'écran publié n'en superpose jamais deux.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Le chapitre 08 garantit beaucoup d'allumettes <em>par clou</em>. Mais si la fenêtre contenait un nombre gigantesque de clous, ce gain ne vaudrait rien : ce qui compte, c'est le gain mesuré par rapport au nombre de clous (chapitre 02). Il faut aussi vérifier une chose : en ne gardant que l'écran 1, deux clous distincts pourraient-ils tomber au même endroit&nbsp;?</p>
+
+  <h2>L'idée</h2>
+  <p>Tout repose sur une évidence : <strong>un nombre entier qui n'est pas zéro vaut au moins 1 en taille</strong> (la taille de −3 est 3). On l'appelle ici l'« écart entier ».</p>
+  <p>Prends deux points différents du pavage. Multiplie leurs distances sur tous les écrans. L'arithmétique de ces mondes garantit que ce produit, une fois multiplié par un facteur qui ne dépend que des clés et du nombre d'écrans, est la racine carrée d'un nombre entier qui n'est pas zéro : il vaut donc au moins 1. Conséquence : les deux points ne peuvent pas être proches sur <em>tous</em> les écrans à la fois. Sur un écran au moins, ils sont séparés d'une distance minimale fixe.</p>
+  <p>Pose alors une petite boule autour de chaque point. Ces boules ne se chevauchent pas. Elles tiennent toutes dans la fenêtre, à peine agrandie. Leur nombre est donc limité par le volume de la fenêtre divisé par le volume d'une boule. Ce rapport grandit avec le nombre d'écrans, mais seulement de façon exponentielle, avec une base qui ne change pas.</p>
+  <p>Et la superposition sur l'écran 1&nbsp;? Si deux points tombaient au même endroit sur l'écran 1, leur différence vaudrait zéro sur cet écran. Or un nombre de ces mondes qui vaut zéro sur un écran vaut zéro partout. Les deux points seraient donc identiques. Le dessin final ne perd aucun clou.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Des oranges dans une caisse. Chaque orange prend sa place, et deux oranges ne s'interpénètrent pas. Le nombre d'oranges est donc limité par le volume de la caisse.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> ici, la place qu'occupe un point se mesure sur tous les écrans à la fois. Sur l'écran 1 seul, deux points peuvent être très proches : le widget le montre.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Sans les écrans cachés, rien n'empêcherait les points de s'entasser sans limite sur l'écran 1. Ce sont les dimensions cachées qui « font la police » : elles imposent un espacement minimum que l'écran 1 seul ne verrait pas.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Les écrans cachés font la police</p>
+    <p class="widget-consigne">La fenêtre sur l'écran caché est coupée au départ. Monte la taille des sommes (combien de pas magiques on additionne au plus pour fabriquer les points) : les clous s'entassent sur l'écran 1 et le plus petit écart fond. Rallume « fenêtre sur les écrans cachés » : le nombre de clous se stabilise.</p>
+    <div class="widget-zone" data-widget="ombre" data-ecrans="2" data-mode="fenetre"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">∏ |σ_r(x − x')| = 𝒟^(−f) · |N(β)|^(1/2) ≥ 𝒟^(−f)</p>
+    <p>« Ici 𝒟 est le carré du produit des clés. Le produit des distances sur les f écrans vaut au moins 1/𝒟 puissance f, car la norme N(β) d'un entier non nul est un entier non nul. »</p>
+    <p class="formule">n ≤ (4R𝒟)^(2f) = e^(Bf)</p>
+    <p>« Le nombre de clous dans la fenêtre de rayon R est au plus une exponentielle de f, de base fixe. »</p>
+    <p class="formule">σ₁(β) = 0  ⇒  β = 0</p>
+    <p>« Un nombre nul sur un écran est nul partout : l'écran 1 ne superpose aucun clou. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Un nombre entier non nul vaut au moins 1. Traduit sur les écrans, cela empêche deux points d'être proches partout à la fois. La fenêtre ne contient donc qu'un nombre limité de points, et l'écran 1 n'en superpose aucun. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/etages/taille.md">l'étage « taille »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/sens/tasser/README.md">le bloc « Tasser »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/vocabulaire/patterns.md#ecart-arithmetique">le motif « écart arithmétique »</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/cyclo.js"></script>
+<script src="assets/widgets/ombre.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 · Petit, grand, très grand — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="02">
+<main>
+  <p class="numero">Chapitre 02 / 14</p>
+  <h1>Petit, grand, très grand</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> une puissance fixe du nombre de clous, même minuscule, finit toujours par dépasser le bonus d'Erdős. C'est pour ça que le résultat renverse la conjecture.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Au chapitre 01, on a dit : Erdős prédisait « un bonus minuscule », la preuve trouve « une vraie puissance ». Mais les deux grandissent. Pour savoir qui a raison, il faut comparer des <strong>vitesses de croissance</strong>, pas des nombres.</p>
+
+  <h2>L'idée</h2>
+  <p>Une façon simple de mesurer une croissance : l'<strong>exposant</strong>. Doubler le nombre de clous double-t-il le nombre d'allumettes, le triple-t-il, le multiplie-t-il par un peu plus de deux&nbsp;? Plus l'exposant est grand, plus la croissance est forte.</p>
+  <p>Dans la prédiction d'Erdős, l'exposant du bonus <em>fond</em> quand n grandit. Il fond en se divisant par une quantité qui grandit d'une lenteur inimaginable : pour un nombre de clous de 80 chiffres, à peu près le nombre d'atomes dans l'univers observable, elle ne vaut qu'environ 5 ; pour un nombre de 80 milliards de chiffres, environ 26. Mais elle finit par dépasser n'importe quelle valeur, si bien que l'exposant du bonus tend vers zéro.</p>
+  <p>Dans le résultat de la preuve, l'exposant est <em>fixe</em> : on le note <strong>δ</strong>, et il ne fond pas. Or un exposant fixe, même tout petit, finit toujours par dépasser un exposant qui tend vers zéro.</p>
+  <p>Encore faut-il bien lire ce que disait Erdős : « pour tout nombre de clous assez grand, jamais plus que le bonus ». Et il laissait choisir la taille du bonus, à condition qu'elle soit fixée une fois pour toutes. Pour le contredire, la preuve n'a pas besoin de gagner pour <em>chaque</em> nombre de clous : il suffit d'une infinité de nombres de clous, de plus en plus grands, où l'on fait mieux. Et comme l'exposant δ est fixe, il bat le bonus d'Erdős quelle que soit la taille choisie pour ce bonus.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>La tortue et le lièvre. Le lièvre (le bonus d'Erdős) part très vite, mais ralentit sans cesse, au point que sa vitesse finit par tomber aussi bas qu'on veut. La tortue (la puissance fixe) garde le même pas, toujours. Tôt ou tard, la tortue passe devant.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> la tortue ne gagne qu'après un temps astronomique ; pour des nombres de clous « raisonnables », le bonus d'Erdős peut très bien rester devant. Et la preuve ne suit pas la tortue à chaque instant : elle l'observe seulement à une infinité de moments bien choisis, ce qui suffit pour réfuter Erdős.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Deux placements d'argent. Le premier rapporte un taux qui baisse chaque année et finit par s'approcher de zéro. Le second rapporte un taux minuscule, mais fixe. Même si le premier démarre beaucoup plus haut, le second finit par l'emporter. L'exposant joue le rôle du taux d'intérêt.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">La tortue et le lièvre</p>
+    <p class="widget-consigne">La courbe orange est l'exposant d'Erdős, la droite verte l'exposant fixe 1 + δ. Baisse δ : le croisement (trait rouge) s'éloigne, mais ne disparaît jamais. Le curseur C règle la taille du bonus d'Erdős.</p>
+    <div class="widget-zone" data-widget="croissances"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">Erdős : ν(n) ≤ n^(1 + C / log log n) pour tout n assez grand        Preuve : ν(n) ≥ n^(1 + δ) pour une infinité de n</p>
+    <p>« Chez Erdős, l'exposant C / log log n tend vers 0 ; dans la preuve, l'exposant δ reste fixe. »</p>
+    <p class="formule">Croisement : log log n = C / δ, soit n = e^(e^(C/δ))</p>
+    <p>« Les deux exposants sont égaux quand log log n vaut C / δ. Au-delà, la puissance fixe gagne, quel que soit C. »</p>
+    <p class="formule">n de 80 chiffres : log log n = ln(80 × ln 10) ≈ 5,2</p>
+    <p>« Pour le nombre d'atomes de l'univers, le diviseur d'Erdős ne vaut qu'environ 5. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Erdős prédisait un exposant qui fond jusqu'à zéro quand le nombre de clous grandit. La preuve trouve un exposant fixe, pour une infinité de nombres de clous. Un exposant fixe finit toujours par gagner, même s'il est minuscule, quelle que soit la taille du bonus d'Erdős. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/README.md#contrat">README technique : Contrat et Invariant</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/croissances.js"></script>
+</body>
+</html>

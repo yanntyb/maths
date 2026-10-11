@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 · Pourquoi elle s'essouffle — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="04">
+<main>
+  <p class="numero">Chapitre 04 / 14</p>
+  <h1>Pourquoi elle s'essouffle</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> chaque nouvel interrupteur double le gain par clou, mais multiplie le nombre de clous par un facteur de plus en plus grand ; mesuré en exposant, le gain fond.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Chaque bon premier double le nombre de directions. Pourquoi ne pas en prendre des centaines, et obtenir un nombre astronomique d'allumettes par clou&nbsp;?</p>
+
+  <h2>L'idée</h2>
+  <p>Appelons <strong>t</strong> le nombre de bons premiers qu'on met dans N. Chaque premier coûte cher. N est le produit de tous les bons premiers choisis, et ces premiers sont de plus en plus grands : 5, 13, 17, 29, 37… N grossit donc à une vitesse folle.</p>
+  <p>Or l'allumette mesure la racine de N. Pour que les directions servent, il faut une grille assez grande pour contenir des segments de cette longueur : au moins deux fois la racine de N de côté. Le nombre de clous grossit donc comme N.</p>
+  <p>Faisons les comptes à chaque nouveau premier :</p>
+  <ul>
+    <li>le gain par clou est multiplié par <strong>2</strong>, toujours ;</li>
+    <li>le nombre de clous est multiplié par <strong>5, puis 13, puis 17, puis 29…</strong> : un facteur qui grandit sans cesse.</li>
+  </ul>
+  <p>Le gain par clou augmente bel et bien. Mais comparé au nombre de clous, il augmente de plus en plus lentement : mesuré en exposant (chapitre 02), il fond. C'est exactement le « bonus lent » de la prédiction d'Erdős. Sa propre recette atteint sa propre limite.</p>
+  <p>Le vrai défaut n'est pas que le coût monte : il monte forcément. C'est que <strong>le facteur de coût de chaque cran grandit, alors que le facteur de gain reste ×2</strong>.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Une usine. Chaque nouvelle machine double la production, mais le loyer de l'usine est multiplié par 5, puis par 13, puis par 29… La production augmente toujours, mais comparée au loyer elle progresse de plus en plus mal.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> ici, rien ne coûte d'argent. Le « loyer », c'est le nombre de clous. Et la quantité qui compte, les allumettes par clou, augmente bel et bien : c'est seulement son exposant, mesuré par rapport au nombre de clous, qui fond.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Ce qu'il faudrait, c'est un bouton dont chaque cran multiplie le gain et le coût par des facteurs <strong>fixes</strong>, toujours les mêmes. Alors le gain reste une puissance fixe du coût, et l'exposant ne fond plus. La preuve trouve ce bouton : ce n'est plus le nombre de premiers, c'est le nombre d'écrans sur lesquels on travaille à la fois. C'est le sujet du chapitre 05.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Ce que coûte un interrupteur</p>
+    <p class="widget-consigne">Monte t, le nombre de bons premiers, jusqu'à 30 : les directions explosent, mais l'exposant gagné (les points orange) descend vers 0.</p>
+    <div class="widget-zone" data-widget="deux-carres" data-mode="cout"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">log N ≈ t log t</p>
+    <p>« Le produit des t premiers bons premiers grandit à peu près comme t à la puissance t. »</p>
+    <p class="formule">n ≥ 4N   donc   t ≈ log n / log log n</p>
+    <p>« Avec n clous, on ne peut se payer qu'environ log n / log log n bons premiers. »</p>
+    <p class="formule">2^t = n^(c / log log n)</p>
+    <p>« Le gain par clou est une puissance de n dont l'exposant tend vers 0 : c'est le bonus d'Erdős. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Dans la recette d'Erdős, chaque bon premier ajouté double le gain par clou, mais multiplie le nombre de clous par un facteur de plus en plus grand. Le gain existe, mais son exposant fond : c'est le bonus minuscule de la conjecture. Pour faire mieux, il faut un bouton dont chaque cran multiplie gain et coût par des facteurs fixes. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/grille-erdos.md#pourquoi-ca-plafonne">pourquoi la grille plafonne, version technique</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/deux-carres.js"></script>
+</body>
+</html>

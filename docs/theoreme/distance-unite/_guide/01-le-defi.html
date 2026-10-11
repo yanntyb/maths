@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 · Le défi — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="01">
+<main>
+  <p class="numero">Chapitre 01 / 14</p>
+  <h1>Le défi</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> on plante des clous sur une table et on compte les paires de clous séparées d'exactement une longueur d'allumette. Jusqu'où ce nombre peut-il monter&nbsp;?</p>
+
+  <h2>Ce qui coince</h2>
+  <p>C'est le point de départ. En 1946, le mathématicien Paul Erdős pose une question qui a l'air d'un jeu d'enfant. Tu as une boîte d'allumettes, toutes de la même longueur, et une poignée de clous. Tu plantes les clous où tu veux sur une table. Ensuite, tu poses une allumette entre deux clous chaque fois qu'elle tient <em>pile</em> entre les deux : ni trop courte, ni trop longue.</p>
+  <p>Combien d'allumettes peux-tu poser au maximum&nbsp;?</p>
+  <p>Avec 3 clous en triangle, on pose 3 allumettes. Avec un hexagone et son centre, on a 7 clous et 12 allumettes. On a envie de serrer les clous pour multiplier les allumettes, mais chaque clou est vite limité. Autour d'un clou, les endroits « à une allumette » forment un cercle. Or deux cercles se croisent en deux points au plus. On ne peut donc pas empiler les allumettes comme on veut.</p>
+
+  <h2>L'idée</h2>
+  <p>Appelons <strong>n</strong> le nombre de clous. La bonne question n'est pas « combien d'allumettes en tout », mais « combien d'allumettes <strong>par clou</strong>, en moyenne ».</p>
+  <p>Erdős pensait que cette moyenne grandit quand on ajoute des clous, mais terriblement lentement : un « bonus » si lent qu'il finirait par être battu par n'importe quelle puissance fixe du nombre de clous, aussi petite soit-elle. On sait aussi qu'il existe un plafond : la remarque des deux cercles en donne déjà un, et le meilleur connu, prouvé en 1984, dit que la moyenne ne dépasse pas, en gros, la racine cubique du nombre de clous.</p>
+  <p>Pendant près de quatre-vingts ans, presque tout le monde a cru Erdős. La preuve que ce guide raconte montre qu'il se trompait. Pour une infinité de valeurs de n, on peut planter les clous de façon à ce que chaque clou porte, en moyenne, une vraie <em>puissance</em> du nombre de clous. Le chapitre suivant explique pourquoi cette différence, qui paraît minuscule, change tout.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Imagine un réseau social où deux personnes sont « amies » seulement si elles habitent à exactement un kilomètre l'une de l'autre. La question devient : combien d'amitiés au plus, pour n habitants&nbsp;?</p>
+  <p class="limite"><strong>Limite de l'image :</strong> dans un vrai réseau social, tout le monde peut être ami avec tout le monde. Ici, c'est la géométrie qui décide : une personne peut avoir beaucoup d'amis (tous ceux qui habitent sur son cercle), mais deux personnes ont au plus deux amis en commun. C'est ce qui limite la <em>moyenne</em> d'amis par personne.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Trace autour de chaque clou un cercle de la longueur d'une allumette. Une allumette, c'est un clou posé <em>sur</em> le cercle d'un autre clou. La question devient : combien de fois des cercles peuvent-ils passer par des clous&nbsp;? Ce point de vue « cercles » reviendra au chapitre 03.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Allumettes sur une table</p>
+    <p class="widget-consigne">Touche pour poser un clou, glisse pour le déplacer, touche un clou pour l'enlever. L'aimant colle les clous à distance 1. Essaie de battre le score « allumettes par clou » de la grille triangulaire.</p>
+    <div class="widget-zone" data-widget="allumettes"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">ν(P) = nombre de paires {x, y} de P avec |x − y| = 1</p>
+    <p>« Pour un ensemble de clous P, on compte les paires de clous à distance exactement 1. »</p>
+    <p class="formule">ν(n) = le maximum de ν(P) sur tous les ensembles de n clous</p>
+    <p>« Le meilleur score possible avec n clous. »</p>
+    <p class="formule">Erdős : ν(n) ≤ n^(1 + C / log log n)</p>
+    <p>« Le score ne dépasse jamais n multiplié par un bonus dont l'exposant fond quand n grandit. »</p>
+    <p class="formule">Plafond connu (1984) : ν(n) ≤ c · n^(4/3)</p>
+    <p>« En moyenne, un clou porte au plus, en gros, la racine cubique de n allumettes. »</p>
+    <p class="formule">Résultat : ν(n) ≥ n^(1 + δ) pour une infinité de n, avec δ > 0 fixe</p>
+    <p>« Pour une infinité de tailles, on fait mieux que n fois une puissance fixe de n. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Le problème : planter n clous pour avoir le plus possible de paires à distance exactement 1. Erdős pensait qu'on ne dépasse jamais n multiplié par un bonus minuscule. La preuve montre qu'on peut obtenir n multiplié par une vraie puissance de n. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/README.md">README technique du théorème</a> (sections Sens et Contrat).</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/allumettes.js"></script>
+</body>
+</html>

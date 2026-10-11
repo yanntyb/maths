@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11 · Le cahier des charges — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="11">
+<main>
+  <p class="numero">Chapitre 11 / 14</p>
+  <h1>Le cahier des charges</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> il faut une suite infinie de mondes de plus en plus grands, où les mêmes bons premiers marchent partout et où le nombre de tiroirs ne grossit pas plus vite qu'une exponentielle.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Toute la géométrie des chapitres 05 à 10 repose sur des « bons mondes », avec autant d'écrans qu'on veut. On les a supposés. Il est temps de dire précisément ce qu'on leur demande, puis de vérifier qu'ils existent.</p>
+
+  <h2>L'idée</h2>
+  <p>Le cahier des charges tient en trois conditions.</p>
+  <ul>
+    <li><strong>(0) Un monde réel, plus i.</strong> Chaque monde est obtenu en ajoutant <em>i</em> à un monde entièrement réel. C'est ce qui garantit que le miroir agit pareil sur chaque écran, donc que les pas magiques mesurent 1 partout (chapitre 06).</li>
+    <li><strong>(1) Les mêmes clés partout.</strong> Les mêmes t clés doivent se casser en autant de paires de morceaux qu'il y a d'écrans, et ce dans <em>chaque</em> monde de la suite. Comme ce sont toujours les mêmes, les pas magiques ont toujours les mêmes « dénominateurs » (chapitre 08), donc la taille des cases du pavage ne change pas : la vitesse B reste fixe (chapitre 10).</li>
+    <li><strong>(2) Peu de tiroirs.</strong> Le nombre de tiroirs doit rester sous une exponentielle du nombre d'écrans, avec une base fixe H, plus petite que le gain des clés par écran, c'est-à-dire 2 multiplié t fois par lui-même. Alors le gain net γ reste fixe et positif (chapitres 07 et 10).</li>
+  </ul>
+  <p>Pourquoi ne pas prendre des mondes évidents, comme ceux bâtis sur les racines de l'unité, de plus en plus grands&nbsp;? Ils ratent le cahier des charges des deux côtés. Un premier fixé ne se casse complètement que dans un nombre limité d'entre eux : la condition (1) tombe. Et leur nombre de tiroirs explose : la condition (2) tombe aussi. Il faut fabriquer des mondes sur mesure. C'est l'objet des deux derniers chapitres.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Un immeuble infini, chaque étage plus grand que le précédent. Le cahier des charges exige que (1) les mêmes clés ouvrent toutes les portes, à chaque étage, et que (2) le nombre de boîtes aux lettres par appartement reste raisonnable.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> dans un immeuble, chaque étage est posé à côté des autres ; ici, chaque « étage » est un monde qui <em>contient</em> tous les précédents. Les « clés » sont des nombres premiers, et les « boîtes aux lettres » sont les tiroirs du chapitre 07.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Ce cahier des charges est l'<strong>interface</strong> entre les deux moitiés de la preuve. La géométrie (chapitres 05 à 10) ne s'intéresse pas à la façon dont les mondes sont fabriqués : elle n'a besoin que de ces trois conditions. L'arithmétique (chapitres 12 et 13) n'a pas besoin de savoir à quoi serviront les mondes : elle doit seulement remplir ces trois conditions.</p>
+
+  <figure>
+    <svg viewBox="0 0 320 430" role="img" aria-label="Schéma : trois conditions empilées, qui mènent à la géométrie.">
+      <g style="font: 14px system-ui, sans-serif;">
+        <rect x="10" y="10" width="300" height="80" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="24" y="40" style="fill: var(--texte); font-weight: 600;">(0) Un monde réel, plus i</text>
+        <text x="24" y="66" style="fill: var(--discret);">miroir partout · chapitres 06 et 12</text>
+        <rect x="10" y="120" width="300" height="80" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="24" y="150" style="fill: var(--texte); font-weight: 600;">(1) Les mêmes clés partout</text>
+        <text x="24" y="176" style="fill: var(--discret);">B reste fixe · chapitre 12</text>
+        <rect x="10" y="230" width="300" height="80" rx="10" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="24" y="260" style="fill: var(--texte); font-weight: 600;">(2) Peu de tiroirs</text>
+        <text x="24" y="286" style="fill: var(--discret);">γ reste fixe et positif · chapitre 13</text>
+        <path d="M160 312 L160 352" style="stroke: var(--ambre); stroke-width: 3;"/>
+        <path d="M150 342 L160 356 L170 342 Z" style="fill: var(--ambre);"/>
+        <rect x="10" y="360" width="300" height="60" rx="10" style="fill: var(--encadre); stroke: var(--ambre); stroke-width: 2;"/>
+        <text x="24" y="396" style="fill: var(--texte); font-weight: 600;">La géométrie marche (05 à 10)</text>
+      </g>
+    </svg>
+    <figcaption>Les trois conditions du cahier des charges, et ce qu'elles garantissent.</figcaption>
+  </figure>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">L_j totalement réel,  K_j = L_j(i),  f_j = [L_j : Q] → ∞</p>
+    <p>« Une suite de mondes réels de degré f_j tendant vers l'infini, auxquels on ajoute i. »</p>
+    <p class="formule">q_1 … q_t ≡ 1 (mod 4), totalement décomposés dans chaque L_j</p>
+    <p>« Les mêmes t bons premiers se cassent complètement dans chaque monde. »</p>
+    <p class="formule">h(K_j) ≤ H^(f_j),  γ = t log 2 − log H > 0</p>
+    <p>« Le nombre de classes reste sous une exponentielle de base H fixe, et les clés battent les tiroirs. »</p>
+    <p>C'est la « donnée admissible » de l'article (Définition 2.1 et Théorème 2.3).</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« La géométrie marche dès qu'on dispose de mondes aussi grands qu'on veut, réels plus i, avec les mêmes clés partout et peu de tiroirs. Les familles évidentes ratent l'une ou l'autre condition : il faut les construire sur mesure. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/README.md#deux-niveaux">l'interface entre les deux niveaux</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/grille-erdos.md#pourquoi-pas-une-famille-naive-de-degre-croissant">pourquoi les familles naïves échouent</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+</body>
+</html>

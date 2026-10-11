@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le grand guide de la distance unité</title>
+<meta name="description" content="Comprendre pas à pas, sans vocabulaire technique, la preuve qui réfute la conjecture d'Erdős sur les distances unité.">
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body>
+<main>
+  <p class="numero">Guide</p>
+  <h1>Le grand guide de la distance unité</h1>
+
+  <p class="une-phrase">Plante des clous sur une table et compte les paires séparées d'exactement une longueur d'allumette. En 1946, Erdős a prédit que ce nombre ne pouvait pas grandir beaucoup plus vite que le nombre de clous. Une preuve récente montre qu'il se trompait. Ce guide te mène, étape par étape et sans jargon, jusqu'à pouvoir raconter cette preuve avec tes propres mots.</p>
+
+  <h2>Comment lire</h2>
+  <ul>
+    <li>Compte environ deux heures pour tout lire, widgets compris. Chaque chapitre tient en un ou deux écrans.</li>
+    <li>Chaque chapitre suit le même plan : ce qui coince, l'idée, une image du monde réel avec sa limite, un autre point de vue, un widget à manipuler, et une phrase à redire avec tes mots.</li>
+    <li>Les encadrés « Pour les curieux » contiennent les formules. Ils sont repliés et facultatifs : le fil principal se lit sans eux.</li>
+    <li>Les widgets se manipulent au doigt. Ils calculent pour de vrai : rien n'est une animation préenregistrée.</li>
+  </ul>
+
+  <h2>La carte du parcours</h2>
+  <figure>
+    <svg viewBox="0 0 320 400" role="img" aria-label="Carte du parcours en quatre étapes : le problème, la géométrie, les mondes, la synthèse.">
+      <g style="font: 14px system-ui, sans-serif;">
+        <rect x="10" y="8" width="300" height="72" rx="12" style="fill: var(--surface); stroke: var(--bleu); stroke-width: 2;"/>
+        <text x="24" y="38" style="fill: var(--texte); font-weight: 600;">Le problème · 01 à 04</text>
+        <text x="24" y="62" style="fill: var(--discret);">le défi, et pourquoi Erdős plafonne</text>
+        <rect x="10" y="108" width="300" height="72" rx="12" style="fill: var(--surface); stroke: var(--sarcelle); stroke-width: 2;"/>
+        <text x="24" y="138" style="fill: var(--texte); font-weight: 600;">La géométrie · 05 à 10</text>
+        <text x="24" y="162" style="fill: var(--discret);">écrans, pas magiques, fenêtre, bilan</text>
+        <rect x="10" y="208" width="300" height="72" rx="12" style="fill: var(--surface); stroke: var(--indigo); stroke-width: 2;"/>
+        <text x="24" y="238" style="fill: var(--texte); font-weight: 600;">Les mondes · 11 à 13</text>
+        <text x="24" y="262" style="fill: var(--discret);">fabriquer la tour qui rend tout possible</text>
+        <rect x="10" y="308" width="300" height="72" rx="12" style="fill: var(--encadre); stroke: var(--vert); stroke-width: 2;"/>
+        <text x="24" y="338" style="fill: var(--texte); font-weight: 600;">La synthèse · 14</text>
+        <text x="24" y="362" style="fill: var(--discret);">toute la preuve en une page</text>
+        <g style="stroke: var(--discret); stroke-width: 2;">
+          <line x1="160" y1="80" x2="160" y2="106"/>
+          <line x1="160" y1="180" x2="160" y2="206"/>
+          <line x1="160" y1="280" x2="160" y2="306"/>
+        </g>
+      </g>
+    </svg>
+  </figure>
+
+  <h2>Sommaire</h2>
+  <ol class="sommaire">
+    <li><a href="01-le-defi.html"><span class="num">01</span><span>Le défi</span></a></li>
+    <li><a href="02-petit-grand-tres-grand.html"><span class="num">02</span><span>Petit, grand, très grand</span></a></li>
+    <li><a href="03-la-recette-d-erdos.html"><span class="num">03</span><span>La recette d'Erdős</span></a></li>
+    <li><a href="04-pourquoi-elle-s-essouffle.html"><span class="num">04</span><span>Pourquoi elle s'essouffle</span></a></li>
+    <li><a href="05-changer-de-point-de-vue.html"><span class="num">05</span><span>Changer de point de vue</span></a></li>
+    <li><a href="06-les-pas-magiques.html"><span class="num">06</span><span>Les pas magiques</span></a></li>
+    <li><a href="07-les-tiroirs.html"><span class="num">07</span><span>Les tiroirs</span></a></li>
+    <li><a href="08-la-fenetre-et-le-coup-de-des.html"><span class="num">08</span><span>La fenêtre et le coup de dés</span></a></li>
+    <li><a href="09-pas-trop-de-points.html"><span class="num">09</span><span>Pas trop de points</span></a></li>
+    <li><a href="10-le-bilan.html"><span class="num">10</span><span>Le bilan</span></a></li>
+    <li><a href="11-le-cahier-des-charges.html"><span class="num">11</span><span>Le cahier des charges</span></a></li>
+    <li><a href="12-construire-la-tour.html"><span class="num">12</span><span>Construire la tour</span></a></li>
+    <li><a href="13-les-tiroirs-restent-peu-nombreux.html"><span class="num">13</span><span>Les tiroirs restent peu nombreux</span></a></li>
+    <li><a href="14-toute-la-preuve-en-une-page.html"><span class="num">14</span><span>Toute la preuve en une page</span></a></li>
+    <li><a href="lexique.html"><span class="num">≡</span><span>Lexique</span></a></li>
+  </ol>
+
+  <h2>Sources</h2>
+  <p>La preuve vient de l'article <em>Planar Point Sets with Many Unit Distances</em> (OpenAI). La version technique, étage par étage, se trouve dans le <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/README.md">dossier du théorème sur GitHub</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+</body>
+</html>

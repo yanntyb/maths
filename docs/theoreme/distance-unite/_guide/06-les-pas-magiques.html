@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>06 · Les pas magiques — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="06">
+<main>
+  <p class="numero">Chapitre 06 / 14</p>
+  <h1>Les pas magiques</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> diviser un nombre par son reflet dans un miroir donne un nombre de longueur exactement 1 ; dans les bons mondes, ça marche sur tous les écrans à la fois.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Le chapitre 05 a promis des « pas magiques » : des déplacements qui mesurent exactement 1 sur <em>chaque</em> écran en même temps. Mesurer 1 sur un écran, c'est facile. Mesurer 1 sur tous les écrans à la fois, avec le même nombre, c'est beaucoup plus exigeant. D'où viennent de tels pas&nbsp;?</p>
+
+  <h2>L'idée</h2>
+  <p>Commençons par un seul écran, le plan des nombres de Gauss du chapitre 03. Chaque nombre z a un <strong>reflet</strong> : son image dans le miroir horizontal. Deux opérations sont intéressantes :</p>
+  <ul>
+    <li><strong>multiplier</strong> z par son reflet donne la longueur de z au carré : c'est Pythagore ;</li>
+    <li><strong>diviser</strong> z par son reflet donne un nombre de longueur exactement 1, parce que les longueurs se compensent. Seule la direction survit, et elle est doublée.</li>
+  </ul>
+  <p>Dans les mondes qu'utilise la preuve, un même nombre a plusieurs visages, un par écran (chapitre 05). Le point crucial : le miroir agit <em>de la même façon</em> sur chaque visage. Donc « nombre ÷ reflet » mesure 1 sur le premier écran, sur le deuxième, sur le troisième… sur tous à la fois. Voilà les pas magiques.</p>
+  <p>Pour que le miroir se comporte ainsi partout, il faut des mondes d'un type particulier. On dit qu'un écran est <strong>réel</strong> si tous les nombres du monde y tombent sur la ligne horizontale, sans partie verticale ; sinon, l'écran est <strong>complexe</strong>. On part d'un monde dont <em>tous</em> les écrans sont réels, comme celui des a + b√2 : ses deux visages, 3 + 1,414… et 3 − 1,414…, sont des nombres ordinaires. Puis on lui ajoute <em>i</em>. Le reflet d'un nombre consiste alors à changer <em>i</em> en −<em>i</em>, et sur chaque écran cela revient exactement au miroir horizontal. Attention : un monde sans aucun nombre imaginaire ne suffit pas, il faut que <em>tous ses visages</em> soient réels. Le chapitre 12 expliquera comment la preuve garantit cette condition.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Une boussole. Quelle que soit la distance que tu as parcourue, la boussole ne garde que le cap. Diviser par le reflet, c'est jeter la distance et garder le cap.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> le cap n'est pas gardé tel quel, il est doublé. Si z pointe à 30°, le pas magique pointe à 60°.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Reprends le 5 du chapitre 03 : 5 = (2 + <em>i</em>) × (2 − <em>i</em>). Divise un morceau par l'autre : (2 + <em>i</em>) ÷ (2 − <em>i</em>) = (3 + 4<em>i</em>) ÷ 5. Tu reconnais le triangle 3-4-5 ! Le pas magique est exactement l'une des directions de la grille d'Erdős, ramenée à la longueur 1. La preuve ne fait rien d'autre, mais dans des mondes à beaucoup d'écrans.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Le miroir</p>
+    <p class="widget-consigne">Glisse le doigt pour déplacer z (bleu). Le vert, z × reflet, tombe sur l'axe : c'est la longueur au carré. Le rouge, z ÷ reflet, reste sur le cercle de rayon 1, avec un angle double.</p>
+    <div class="widget-zone" data-widget="pas-magiques" data-partie="un"></div>
+  </section>
+  <section class="widget">
+    <p class="widget-titre">Trois écrans</p>
+    <p class="widget-consigne">Un vrai nombre d'un monde à trois écrans. Touche « α au hasard » : sur chaque écran, α (bleu) a une longueur différente, mais le pas magique (rouge) mesure toujours 1.</p>
+    <div class="widget-zone" data-widget="pas-magiques" data-partie="trois"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">u = α / c(α)</p>
+    <p>« Un pas magique est un nombre α divisé par son reflet c(α). »</p>
+    <p class="formule">u · c(u) = 1</p>
+    <p>« Multiplié par son propre reflet, il donne 1 : sa longueur au carré vaut 1. »</p>
+    <p class="formule">|σ(u)| = 1 pour chaque écran σ</p>
+    <p>« Sur chaque écran, sa longueur vaut 1. »</p>
+    <p class="formule">(2 + i) / (2 − i) = (3 + 4i) / 5</p>
+    <p>« Le pas magique du nombre 5 est la direction 3-4-5. »</p>
+    <p>Le widget « trois écrans » calcule dans le monde des racines septièmes de l'unité, qui a exactement trois écrans. Ce monde n'est pas exactement « réel plus i », mais son miroir agit lui aussi de la même façon sur chaque écran : c'est tout ce dont le widget a besoin.</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Un pas magique, c'est un nombre divisé par son reflet. Il mesure 1 sur chaque écran, parce que le miroir agit pareil partout. Exemple : (2 + i) ÷ (2 − i) = (3 + 4i)/5, c'est le triangle 3-4-5. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/sens/unitariser/README.md">le bloc « Unitariser », version technique</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/cyclo.js"></script>
+<script src="assets/widgets/pas-magiques.js"></script>
+</body>
+</html>

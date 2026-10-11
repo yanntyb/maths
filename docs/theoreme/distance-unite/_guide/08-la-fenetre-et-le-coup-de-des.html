@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08 · La fenêtre et le coup de dés — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="08">
+<main>
+  <p class="numero">Chapitre 08 / 14</p>
+  <h1>La fenêtre et le coup de dés</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> on garde seulement les points d'un pavage infini qui tombent dans une fenêtre, et un argument de moyenne garantit une position de fenêtre très riche en allumettes.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Les pas magiques ne tombent pas n'importe où. Comme ils sont fabriqués uniquement à partir des clés (chapitre 07), leurs « dénominateurs » ne font intervenir que ces clés. Tous les pas, et toutes leurs sommes, tombent donc sur un même <strong>pavage</strong> : une grille régulière de points, vue sur tous les écrans à la fois, dont la taille des cases ne dépend que des clés. Or on veut planter un nombre <em>fini</em> de clous. Il faut découper un morceau du pavage où beaucoup de paires de clous diffèrent exactement d'un pas magique.</p>
+
+  <h2>L'idée</h2>
+  <p>On découpe le pavage avec une <strong>fenêtre</strong> : un disque sur chaque écran. On garde les points qui tombent dans la fenêtre sur tous les écrans à la fois.</p>
+  <p>Mais où placer la fenêtre&nbsp;? Plutôt que de chercher la meilleure position, la preuve fait un raisonnement de <strong>moyenne</strong>. Imagine qu'on pose la fenêtre au hasard :</p>
+  <ul>
+    <li>en moyenne, le nombre de clous capturés vaut la taille de la fenêtre divisée par la taille d'une case du pavage ;</li>
+    <li>pour un pas magique donné, un clou garde son voisin si ce voisin tombe aussi dans la fenêtre. Comme le pas mesure 1 sur chaque écran, on ne perd que les clous trop près du bord. La proportion conservée est la <strong>part commune</strong> de la fenêtre et de sa copie décalée de 1.</li>
+  </ul>
+  <p>En moyenne, chaque clou a donc autant de voisins que de pas magiques, multiplié par cette part commune sur chaque écran. Or une moyenne est toujours égalée ou dépassée quelque part : il existe une position de fenêtre au moins aussi bonne que la moyenne. C'est celle-là qu'on garde.</p>
+  <p>Dernier réglage : plus la fenêtre est grande, plus la part commune s'approche de 100 %. Mais la perte au bord se répète sur chaque écran : avec beaucoup d'écrans, la fenêtre ne garde qu'une fraction de plus en plus petite des pas. En choisissant la fenêtre assez grande, on s'arrange pour que cette perte ne coûte au plus que la moitié de la vitesse de croissance γ du chapitre 07. Chaque clou garde donc un nombre de voisins qui grandit encore de façon exponentielle avec le nombre d'écrans, à la moitié de la vitesse.</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Un filet lancé sur un banc de poissons régulièrement espacés. On connaît le nombre moyen de poissons pris par lancer ; certains lancers en prennent au moins autant. Ou encore : si la moyenne d'une classe est 12, au moins un élève a 12 ou plus.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> l'argument ne dit pas <em>où</em> est la bonne position ; il prouve seulement qu'elle existe, et la preuve n'a jamais besoin de la trouver. Et ce qu'on moyenne ici, ce n'est pas un nombre de poissons, mais un nombre de <em>paires</em> de clous voisins, avec une perte au bord qui se répète sur chaque écran.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Regarde deux disques identiques décalés de 1. Leur partie commune est la proportion de clous qui gardent leur voisin. Petits disques : la partie commune est maigre. Grands disques : elle couvre presque tout. Agrandir la fenêtre, c'est rendre le bord négligeable.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Le filet</p>
+    <p class="widget-consigne">Touche « lancer 200 fois » : l'histogramme des lancers se répartit autour de la moyenne attendue (ligne rouge), et une bonne partie la dépasse. Agrandis la fenêtre : la part commune grimpe vers 100 %.</p>
+    <div class="widget-zone" data-widget="fenetre"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">E[N_a] = vol(B_R) / covol(Λ)</p>
+    <p>« En moyenne sur les positions a de la fenêtre, le nombre de clous vaut le volume de la fenêtre divisé par celui d'une case. »</p>
+    <p class="formule">E[E_a] = |U| · ρ_R^f · E[N_a]</p>
+    <p>« En moyenne, le nombre de paires reliées par un pas vaut le nombre de pas, fois la part commune ρ_R sur chacun des f écrans, fois le nombre de clous. »</p>
+    <p class="formule">ρ_R → 1 quand R grandit ;  on choisit R tel que ρ_R^f ≥ e^(−γ f / 2)</p>
+    <p>« La fenêtre est assez grande pour ne perdre que la moitié du taux γ. »</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« On découpe une fenêtre dans le pavage infini. En moyenne sur les positions, chaque clou a beaucoup de voisins par un pas magique, avec une perte au bord qu'on limite en prenant une fenêtre assez grande. Une position au moins égale ou dépasse cette moyenne : on la garde. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/etages/fenetre.md">l'étage « fenêtre »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/sens/moyenner/README.md">le bloc « Moyenner »</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/fenetre.js"></script>
+</body>
+</html>

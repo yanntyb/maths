@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05 · Changer de point de vue — Distance unité</title>
+<link rel="stylesheet" href="assets/guide.css">
+</head>
+<body data-chapitre="05">
+<main>
+  <p class="numero">Chapitre 05 / 14</p>
+  <h1>Changer de point de vue</h1>
+
+  <p class="une-phrase"><strong>En une phrase :</strong> au lieu d'une seule table, on joue sur plusieurs tables à la fois, avec des pas qui mesurent exactement 1 sur chacune ; à la fin, on ne regarde qu'une table.</p>
+
+  <h2>Ce qui coince</h2>
+  <p>Le chapitre 04 a montré le défaut de la recette d'Erdős : chaque cran de son bouton multiplie le gain par 2, mais le coût par un facteur de plus en plus grand. Il nous faut un autre bouton, dont chaque cran multiplie le gain et le coût par des facteurs <em>fixes</em>.</p>
+
+  <h2>L'idée</h2>
+  <p><strong>D'abord, d'où viennent plusieurs « écrans »&nbsp;?</strong> Prends les nombres qui s'écrivent a + b√2, avec a et b des fractions ordinaires. Appelons cela un <strong>monde</strong> : un système de nombres obtenu en ajoutant une racine aux fractions. Dans ce monde, √2 et −√2 sont indiscernables : tout calcul juste reste juste si on remplace l'un par l'autre partout. Un même nombre, comme 3 + √2, a donc deux « visages » : 3 + 1,414… et 3 − 1,414… Chaque visage est une façon de placer le nombre dans le plan : c'est un <strong>écran</strong>. Un monde plus grand, obtenu en ajoutant d'autres racines, a plus de visages, donc plus d'écrans. Appelons <strong>f</strong> le nombre d'écrans.</p>
+  <p>La preuve change alors de décor. Un « point » n'est plus une position sur une table, mais la liste de ses positions sur tous les écrans à la fois, comme une scène filmée par plusieurs caméras.</p>
+  <p>Un <strong>pas magique</strong> déplace un point d'exactement 1 sur <em>chaque</em> écran à la fois, dans des directions qui peuvent être différentes d'un écran à l'autre. Le chapitre 06 montre comment fabriquer de tels pas.</p>
+  <p>Pourquoi est-ce mieux&nbsp;?</p>
+  <ul>
+    <li>Chaque écran supplémentaire multiplie le nombre de pas magiques par un facteur fixe (chapitre 07).</li>
+    <li>Deux points ne peuvent pas être proches sur tous les écrans à la fois. Chaque écran supplémentaire ne multiplie donc le nombre de clous d'une fenêtre que par un facteur fixe, lui aussi (chapitres 08 et 09).</li>
+  </ul>
+  <p>À la fin, on <strong>publie un seul écran</strong>, l'écran 1. Un pas magique y mesure toujours 1 : chaque paire de points reliée par un pas devient une allumette. Et deux points différents n'y tombent jamais au même endroit : le chapitre 09 explique pourquoi.</p>
+  <p>Le nouveau bouton, c'est donc le nombre d'écrans. Gain et coût grandissent tous les deux avec lui, mais chacun à un rythme fixe : le gain reste une puissance fixe du coût (chapitre 10).</p>
+
+  <h2>Image du monde réel</h2>
+  <p>Plusieurs caméras filment la même scène sous des angles différents. À chaque pas magique, chaque caméra voit l'acteur avancer d'exactement un mètre, chacune dans sa propre direction. On ne diffuse que le film de la caméra 1.</p>
+  <p class="limite"><strong>Limite de l'image :</strong> une vraie caméra peut superposer deux objets alignés ; l'écran 1, lui, ne superpose jamais deux points (chapitre 09). Et les écrans ne filment pas une scène en trois dimensions : ce sont les coordonnées d'un même point dans un espace qui a deux dimensions par écran.</p>
+
+  <h2>Autre point de vue</h2>
+  <p>Une ombre chinoise. Un objet compliqué projette une ombre sur un mur. D'habitude, une ombre raccourcit les longueurs. Ici, on a fabriqué des pas dont l'ombre mesure <em>exactement</em> 1. Les allumettes du dessin final sont les ombres de pas magiques.</p>
+
+  <h2>À manipuler</h2>
+  <section class="widget">
+    <p class="widget-titre">Deux écrans, un seul publié</p>
+    <p class="widget-consigne">En haut, l'écran 1 : le dessin qu'on publie. En bas, l'écran caché. Touche « un autre point » : sur chaque écran, ses voisins (traits rouges) sont à distance 1, dans des directions différentes. La « taille des sommes » règle combien de pas magiques on additionne au plus pour fabriquer les points.</p>
+    <div class="widget-zone" data-widget="ombre" data-ecrans="2" data-mode="pas"></div>
+  </section>
+
+  <details class="curieux">
+    <summary>Pour les curieux</summary>
+    <p class="formule">Φ(x) = (σ₁(x), σ₂(x), …, σ_f(x))</p>
+    <p>« Un nombre x devient un point à f coordonnées complexes, une par écran. Chaque σ est un écran. »</p>
+    <p class="formule">π₁(Φ(x)) = σ₁(x)</p>
+    <p>« Publier l'écran 1, c'est ne garder que la première coordonnée. »</p>
+    <p>Le widget calcule dans le monde des nombres a + b√2 auquel on ajoute i (celui des racines huitièmes de l'unité) : il a exactement deux écrans.</p>
+  </details>
+
+  <h2>Tu peux maintenant expliquer</h2>
+  <div class="expliquer">
+    <p>« Dans un monde comme celui des a + b√2, chaque nombre a plusieurs visages : ce sont ses écrans. La preuve fabrique des pas qui mesurent 1 sur tous les écrans à la fois, puis publie l'écran 1, qui garde toutes les allumettes. Le nombre d'écrans est le nouveau bouton : gain et coût grandissent avec lui, chacun à un rythme fixe. »</p>
+  </div>
+
+  <p class="plus-loin"><strong>Pour aller plus loin :</strong> <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/sens/plonger/README.md">le bloc « Plonger »</a> · <a href="https://github.com/yanntyb/maths/blob/main/docs/theoreme/distance-unite/etages/fenetre.md">l'étage « fenêtre »</a>.</p>
+</main>
+<script src="assets/guide.js"></script>
+<script src="assets/widgets/cyclo.js"></script>
+<script src="assets/widgets/ombre.js"></script>
+</body>
+</html>
