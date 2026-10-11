@@ -58,6 +58,7 @@ graph TD
 | [V5 — Primitives](5_abstraites/) | inchange (axiomes → formes) | 3 couches (rendus ↔ primitives ↔ p5.js) | p5.js encapsule, swap possible |
 | [V6 — Contrat rendu](6_contrats/) | inchange (axiomes → formes) | **4 couches** (rendus → RenderContract → primitives → p5.js) | **template method** (RenderContract orchestre, rendus héritent) |
 | [V7 — Contrat cablage](7_cablages/) | inchange (axiomes → formes) | **5 couches** (rendus → CablageContract → RenderContract → primitives → p5.js) | **CablageContract singleton** (metadata + rendu, zéro duplication) |
+| [V10 — Statuts](10_statuts/) | statuts de dérivabilité (essentiel, superflu, non testé) | `data/statuts.json` produit par Lean | matrice HTML + panneau + vues canvas par statut |
 
 ## Invariant a travers les versions
 

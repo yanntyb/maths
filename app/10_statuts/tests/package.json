@@ -1,0 +1,12 @@
+{
+  "name": "visualiseur-v10-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verifier": "node verifier.mjs",
+    "lean": "node verifier.mjs --lean"
+  },
+  "devDependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pythagore — statuts</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script>
+  // En file:// les modules et le fetch du JSON sont bloqués : on prévient sans attendre main.js.
+  if (location.protocol === 'file:') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const b = document.getElementById('bandeau');
+      b.textContent = 'Page ouverte en file:// : les modules et statuts.json demandent un serveur HTTP.\n'
+        + 'Servir app/ en HTTP : cd app && python3 -m http.server 8765, puis ouvrir '
+        + 'http://localhost:8765/10_statuts/pythagore.html.';
+      b.hidden = false;
+    });
+  }
+</script>
+</head>
+<body>
+<div id="ui">
+  <div class="title"><strong>pythagore</strong><span id="nb-cablages">câblages</span></div>
+  <div class="sep"></div>
+  <div class="ctrl"><label for="a">côté a</label><input id="a" type="range" min="0" max="25" value="3" step="1"><span id="a-v">3</span></div>
+  <div class="ctrl"><label for="b">côté b</label><input id="b" type="range" min="0" max="25" value="4" step="1"><span id="b-v">4</span></div>
+  <div class="sep"></div>
+  <div class="tabs tabs-cablages"><span class="tabs-label">CÂBLAGES</span></div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <button class="tab active" data-view="tree">arbre</button>
+    <button class="tab" data-view="sphere">cercle</button>
+  </div>
+  <div class="sep"></div>
+  <button id="play" class="btn">▶ animer</button>
+  <button id="reset" class="btn">↺ reset</button>
+</div>
+<div id="bandeau" role="alert" hidden></div>
+<header id="entete"></header>
+<main id="contenu">
+  <section id="matrice" aria-label="Matrice des statuts"></section>
+  <section id="vue" aria-label="Vue des axiomes"></section>
+</main>
+<aside id="panneau" hidden aria-label="Preuve Lean"></aside>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
